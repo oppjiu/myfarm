@@ -1,0 +1,21 @@
+body {
+    font-family: "Microsoft YaHei";
+    margin: 10px;
+    background:url(../../images/basicPic/background.png?t876);
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+}
+
+.op-linkbutton{
+    position: relative;
+    display: inline-block;
+    top: 0px;
+    padding: 0 3px;
+    height: 24px;
+    line-height: 24px;
+    cursor: pointer;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    text-decoration: none;
+}

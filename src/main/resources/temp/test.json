@@ -1,0 +1,16 @@
+{
+  "id": "0",
+  "cropID": "2",
+  "cropName": "苹果",
+  "growSeason": "1",
+  "level": "1",
+  "seedType": "2",
+  "gainExperience": "10",
+  "seasonTime": "20",
+  "gainHarvestInEachRipeSeason": "10",
+  "seedPurchasePrice": "20",
+  "unitPriceOfEachHarvest": "10",
+  "soilType": "2",
+  "gainPointsInEachRipeSeason": "20",
+  "tips": "20"
+}

@@ -1,0 +1,22 @@
+.tools-imagePositioner-display {
+    position: absolute;
+    background-image: url(../../images/basicPic/positioning.png);
+    background-repeat: no-repeat;
+    background-position: top;
+    width: 200px;
+    height: 300px;
+    border: 1px solid #000000;
+    overflow: hidden;
+}
+
+.tools-imagePositioner-display img {
+    height: 200px;
+    border: 1px solid red;
+}
+
+.tools-imagePositioner-button-loadImage {
+    position: absolute;
+    top: 300px;
+    left: 0;
+    border: 0px solid #999999;
+}

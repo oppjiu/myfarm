@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../ext/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../ext/easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="../ext/easyui/themes/icon.css">
+
+    <script type="text/javascript" src="../ext/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../ext/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../ext/easyui/plugins/jquery.edatagrid.js"></script>
+    <script type="text/javascript" src="../ext/easyui/locale/easyui-lang-zh_CN.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../ext/farm/imgPosition.css">
+
+    <script type="text/javascript" src="../ext/farm/imgPosition.js"></script>
+
+    <style>
+        td {
+            white-space: nowrap;
+        }
+
+        .easyui-panel {
+            background-image: url("../images/basicPic/positioning.png");
+        }
+    </style>
+
+    <!--    <base href="http://localhost:8080/">-->
+</head>
+<body>
+<div class="easyui-dialog" style="width: auto; height: auto; padding: 10px 10px" data-options="fit:true, resizable:true, collapsible:true">
+    <div id="controlBox">
+        <span>编辑成长阶段:</span>
+        <a href="#" class="easyui-linkbutton c2" iconCls="icon-add" onclick="loadSaveForm()">添加</a>
+        <a href="#" class="easyui-linkbutton c4" iconCls="icon-edit" onclick="loadForm()">编辑</a>
+        <a href="#" class="easyui-linkbutton c3" iconCls="icon-remove"
+           onclick="javascript:grid.edatagrid('cancelRow')">取消</a>
+        <a href="#" class="easyui-linkbutton c5" iconCls="icon-cancel"
+           onclick="javascript:grid.edatagrid('destroyRow')">删除</a>
+    </div>
+    <table id="grid"></table>
+    <div id="msgBox"></div>
+</div>
+
+
+<!--编辑-->
+<div id="formEditContainer" class="easyui-dialog" style="width: auto; height: auto; padding: 10px 10px" closed="true"
+     buttons="#formEditSeedButtons">
+    <form id="formEditSeed" method="POST" novalidate>
+        <table class='tbledit'>
+            <tr>
+                <td>ID：</td>
+                <td><input name="id" required="true" class="w200" value="0" disabled="disabled"></td>
+                <td>种子ID：</td>
+                <td><input name="seedId" required="true" class="easyui-validatebox w50" disabled="disabled"></td>
+            </tr>
+            <tr>
+                <td>生长阶段：</td>
+                <td><input name="growthStage" required="true" class="w200" value="0"></td>
+                <td>生长标题：</td>
+                <td><input name="growTitle" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>阶段生长时间：</td>
+                <td><input name="stageTime" required="true" class="w200" value="0"></td>
+                <td>生虫概率：</td>
+                <td><input name="insectPro" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>图片宽度：</td>
+                <td><input name="pictureWidth" required="true" class="w200" value="0"></td>
+                <td>图片高度：</td>
+                <td><input name="pictureHigh" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>图片offsetX：</td>
+                <td><input name="pictureOffSetX" required="true" class="w200" value="0"></td>
+                <td>图片offsetY：</td>
+                <td><input name="pictureOffSetY" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>作物状态：</td>
+                <td><input name="cropState" required="true" class="w200" value="0"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!--添加-->
+<div id="formSaveContainer" class="easyui-dialog" style="width: auto; height: auto; padding: 10px 10px" closed="true"
+     buttons="#formSaveSeedButtons">
+    <form id="formSaveSeed" method="POST" novalidate>
+        <table class='tbledit'>
+            <tr>
+                <td>ID：</td>
+                <td><input name="id" required="true" class="w200" value="0" disabled="disabled"></td>
+                <td>种子ID：</td>
+                <td><input name="seedId" required="true" class="easyui-validatebox w50" disabled="disabled"></td>
+            </tr>
+            <tr>
+                <td>生长阶段：</td>
+                <td><input name="growthStage" required="true" class="w200"></td>
+                <td>生长标题：</td>
+                <td><input name="growTitle" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>阶段生长时间：</td>
+                <td><input name="stageTime" required="true" class="w200"></td>
+                <td>生虫概率：</td>
+                <td><input name="insectPro" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>图片宽度：</td>
+                <td><input name="pictureWidth" required="true" class="w200"></td>
+                <td>图片高度：</td>
+                <td><input name="pictureHigh" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>图片offsetX：</td>
+                <td><input name="pictureOffSetX" required="true" class="w200"></td>
+                <td>图片offsetY：</td>
+                <td><input name="pictureOffSetY" required="true" class="easyui-validatebox w50"></td>
+            </tr>
+            <tr>
+                <td>作物状态：</td>
+                <td><input name="cropState" required="true" class="w200"></td>
+                <td><a href="#" class="easyui-linkbutton c2" iconCls="icon-blank"
+                       onclick="loadPictureChange()">编辑图片位置</a></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!--默认的图片编辑拖拽-->
+<div id="positionDialog" class="easyui-dialog" style="width:240px;height:420px; padding:10px 10px" closed="true"
+     buttons="#positionDialogButtons">
+    <div id="tools-imagePositioner-display" class="tools-imagePositioner-display">
+        <img src="../images/crops/940/2.png">
+    </div>
+</div>
+<div id="positionDialogButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="gainPosition()">确定</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+       onclick="javascript:$('#positionDialog').dialog('close')">取消</a>
+</div>
+
+<!--编辑视图的按钮-->
+<div id="formEditSeedButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="editSeedForm()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+       onclick="javascript:$('#formEditContainer').dialog('close')">取消</a>
+</div>
+
+<!--添加视图的按钮-->
+<div id="formSaveSeedButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveSeedForm()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+       onclick="javascript:$('#formSaveContainer').dialog('close')">取消</a>
+</div>
+<script type="text/javascript">
+
+    var someData = [{
+        id: 1,
+        seedId: 1,//种子id
+        growthStage: 0,//生长阶段
+        growTitle: "种子阶段",//生长标题
+        stageTime: "100",//阶段生长时间
+        insectPro: "0.2",//生虫概率
+        pictureWidth: "60",//图片宽度
+        pictureHigh: "60",//图片高度
+        pictureOffSetX: "60",//图片offsetX
+        pictureOffSetY: "60",//图片offsetY
+        cropState: "发芽",//作物状态
+    }, {
+        id: 1,
+        seedId: 1,//种子id
+        growthStage: 0,//生长阶段
+        growTitle: "种子阶段",//生长标题
+        stageTime: "100",//阶段生长时间
+        insectPro: "0.2",//生虫概率
+        pictureWidth: "60",//图片宽度
+        pictureHigh: "50",//图片高度
+        pictureOffSetX: "60",//图片offsetX
+        pictureOffSetY: "60",//图片offsetY
+        cropState: "成长",//作物状态
+    }, {
+        id: 1,
+        seedId: 1,//种子id
+        growthStage: 0,//生长阶段
+        growTitle: "种子阶段",//生长标题
+        stageTime: "100",//阶段生长时间
+        insectPro: "0.2",//生虫概率
+        pictureWidth: "60",//图片宽度
+        pictureHigh: "60",//图片高度
+        pictureOffSetX: "60",//图片offsetX
+        pictureOffSetY: "60",//图片offsetY
+        cropState: "成熟",//作物状态
+    }];
+
+    var params = {
+        id: '',
+        mode: 'insert'
+    };
+    var grid;
+    var imgExtData = {
+        offsetX: '',
+        offsetY: '',
+        width: '',
+        height: ''
+    }
+    $(function () {
+        //表格
+        grid = $("#grid").edatagrid({
+            title: '种子清单',
+            data: someData,
+            method: "post",
+            striped: true,
+            idField: "id",
+            rownumbers: true,
+            remoteSort: false,
+            columns: [[
+                {
+                    field: 'id',
+                    title: 'ID',
+                    halign: 'center',
+                    align: 'center'
+                },
+                {
+                    field: 'seedId',
+                    title: '种子id',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'growthStage',
+                    title: '生长阶段',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+
+                    field: 'growTitle',
+                    title: '生长标题',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                },
+                {
+                    field: 'stageTime',
+                    title: '阶段生长时间',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'insectPro',
+                    title: '生虫概率',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'pictureWidth',
+                    title: '图片宽度',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'pictureHigh',
+                    title: '图片高度',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'pictureOffSetX',
+                    title: '图片offsetX',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'pictureOffSetY',
+                    title: '图片offsetY',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'cropState',
+                    title: '作物状态',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                }
+            ]]
+        });
+    });
+
+    function loadForm() {
+        var row = grid.datagrid('getSelected');
+        if (row) {
+            params.id = row.id;
+            params.mode = 'edit';
+            $('#formEditContainer').dialog('open').dialog('setTitle', '编辑数据');
+            $('#formEditSeed').form('load', row);
+        } else {
+            alert("请先选择一行数据，然后再尝试点击操作按钮！");
+        }
+    }
+
+    function editSeedForm() {
+        $('#formEditSeed').form('submit', {
+            url: '<%=basePath%>/student/save',
+            onSubmit: function (param) {
+                //param.id = params.id;
+                //param.mode = params.mode;
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.code == 0) {
+                    $('#formEditContainer').dialog('close');
+                    grid.datagrid('reload');
+                }
+                $.messager.show({
+                    title: "消息",
+                    msg: result.msg
+                });
+            }
+        });
+    }
+
+    function loadSaveForm() {
+        params.mode = 'edit';
+        $('#formSaveContainer').dialog('open').dialog('setTitle', '添加数据');
+    }
+
+
+    function saveSeedForm() {
+        $('#formSaveSeed').form('submit', {
+            url: '<%=basePath%>/student/save',
+            onSubmit: function (param) {
+                //param.id = params.id;
+                //param.mode = params.mode;
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.code == 0) {
+                    $('#formSaveContainer').dialog('close');
+                    grid.datagrid('reload');
+                }
+                $.messager.show({
+                    title: "消息",
+                    msg: result.msg
+                });
+            }
+        });
+    }
+
+    function loadPictureChange() {
+        params.mode = 'edit';
+        $('#positionDialog').dialog('open').dialog('setTitle', '图片编辑');
+    }
+
+    function savePictureXAndY() {
+        $('#formSaveSeed').form('submit', {
+            url: '<%=basePath%>/student/save',
+            onSubmit: function (param) {
+                //param.id = params.id;
+                //param.mode = params.mode;
+                return $(this).form('validate');
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.code == 0) {
+                    $('#pictureContainer').dialog('close');
+                    grid.datagrid('reload');
+                }
+                $.messager.show({
+                    title: "消息",
+                    msg: result.msg
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取图像的坐标
+     */
+    function gainPosition() {
+        console.log(imgExtData);
+        return imgExtData;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../ext/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../ext/easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="../ext/easyui/themes/icon.css">
+    <script type="text/javascript" src="../ext/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../ext/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../ext/easyui/plugins/jquery.edatagrid.js"></script>
+    <script type="text/javascript" src="../ext/easyui/locale/easyui-lang-zh_CN.js"></script>
+
+    <style>
+        .easyui-panel{
+            background-image: url("../images/basicPic/positioning.png");
+        }
+        #dd{
+            background-image: url("../images/crops/940/2.png");
+            background-repeat: no-repeat;
+            background-size:100% 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <div class="easyui-panel" style="position:relative;overflow:hidden;width:200px;height:300px;">
+        <div id="dd" class="easyui-draggable easyui-resizable"  style="width:100px;height:200px;border:1px solid red"></div>
+    </div>
+    <button onclick="a()"></button>
+</div>
+
+
+<script>
+    function onDrag(e){
+        var d = e.data;
+        if (d.left < 0){d.left = 0}
+        if (d.top < 0){d.top = 0}
+        if (d.left + $(d.target).outerWidth() > $(d.parent).width()){
+            d.left = $(d.parent).width() - $(d.target).outerWidth();
+        }
+        if (d.top + $(d.target).outerHeight() > $(d.parent).height()){
+            d.top = $(d.parent).height() - $(d.target).outerHeight();
+        }
+    }
+    function a() {
+        alert(document.getElementById("dd"))
+    }
+
+</script>
+
+</body>
+</html>
