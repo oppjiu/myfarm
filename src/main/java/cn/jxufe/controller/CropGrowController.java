@@ -33,14 +33,14 @@ public class CropGrowController {
     @ResponseBody
     @RequestMapping("/save")
     public ResponseResult<?> save(CropGrow cropGrow) {
-        //TODO
+        //TODO 修改
         return new ResponseResult<>(ResponseCode.SUCCESS, cropGrowService.save(cropGrow));
     }
 
     @ResponseBody
     @RequestMapping("/delete")
     public ResponseResult<?> delete(@RequestBody CropGrow cropGrow) {
-        //TODO
+        //TODO 修改
         cropGrowService.delete(cropGrow);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }

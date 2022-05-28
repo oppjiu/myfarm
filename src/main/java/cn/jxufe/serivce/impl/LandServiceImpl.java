@@ -5,6 +5,7 @@ import cn.jxufe.entity.User;
 import cn.jxufe.entity.view.LandView;
 import cn.jxufe.repository.LandRepository;
 import cn.jxufe.repository.UserRepository;
+import cn.jxufe.repository.view.LandViewRepository;
 import cn.jxufe.serivce.LandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class LandServiceImpl implements LandService {
     UserRepository userRepository;
 
     @Autowired
-//    UserLandViewRepository userLandViewRepository;
+    LandViewRepository landViewRepository;
 
     @Override
     public List<LandView> findAll() {

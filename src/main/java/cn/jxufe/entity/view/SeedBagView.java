@@ -19,7 +19,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "V_SeedBag")
 public class SeedBagView extends EntityID {
-    private int seedBagId = 0;  //种子收纳袋ID
     private int seedNumber = 0;    //种子数量
     //外键
     //用户表

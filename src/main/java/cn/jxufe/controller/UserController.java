@@ -29,8 +29,9 @@ public class UserController {
 
     /**
      * 查询玩家列表
+     *
      * @param pageRequest easyui请求
-     * @param username 玩家名称 模糊查询数据
+     * @param username    玩家名称 模糊查询数据
      * @return EasyUIData
      */
     @RequestMapping("/list")

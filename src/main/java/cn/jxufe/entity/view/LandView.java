@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Date;
 
 
 /**
@@ -26,7 +27,7 @@ public class LandView extends EntityID {
     private int isWithered;    //是否枯萎
     private int output;    //作物产量
     private int growthTimeOfEachState;    //作物在每种状态下生长的时间
-    private int stateEndTime;    //作物在每种状态下生长
+    private Date stateEndTime;    //作物在每种状态下生长
     //外键
     //用户表
     private String username;   //用户名

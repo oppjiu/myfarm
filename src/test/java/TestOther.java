@@ -91,11 +91,13 @@ public class TestOther {
     public void testDeleteUser() {
         User user = new User();
         user.setUsername("nihao");
+
         userService.delete(user);
     }
 
     @Test
     public void testTemp() {
-        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
+//        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
+        System.err.println("userService.findByUsername(\"nihao\") = " + userRepository.findAll());
     }
 }

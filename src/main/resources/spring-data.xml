@@ -34,7 +34,7 @@
                 <prop key="hibernate.jdbc.fetch_size">30</prop>
                 <prop key="hibernate.jdbc.batch_size">50</prop>
                 <!-- 建表的命名规则 -->
-                <prop key="hibernate.ejb.naming_strategy">cn.jxufe.cn.jxufe.system.db.SqlServer</prop>
+                <prop key="hibernate.ejb.naming_strategy">cn.jxufe.system.db.SqlServer</prop>
                 <!-- 用于调试的属性 -->
                 <!-- -->
                 <prop key="hibernate.format_sql">true</prop>

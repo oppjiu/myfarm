@@ -17,5 +17,5 @@ public interface SeedBagRepository extends JpaRepository<SeedBag, Long> {
 
     SeedBag findByCropId(int cropId);
 
-    SeedBag findByUserIdAndSeedId(int seedId, String username);
+    SeedBag findByCropIdAndUsername(int seedId, String username);
 }

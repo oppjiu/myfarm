@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void purchaseSeed(int cropId, User user, int seedNumber) {
-        SeedBag seedBag = seedBagRepository.findByUserIdAndSeedId(cropId, user.getUsername());
+        SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, user.getUsername());
         //如果数据库中有相关字段，种子数量加一
         if (seedBag != null) {
             seedBag.setSeedNumber(seedBag.getSeedNumber() + 1);

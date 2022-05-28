@@ -1,5 +1,7 @@
 package cn.jxufe.serivce.impl;
 
+import cn.jxufe.entity.view.LandView;
+import cn.jxufe.repository.view.LandViewRepository;
 import cn.jxufe.serivce.GameService;
 import cn.jxufe.websocket.SystemWebsocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +22,9 @@ import java.util.TimerTask;
 public class GameServiceImpl implements GameService {
     @Autowired
     SystemWebsocketHandler systemWebsocketHandler;
+
+    @Autowired
+    LandViewRepository landViewRepository;
 
     @Override
     public void gameSeversInitiate() {
@@ -33,16 +39,24 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void insectAlgorithm() {
+        //查询种植了作物和不是枯萎作物的土地
+        List<LandView> landViewList = landViewRepository.findAllByHasCropAndIsWithered(1, 0);
+        if (!landViewList.isEmpty()) {
+            Date nowTime = new Date();
+            for (LandView landView : landViewList) {
+                //生长时间大于生长结束时间
+                Date stateEndTime = landView.getStateEndTime();
+                if (nowTime.getTime() >= stateEndTime.getTime()) {
 
+                } else {
+
+                }
+            }
+        }
     }
 
     @Override
-    public void serverActionChangeCropStage() {
-
-    }
-
-    @Override
-    public void serverActionCreateInsect() {
+    public void updateCropStage() {
 
     }
 

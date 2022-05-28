@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@192.168.2.128" uuid="54b13d3b-4c1c-4c3b-82a6-cfaba971a749">
+    <data-source source="LOCAL" name="@192.168.2.128" uuid="ae14db9e-2335-487a-89eb-4ed289a745dc">
       <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>

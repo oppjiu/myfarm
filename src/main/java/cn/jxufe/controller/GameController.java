@@ -31,8 +31,39 @@ public class GameController {
      */
     @RequestMapping(value = "/startFarm")
     @ResponseBody
-    public ResponseResult<?> temp() {
+    public ResponseResult<?> startFarm() {
         //TODO
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }
+
+    @RequestMapping(value = "/1")
+    @ResponseBody
+    public ResponseResult<?> serverActionPlantSeed() {
+        //TODO
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+
+    @RequestMapping(value = "/2")
+    @ResponseBody
+    public ResponseResult<?> serverActionKillWorm() {
+        //TODO
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "/3")
+    @ResponseBody
+    public ResponseResult<?> serverActionHarvest() {
+        //TODO
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "/4")
+    @ResponseBody
+    public ResponseResult<?> serverActionCleanGrass() {
+        //TODO
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+
 }

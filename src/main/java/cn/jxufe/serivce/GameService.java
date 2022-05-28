@@ -34,9 +34,7 @@ public interface GameService {
 
     void insectAlgorithm();
 
-    void serverActionChangeCropStage();
-
-    void serverActionCreateInsect();
+    void updateCropStage();
 
     /*和用户绑定的相关方法*/
     //TODO 对于每块土地种子的管理

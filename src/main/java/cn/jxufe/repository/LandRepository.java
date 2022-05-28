@@ -11,7 +11,7 @@ import java.util.List;
  * @description:
  **/
 public interface LandRepository extends JpaRepository<Land, Long> {
-    List<Land> findAllByLandId(long id);
+    List<Land> findAllByLandId(int id);
 
     List<Land> findAllByUsername(String username);
 
