@@ -1,6 +1,7 @@
 package cn.jxufe.entity;
 
 import cn.jxufe.bean.EntityID;
+import cn.jxufe.bean.SystemCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +26,5 @@ public class User extends EntityID {
     private int exp = 0;    //经验
     private int point = 0;  //分数
     private int money = 0;  //金钱
-    private String headImgUrl = "/images/headImages/0.jpg";    //头像
+    private String headImgUrl = SystemCode.DEFAULT_USER_IMAGE_URL;    //头像
 }

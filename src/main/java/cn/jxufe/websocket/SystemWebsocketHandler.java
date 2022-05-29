@@ -1,5 +1,6 @@
 package cn.jxufe.websocket;
 
+import cn.jxufe.bean.SystemCode;
 import cn.jxufe.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +32,14 @@ public class SystemWebsocketHandler extends TextWebSocketHandler {
     /*发布webSocket会话时，在会话管理列表中注册该webSocket会话*/
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessionList.add(session);
-        User user = (User) session.getHandshakeAttributes().get("user");
+        User user = (User) session.getHandshakeAttributes().get(SystemCode.WEBSOCKET_SESSION_NAME);
         log.info("用户 " + user.getUsername() + " 成功建立连接");
     }
 
     @Override
     /*发生webSocket会话主动关闭事件时，清理会话管理列表*/
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        User user = (User) session.getHandshakeAttributes().get("user");
+        User user = (User) session.getHandshakeAttributes().get(SystemCode.WEBSOCKET_SESSION_NAME);
         log.info("用户 " + user.getUsername() + " 连接关闭。状态: " + status);
         sessionList.remove(session);
     }
@@ -46,7 +47,7 @@ public class SystemWebsocketHandler extends TextWebSocketHandler {
     @Override
     /*发生传输错误时关闭该用户的webSocket会话，并清理会话管理列表*/
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        User user = (User) session.getHandshakeAttributes().get("user");
+        User user = (User) session.getHandshakeAttributes().get(SystemCode.WEBSOCKET_SESSION_NAME);
         if (session.isOpen()) {
             session.close();
         }
@@ -79,7 +80,7 @@ public class SystemWebsocketHandler extends TextWebSocketHandler {
      */
     public void sendMessageToOne(String username, TextMessage message) {
         for (WebSocketSession session : sessionList) {
-            User User = (User) session.getHandshakeAttributes().get("user");
+            User User = (User) session.getHandshakeAttributes().get(SystemCode.WEBSOCKET_SESSION_NAME);
             if (User == null) continue;
             if (User.getUsername().equals(username)) {
                 try {

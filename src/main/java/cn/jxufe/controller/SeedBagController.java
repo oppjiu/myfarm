@@ -1,15 +1,18 @@
 package cn.jxufe.controller;
 
-import cn.jxufe.bean.ResponseCode;
-import cn.jxufe.bean.ResponseResult;
+import cn.jxufe.bean.*;
 import cn.jxufe.entity.SeedBag;
+import cn.jxufe.entity.User;
 import cn.jxufe.serivce.SeedBagService;
+import cn.jxufe.utils.EasyUIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @create: 2022-05-18 10:48
@@ -23,16 +26,17 @@ public class SeedBagController {
     SeedBagService seedBagService;
 
     /**
-     * 查询用户拥有的所有种子数据
+     * 查询该用户拥有的所有种子数据
      *
-     * @param username
+     * @param pageRequest 请求
+     * @param session    当前用户session
      * @return
      */
     @RequestMapping("/list")
     @ResponseBody
-    public ResponseResult<?> findAllPageable(@RequestParam("username") String username) {
-        //TODO EasyUIData<?> 返回类型
-        return new ResponseResult<>(ResponseCode.SUCCESS, seedBagService.findAllByUsername(username));
+    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest, HttpSession session) {
+        User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
+        return seedBagService.findAllByUsernamePageable(curUser.getUsername(), EasyUIUtils.requestProcess(pageRequest));
     }
 
     /**

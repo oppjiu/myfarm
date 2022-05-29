@@ -13,7 +13,7 @@ import java.util.List;
  * @description:
  **/
 public interface SeedBagService {
-    List<SeedBagView> findAllByUsername(String username);
+    EasyUIData<SeedBagView> findAllByUsernamePageable(String username, Pageable pageable);
 
     SeedBag save(SeedBag seedBag);
 

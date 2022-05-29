@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
         User curUser = userRepository.findByUsername(user.getUsername());
         //查询到玩家数据
         if (curUser != null) {
-            session.setAttribute("curUser", curUser);
+            session.setAttribute(SystemCode.USER_SESSION_NAME, curUser);
             return true;
         } else {
             return false;

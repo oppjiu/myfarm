@@ -1,9 +1,6 @@
 package cn.jxufe.controller;
 
-import cn.jxufe.bean.EasyUIData;
-import cn.jxufe.bean.EasyUIDataPageRequest;
-import cn.jxufe.bean.ResponseCode;
-import cn.jxufe.bean.ResponseResult;
+import cn.jxufe.bean.*;
 import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.UserService;
@@ -33,7 +30,7 @@ public class UserController {
      * 模糊查询玩家数据
      *
      * @param pageRequest 请求
-     * @param username    玩家名称 模糊查询数据
+     * @param username    玩家名称 模糊查询所需信息
      * @return EasyUIData
      */
     @RequestMapping("/list")
@@ -122,7 +119,7 @@ public class UserController {
     @RequestMapping(value = "/purchaseSeed")
     @ResponseBody
     public ResponseResult<?> purchaseSeed(@RequestParam("seedId") int seedId, @RequestParam("seedNumber") int seedNumber, HttpSession session) {
-        User curUser = (User) session.getAttribute("curUser");
+        User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
         SeedBag seedBag = userService.purchaseSeed(seedId, seedNumber, curUser);
         if (seedBag != null) {
             return new ResponseResult<>(ResponseCode.SUCCESS, seedBag);

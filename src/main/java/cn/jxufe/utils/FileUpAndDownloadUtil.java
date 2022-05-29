@@ -7,7 +7,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -26,14 +25,14 @@ public class FileUpAndDownloadUtil {
      * 文件上传
      *
      * @param savePathname 路径
-     * @param request      httpServletRequest
+     * @param session      session
      * @param uploadFile   文件名称
      * @throws IOException
      */
-    public static String fileUpload(String savePathname, HttpServletRequest request, MultipartFile uploadFile) throws IOException {
+    public static String fileUpload(String savePathname, HttpSession session, MultipartFile uploadFile) throws IOException {
         String fileName = uploadFile.getOriginalFilename();//获取上传的文件的文件名
         fileName = UUID.randomUUID() + fileName.substring(fileName.lastIndexOf("."));//处理文件重名问题
-        String realPath = request.getSession().getServletContext().getRealPath(savePathname); //获取服务器中目录的绝对路径
+        String realPath = session.getServletContext().getRealPath(savePathname); //获取服务器中目录的绝对路径
         File file = new File(realPath);
         //创建文件夹
         if (!file.exists()) {
@@ -44,6 +43,13 @@ public class FileUpAndDownloadUtil {
         return savePathname + File.separator + fileName;
     }
 
+    /**
+     * 文件下载
+     * @param session session
+     * @param filePath 文件路径
+     * @return
+     * @throws IOException
+     */
     public static ResponseEntity<byte[]> fileDownload(HttpSession session, @RequestParam("filePath") String filePath) throws IOException {
         InputStream is = null;
         try {

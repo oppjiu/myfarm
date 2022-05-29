@@ -1,6 +1,8 @@
+import cn.jxufe.entity.Crop;
 import cn.jxufe.entity.Land;
 import cn.jxufe.entity.User;
 import cn.jxufe.entity.view.CropGrowView;
+import cn.jxufe.repository.CropRepository;
 import cn.jxufe.repository.LandRepository;
 import cn.jxufe.repository.SeedBagRepository;
 import cn.jxufe.repository.UserRepository;
@@ -98,10 +100,18 @@ public class TestOther {
     }
     @Autowired
     CropGrowViewRepository cropGrowViewRepository;
+    @Autowired
+    CropRepository cropRepository;
     @Test
     public void testTemp() {
-        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
-        CropGrowView cropGrowViewByFind = cropGrowViewRepository.findByStageIdAndCropId(1, 1);
-        System.out.println("cropGrowViewByFind = " + cropGrowViewByFind);
+//        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
+//        CropGrowView cropGrowViewByFind = cropGrowViewRepository.findByStageIdAndCropId(1, 1);
+//        System.out.println("cropGrowViewByFind = " + cropGrowViewByFind);
+        for (CropGrowView cropGrowView : cropGrowViewRepository.findAll()) {
+            System.out.println("cropGrowView = " + cropGrowView);
+        }
+//        for (Crop crop : cropRepository.findAll()) {
+//            System.out.println("crop = " + crop);
+//        }
     }
 }

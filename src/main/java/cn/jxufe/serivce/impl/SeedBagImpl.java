@@ -2,6 +2,7 @@ package cn.jxufe.serivce.impl;
 
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.entity.SeedBag;
+import cn.jxufe.entity.view.CropView;
 import cn.jxufe.entity.view.SeedBagView;
 import cn.jxufe.repository.SeedBagRepository;
 import cn.jxufe.repository.view.SeedBagViewRepository;
@@ -25,8 +26,12 @@ public class SeedBagImpl implements SeedBagService {
     @Autowired
     SeedBagViewRepository seedBagViewRepository;
     @Override
-    public List<SeedBagView> findAllByUsername(String username) {
-        return seedBagViewRepository.findAllByUsername(username);
+    public EasyUIData<SeedBagView> findAllByUsernamePageable(String username, Pageable pageable) {
+        Page<SeedBagView> page = seedBagViewRepository.findAllByUsername(username, pageable);
+        EasyUIData<SeedBagView> easyUIData = new EasyUIData<SeedBagView>();
+        easyUIData.setTotal(page.getTotalElements());
+        easyUIData.setRows(page.getContent());
+        return easyUIData;
     }
     @Override
     public SeedBag save(SeedBag seedBag) {

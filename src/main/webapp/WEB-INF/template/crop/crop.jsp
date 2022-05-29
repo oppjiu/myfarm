@@ -21,8 +21,8 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/farm/farm.css">
-    <script type="text/javascript" src="<%=basePath%>/ext/farm/helper.js?346t"></script>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+    <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js?346t"></script>
 </head>
 <body>
 

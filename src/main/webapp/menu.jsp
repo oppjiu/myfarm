@@ -42,13 +42,13 @@
         <img class="menu shadow" src="ext/images/advancePic/storeIcon.png" width="50px" alt="种子收纳袋">
     </a>
     <a href="<%=basePath%>/page/userLoginPage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" width="50px" alt="玩家登录">
+        <img class="menu shadow" src="ext/images/advancePic/userIcon.png" width="50px" alt="玩家登录">
     </a>
     <a href="<%=basePath%>/page/userManagerPage" target="workspace">
         <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" width="50px" alt="玩家管理">
     </a>
     <a href="<%=basePath%>/page/cropPage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/seedManageIcon.png" width="50px" alt="种子管理">
+        <img class="menu shadow" src="ext/images/advancePic/barnIcon.png" width="50px" alt="种子管理">
     </a>
 </div>
 </body>

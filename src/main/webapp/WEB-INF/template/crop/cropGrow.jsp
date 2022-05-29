@@ -22,11 +22,11 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.draggable.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/farm/farm.css">
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/farm/imgPosition.css?t=0901">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/imgPosition.css?t=0901">
 
-    <script type="text/javascript" src="<%=basePath%>/ext/farm/helper.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/ext/farm/imgPosition.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/js/imgPosition.js"></script>
 </head>
 <body>
 <div id="positionDialog" class="easyui-dialog" style="width:240px;height:420px;padding:10px 10px" closed="true"
