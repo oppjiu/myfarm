@@ -18,8 +18,8 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <script type="text/javascript" src="<%=basePath%>/ext/farm/helper.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/ext/farm/sockjs.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/js/sockjs.js"></script>
 </head>
 <body>
 用户选择：

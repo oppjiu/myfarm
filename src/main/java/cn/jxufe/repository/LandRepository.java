@@ -13,8 +13,6 @@ import java.util.List;
 public interface LandRepository extends JpaRepository<Land, Long> {
     Land findByLandId(int id);
 
-    List<Land> findAllByLandId(int id);
-
     List<Land> findAllByUsername(String username);
 
     List<Land> findAllByHasCrop(int hasCrop);

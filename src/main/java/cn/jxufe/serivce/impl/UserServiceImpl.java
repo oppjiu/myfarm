@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
             return null;
         } else {
             User savedUser = userRepository.save(user);
-            gameService.initiateUserLands(SystemCode.INITIATE_USER_LANDS, savedUser);//初始化玩家土地
+            List<Land> createLands = gameService.initiateUserLands(SystemCode.INITIATE_USER_LANDS, savedUser);//初始化玩家土地
             return savedUser;
         }
     }

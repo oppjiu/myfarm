@@ -14,6 +14,8 @@ import java.util.List;
 public interface LandService {
     List<LandView> findAll();
 
+    List<LandView> findAllByUsername(User user);
+
     Land save(Land land);
 
     void delete(Land land);

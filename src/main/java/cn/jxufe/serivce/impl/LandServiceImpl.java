@@ -22,9 +22,6 @@ public class LandServiceImpl implements LandService {
     @Autowired
     LandRepository landRepository;
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     LandViewRepository landViewRepository;
 
     @Override
@@ -32,6 +29,11 @@ public class LandServiceImpl implements LandService {
         //TODO UserLandViewRepository 视图
 //        return userLandViewRepository.findAll();
         return null;
+    }
+
+    @Override
+    public List<LandView> findAllByUsername(User user) {
+        return landViewRepository.findAllByUsername(user.getUsername());
     }
 
 

@@ -4,11 +4,10 @@ import cn.jxufe.bean.SystemCode;
 import cn.jxufe.entity.CropGrow;
 import cn.jxufe.entity.Land;
 import cn.jxufe.entity.User;
+import cn.jxufe.entity.view.CropGrowView;
 import cn.jxufe.entity.view.LandView;
 import cn.jxufe.repository.CropGrowRepository;
-import cn.jxufe.repository.CropRepository;
 import cn.jxufe.repository.LandRepository;
-import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.repository.view.LandViewRepository;
 import cn.jxufe.serivce.GameService;
@@ -31,11 +30,7 @@ public class GameServiceImpl implements GameService {
     @Autowired
     LandViewRepository landViewRepository;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
     LandRepository landRepository;
-    @Autowired
-    CropRepository cropRepository;
     @Autowired
     CropGrowRepository cropGrowRepository;
     @Autowired
@@ -48,11 +43,12 @@ public class GameServiceImpl implements GameService {
                     @Override
                     public void run() {
                         talkToAll("现在服务器时间是：" + new Date());
+                        //更新游戏数据
+//                        updateCropStage();
                     }
-                }, 0, 5000);
+                }, 0, SystemCode.PER_TIME);
     }
 
-    @Override
     public boolean insectAlgorithm() {
         //TODO 当玩家在线时才生虫
         //TODO 不能在即将进入下一阶段的前一段时间内生虫
@@ -69,7 +65,17 @@ public class GameServiceImpl implements GameService {
      */
 
     @Override
-    public void updateCropStage() {
+    public List<Land> initiateUserLands(int landNumber, User user) {
+        ArrayList<Land> landList = new ArrayList<>();
+        for (int i = 0; i < landNumber; i++) {
+            Land createLand = new Land();
+            createLand.setUsername(user.getUsername());
+            landList.add(createLand);
+        }
+        return landRepository.save(landList);
+    }
+
+    private void updateCropStage() {
         //查询种植了作物、不是成熟期和不是枯萎作物的土地
         List<LandView> landViewList = landViewRepository.findAllByHasCropAndIsWitheredAndIsMature(1, 0, 0);
         if (!landViewList.isEmpty()) {
@@ -111,21 +117,12 @@ public class GameServiceImpl implements GameService {
                 landByFind.setGrowthTimeOfEachState(nowCropGrowStageByFind.getGrowTime() + SystemCode.PER_TIME);
                 //保存数据
                 landRepository.save(landByFind);
-                //TODO 发送消息
-                systemWebsocketHandler.sendMessageToOne(username, new TextMessage(landByFind.toString()));
+                //TODO 发送封装的消息，前端需要接受的参数landId
+                CropGrowView cropGrowViewFindById = cropGrowViewRepository.findByStageIdAndCropId(landByFind.getNowCropGrowStage(), landByFind.getCropId());
+
+                systemWebsocketHandler.sendMessageToOne(username, new TextMessage(cropGrowViewFindById.toString()));
             }
         }
-    }
-
-    @Override
-    public List<Land> initiateUserLands(int landNumber, User user) {
-        ArrayList<Land> landList = new ArrayList<>();
-        for (int i = 0; i < landNumber; i++) {
-            Land createLand = new Land();
-            createLand.setUsername(user.getUsername());
-            landList.add(createLand);
-        }
-        return landRepository.save(landList);
     }
 
     private void talkToAll(String message) {
