@@ -25,24 +25,42 @@ public class CropController {
     @Autowired
     CropService cropService;
 
+    /**
+     * 查询所有种子数据
+     * 模糊查询种子数据
+     *
+     * @param pageRequest 请求
+     * @param cropName    种子名称
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/list")
     public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest,
-                                         @RequestParam(value = "name", defaultValue = "") String name) {
-        return cropService.findAllByCropNameLike(name, EasyUIUtils.requestProcess(pageRequest));
+                                         @RequestParam(value = "cropName", defaultValue = "") String cropName) {
+        return cropService.findAllPageableByCropNameLike(cropName, EasyUIUtils.requestProcess(pageRequest));
     }
 
+    /**
+     * 保存种子信息（单条保存）
+     *
+     * @param crop 种子信息
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/save")
     public ResponseResult<?> save(@RequestBody Crop crop) {
-        //TODO 修改
         return new ResponseResult<>(ResponseCode.SUCCESS, cropService.save(crop));
     }
 
+    /**
+     * 删除种子数据（单条删除）
+     *
+     * @param crop 种子信息（需含有种子id）
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/delete")
     public ResponseResult<?> delete(@RequestBody Crop crop) {
-        //TODO 修改
         cropService.delete(crop);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }

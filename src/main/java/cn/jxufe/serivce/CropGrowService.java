@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  * @description:
  **/
 public interface CropGrowService {
-    EasyUIData<CropGrowView> findAllPageable(Pageable pageable);
+    EasyUIData<CropGrowView> findAllPageableByCropId(int cropId, Pageable pageable);
 
     CropGrow save(CropGrow cropGrow);
 

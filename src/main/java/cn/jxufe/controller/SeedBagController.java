@@ -1,14 +1,14 @@
 package cn.jxufe.controller;
 
-import cn.jxufe.bean.EasyUIData;
-import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.ResponseCode;
 import cn.jxufe.bean.ResponseResult;
+import cn.jxufe.entity.SeedBag;
 import cn.jxufe.serivce.SeedBagService;
-import cn.jxufe.utils.EasyUIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -22,24 +22,41 @@ public class SeedBagController {
     @Autowired
     SeedBagService seedBagService;
 
+    /**
+     * 查询用户拥有的所有种子数据
+     *
+     * @param username
+     * @return
+     */
     @RequestMapping("/list")
     @ResponseBody
-    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest) {
-        //修改UserSeed为UserSeedView
-        return seedBagService.findAllPageable(EasyUIUtils.requestProcess(pageRequest));
+    public ResponseResult<?> findAllPageable(@RequestParam("username") String username) {
+        //TODO EasyUIData<?> 返回类型
+        return new ResponseResult<>(ResponseCode.SUCCESS, seedBagService.findAllByUsername(username));
     }
 
+    /**
+     * 保存种子收纳袋信息（单条保存）
+     *
+     * @param seedBag 种子收纳袋信息
+     * @return
+     */
     @RequestMapping("/save")
     @ResponseBody
-    public ResponseResult<?> save() {
-        //TODO
-        return new ResponseResult<>(ResponseCode.SUCCESS);
+    public ResponseResult<?> save(@RequestBody SeedBag seedBag) {
+        return new ResponseResult<>(ResponseCode.SUCCESS, seedBagService.save(seedBag));
     }
 
+    /**
+     * 删除种子收纳袋数据（单条删除）
+     *
+     * @param seedBag 种子收纳袋信息（需含有种子id和用户名信息）
+     * @return
+     */
     @RequestMapping("/delete")
     @ResponseBody
-    public ResponseResult<?> delete() {
-        //TODO
+    public ResponseResult<?> delete(@RequestBody SeedBag seedBag) {
+        seedBagService.delete(seedBag);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }
 }

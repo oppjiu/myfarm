@@ -14,7 +14,7 @@
     <style>
         body {
             margin: 0px;
-            background-image: url(images/basicPic/welcome.png);
+            background-image: url(ext/images/basicPic/welcome.png);
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-color: transparent;

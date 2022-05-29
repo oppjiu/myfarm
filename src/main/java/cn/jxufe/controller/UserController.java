@@ -4,6 +4,7 @@ import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.EasyUIDataPageRequest;
 import cn.jxufe.bean.ResponseCode;
 import cn.jxufe.bean.ResponseResult;
+import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.UserService;
 import cn.jxufe.utils.EasyUIUtils;
@@ -28,27 +29,44 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 查询玩家列表
+     * 查询所有玩家数据
+     * 模糊查询玩家数据
      *
-     * @param pageRequest easyui请求
+     * @param pageRequest 请求
      * @param username    玩家名称 模糊查询数据
      * @return EasyUIData
      */
     @RequestMapping("/list")
     @ResponseBody
-    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest,
-                                         @RequestParam(value = "username", defaultValue = "") String username) {
+    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest, @RequestParam(value = "username", defaultValue = "") String username) {
         return userService.findAllByUsernameLike(username, EasyUIUtils.requestProcess(pageRequest));
     }
 
+    /**
+     * 注册用户
+     *
+     * @param user 用户信息（需含有用户名标识）
+     * @return
+     */
     @RequestMapping("/register")
     @ResponseBody
     public ResponseResult<?> register(@RequestBody User user) {
         //TODO 修改
         User registerUser = userService.register(user);
-        return new ResponseResult<>(ResponseCode.SUCCESS, registerUser);
+        //判断注册用户是否重名
+        if (registerUser != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, registerUser);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 
+    /**
+     * 修改用户
+     *
+     * @param user 用户信息（需含有用户名标识）
+     * @return
+     */
     @RequestMapping("/modify")
     @ResponseBody
     public ResponseResult<?> modify(@RequestBody User user) {
@@ -57,6 +75,12 @@ public class UserController {
         return new ResponseResult<>(ResponseCode.SUCCESS, modifyUser);
     }
 
+    /**
+     * 删除用户
+     *
+     * @param user 用户信息（需含有用户名标识）
+     * @return
+     */
     @RequestMapping("/delete")
     @ResponseBody
     public ResponseResult<?> delete(@RequestBody User user) {
@@ -68,15 +92,15 @@ public class UserController {
     /**
      * 用户登录功能
      *
-     * @param session
-     * @param user
+     * @param user    用户信息（需含有用户名标识）
+     * @param session session
      * @return
      */
     @RequestMapping(value = "/setCurUser")
     @ResponseBody
-    public ResponseResult<?> setCurUser(HttpSession session, @RequestBody User user) {
+    public ResponseResult<?> setCurUser(@RequestBody User user, HttpSession session) {
         //TODO 是否需要增加shiro
-        boolean isTure = userService.setCurUser(session, user);
+        boolean isTure = userService.setCurUser(user, session);
         //检测是否登录成功
         ResponseResult<?> result;
         if (isTure) {
@@ -87,12 +111,23 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 购买种子
+     *
+     * @param seedId     种子id
+     * @param seedNumber 种子数量
+     * @param session    购买用户
+     * @return
+     */
     @RequestMapping(value = "/purchaseSeed")
     @ResponseBody
-    public ResponseResult<?> purchaseSeed(HttpSession session,
-                                          @RequestParam("seedId") int seedId) {
+    public ResponseResult<?> purchaseSeed(@RequestParam("seedId") int seedId, @RequestParam("seedNumber") int seedNumber, HttpSession session) {
         User curUser = (User) session.getAttribute("curUser");
-        userService.purchaseSeed(seedId, curUser, 1);
-        return new ResponseResult<>(ResponseCode.SUCCESS);
+        SeedBag seedBag = userService.purchaseSeed(seedId, seedNumber, curUser);
+        if (seedBag != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, seedBag);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 }

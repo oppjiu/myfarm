@@ -18,5 +18,7 @@ public interface LandViewRepository extends JpaRepository<LandView, Long> {
      * @param isWithered 是否枯萎
      * @return
      */
-    List<LandView> findAllByHasCropAndIsWithered(int hasCrop, int isWithered);
+    List<LandView> findAllByHasCropAndIsWitheredAndIsMature(int hasCrop, int isWithered, int isMature);
+
+    LandView findByLandId(int id);
 }

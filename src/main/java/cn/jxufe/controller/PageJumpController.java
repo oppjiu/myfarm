@@ -11,14 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/page")
 public class PageJumpController {
-    @RequestMapping("/cropList")
-    public String jump2CropList() {
-        return "/crop/grid";
+    @RequestMapping("/cropPage")
+    public String jump2CropPage() {
+        return "/crop/crop";
     }
 
-    @RequestMapping("/cropsGrowList")
-    public String jump2CropsGrowList() {
-        return "/cropsGrow/grid";
+    @RequestMapping("/cropGrowPage")
+    public String jump2CropGrowPage() {
+        return "/crop/cropGrow";
     }
 
+    @RequestMapping("/userManagerPage")
+    public String jump2UserManagerPage() {
+        return "/user/userManager";
+    }
+
+    @RequestMapping("/seedBagPage")
+    public String jump2SeedBagPage() {
+        return "/seedBag/seedBag";
+    }
+
+    @RequestMapping("/userLoginPage")
+    public String jump2RegisterPage() {
+        return "/user/userLogin";
+    }
+
+    @RequestMapping("/farmGamePage")
+    public String jump2FarmGamePage() {
+        return "/farmGame/farmGame";
+    }
 }

@@ -24,28 +24,10 @@ public class SeedBagImpl implements SeedBagService {
     SeedBagRepository seedBagRepository;
     @Autowired
     SeedBagViewRepository seedBagViewRepository;
-
     @Override
-    public List<SeedBagView> findAll() {
-        return seedBagViewRepository.findAll();
+    public List<SeedBagView> findAllByUsername(String username) {
+        return seedBagViewRepository.findAllByUsername(username);
     }
-
-    /**
-     * 查询种子视图
-     *
-     * @param pageable
-     * @return
-     */
-    @Override
-    public EasyUIData<SeedBagView> findAllPageable(Pageable pageable) {
-        Page<SeedBagView> page = seedBagViewRepository.findAll(pageable);
-        EasyUIData<SeedBagView> easyUIData = new EasyUIData<SeedBagView>();
-        easyUIData.setTotal(page.getTotalElements());
-        easyUIData.setRows(page.getContent());
-        return easyUIData;
-    }
-
-
     @Override
     public SeedBag save(SeedBag seedBag) {
         return seedBagRepository.save(seedBag);

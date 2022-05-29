@@ -1,8 +1,10 @@
 import cn.jxufe.entity.Land;
 import cn.jxufe.entity.User;
+import cn.jxufe.entity.view.CropGrowView;
 import cn.jxufe.repository.LandRepository;
 import cn.jxufe.repository.SeedBagRepository;
 import cn.jxufe.repository.UserRepository;
+import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.serivce.LandService;
 import cn.jxufe.serivce.UserService;
 import org.junit.Test;
@@ -94,10 +96,12 @@ public class TestOther {
 
         userService.delete(user);
     }
-
+    @Autowired
+    CropGrowViewRepository cropGrowViewRepository;
     @Test
     public void testTemp() {
-//        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
-        System.err.println("userService.findByUsername(\"nihao\") = " + userRepository.findAll());
+        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
+        CropGrowView cropGrowViewByFind = cropGrowViewRepository.findByStageIdAndCropId(1, 1);
+        System.out.println("cropGrowViewByFind = " + cropGrowViewByFind);
     }
 }

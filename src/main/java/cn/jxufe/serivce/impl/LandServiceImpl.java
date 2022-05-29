@@ -10,7 +10,6 @@ import cn.jxufe.serivce.LandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,22 +43,5 @@ public class LandServiceImpl implements LandService {
     @Override
     public void delete(Land land) {
         landRepository.delete(land);
-    }
-
-    @Override
-    public List<Land> initiateUserLands(User user, int landNum) {
-        ArrayList<Land> landList = new ArrayList<>();
-        for (int i = 0; i < landNum; i++) {
-            Land createLand = new Land();
-            createLand.setUsername(user.getUsername());
-            landList.add(createLand);
-        }
-        return landRepository.save(landList);
-    }
-
-
-    @Override
-    public void deleteInBatch(User user) {
-        landRepository.deleteInBatch(landRepository.findAllByUsername(user.getUsername()));
     }
 }

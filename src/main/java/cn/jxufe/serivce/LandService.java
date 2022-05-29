@@ -17,13 +17,4 @@ public interface LandService {
     Land save(Land land);
 
     void delete(Land land);
-
-    /**
-     * 批量删除
-     *
-     * @param user
-     */
-    void deleteInBatch(User user);
-
-    List<Land> initiateUserLands(User user, int landNum);
 }

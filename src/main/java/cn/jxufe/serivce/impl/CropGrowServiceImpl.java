@@ -30,33 +30,21 @@ public class CropGrowServiceImpl implements CropGrowService {
      * @return
      */
     @Override
-    public EasyUIData<CropGrowView> findAllPageable(Pageable pageable) {
-        Page<CropGrowView> page = cropGrowViewRepository.findAll(pageable);
+    public EasyUIData<CropGrowView> findAllPageableByCropId(int cropId, Pageable pageable) {
+        Page<CropGrowView> page = cropGrowViewRepository.findAllByCropId(cropId, pageable);
         EasyUIData<CropGrowView> easyUIData = new EasyUIData<CropGrowView>();
         easyUIData.setTotal(page.getTotalElements());
         easyUIData.setRows(page.getContent());
         return easyUIData;
     }
 
-    /**
-     * 保存和修改生长作物
-     *
-     * @param cropGrow
-     * @return
-     */
     @Override
     public CropGrow save(CropGrow cropGrow) {
         return cropGrowRepository.save(cropGrow);
     }
 
-    /**
-     * 删除生长作物
-     *
-     * @param cropGrow
-     * @return
-     */
     @Override
     public void delete(CropGrow cropGrow) {
-        cropGrowRepository.delete(cropGrow);
+        cropGrowRepository.delete(cropGrowRepository.findByStageIdAndCropId(cropGrow.getStageId(), cropGrow.getCropId()));
     }
 }

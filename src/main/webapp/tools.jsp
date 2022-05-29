@@ -17,7 +17,7 @@
         }
 
         .bar {
-            background-image: url(images/basicPic/bottom.png);
+            background-image: url(ext/images/basicPic/bottom.png);
             background-size: 10% 60px;
             background-repeat: repeat-x;
         }

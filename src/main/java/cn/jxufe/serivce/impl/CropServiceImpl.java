@@ -25,7 +25,7 @@ public class CropServiceImpl implements CropService {
     public CropRepository cropRepository;
 
     @Override
-    public EasyUIData<CropView> findAllByCropNameLike(String name, Pageable pageable) {
+    public EasyUIData<CropView> findAllPageableByCropNameLike(String name, Pageable pageable) {
         Page<CropView> page = cropViewRepository.findAllByCropNameContaining(name, pageable);
         EasyUIData<CropView> easyUIData = new EasyUIData<CropView>();
         easyUIData.setTotal(page.getTotalElements());
@@ -40,6 +40,6 @@ public class CropServiceImpl implements CropService {
 
     @Override
     public void delete(Crop crop) {
-        cropRepository.delete(crop);
+        cropRepository.delete(cropRepository.findByCropId(crop.getCropId()));
     }
 }

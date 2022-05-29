@@ -1,5 +1,10 @@
 package cn.jxufe.serivce;
 
+import cn.jxufe.entity.Land;
+import cn.jxufe.entity.User;
+
+import java.util.List;
+
 /**
  * （1）支持多玩家模式
  * 多玩家是指用户可以通过模拟登录切换当前玩家，并对当前玩家的农场进行播种、除虫、收获、除枯叶等操作。 多玩家模式不需要支持偷菜等功能。
@@ -32,22 +37,9 @@ public interface GameService {
     /*服务器自动执行*/
     void gameSeversInitiate();
 
-    void insectAlgorithm();
+    boolean insectAlgorithm();
 
     void updateCropStage();
 
-    /*和用户绑定的相关方法*/
-    //TODO 对于每块土地种子的管理
-    //TODO（a）播种：
-    void serverActionPlantSeed();
-
-    //TODO（b）除虫：
-    void serverActionKillWorm();
-
-    //TODO（c）收获：
-    void serverActionHarvest();
-
-    //TODO（d）除枯草：
-    void serverActionCleanGrass();
-
+    List<Land> initiateUserLands(int landNumber, User user);
 }

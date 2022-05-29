@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -24,23 +25,41 @@ public class CropGrowController {
     @Autowired
     CropGrowService cropGrowService;
 
+    /**
+     * 查询作物的所有生长阶段数据
+     *
+     * @param pageRequest 请求
+     * @param cropId      种子id
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/list")
-    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest) {
-        return cropGrowService.findAllPageable(EasyUIUtils.requestProcess(pageRequest));
+    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest,
+                                         @RequestParam("cropId") int cropId) {
+        return cropGrowService.findAllPageableByCropId(cropId, EasyUIUtils.requestProcess(pageRequest));
     }
 
+    /**
+     * 保存作物生长阶段信息（单条保存）
+     *
+     * @param cropGrow 作物生长阶段信息
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/save")
     public ResponseResult<?> save(CropGrow cropGrow) {
-        //TODO 修改
         return new ResponseResult<>(ResponseCode.SUCCESS, cropGrowService.save(cropGrow));
     }
 
+    /**
+     * 删除作物生长阶段数据（单条删除）
+     *
+     * @param cropGrow 作物生长阶段信息（需含有作物生长阶段id和种子id）
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/delete")
     public ResponseResult<?> delete(@RequestBody CropGrow cropGrow) {
-        //TODO 修改
         cropGrowService.delete(cropGrow);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }

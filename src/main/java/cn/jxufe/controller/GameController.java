@@ -29,14 +29,14 @@ public class GameController {
      *
      * @return
      */
-    @RequestMapping(value = "/startFarm")
+    @RequestMapping(value = "/initiateFarmView")
     @ResponseBody
-    public ResponseResult<?> startFarm() {
+    public ResponseResult<?> initiateFarmView() {
         //TODO
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }
 
-    @RequestMapping(value = "/1")
+    @RequestMapping(value = "/plantSeed")
     @ResponseBody
     public ResponseResult<?> serverActionPlantSeed() {
         //TODO
@@ -44,21 +44,21 @@ public class GameController {
     }
 
 
-    @RequestMapping(value = "/2")
+    @RequestMapping(value = "/killWorm")
     @ResponseBody
     public ResponseResult<?> serverActionKillWorm() {
         //TODO
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }
 
-    @RequestMapping(value = "/3")
+    @RequestMapping(value = "/harvest")
     @ResponseBody
     public ResponseResult<?> serverActionHarvest() {
         //TODO
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }
 
-    @RequestMapping(value = "/4")
+    @RequestMapping(value = "/cleanGrass")
     @ResponseBody
     public ResponseResult<?> serverActionCleanGrass() {
         //TODO

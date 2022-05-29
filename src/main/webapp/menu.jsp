@@ -17,7 +17,7 @@
         }
 
         .bar {
-            background-image: url(images/basicPic/topbar.png);
+            background-image: url(ext/images/basicPic/topbar.png);
             background-size: 25% 60px;
             background-repeat: repeat-x;
         }
@@ -35,10 +35,21 @@
 </head>
 <body class="bar">
 <div align="right" width="100%">
-    <a href="<%=basePath%>/page/cropList" target="workspace"><img class="menu shadow" src="images/advancePic/农民.png" width="50px" alt=""></a>
-    <a href="<%=basePath%>/page/cropList" target="workspace"><img class="menu shadow" src="images/advancePic/土壤icon.png" width="50px" alt=""></a>
-    <a href="<%=basePath%>/page/cropList" target="workspace"><img class="menu shadow" src="images/advancePic/种子仓库.png" width="50px" alt=""></a>
-    <a href="<%=basePath%>/page/cropList" target="workspace"><img class="menu shadow" src="images/basicPic/seedManager.png" width="50px"></a>
+    <a href="<%=basePath%>/page/farmGamePage" target="workspace">
+        <img class="menu shadow" src="ext/images/advancePic/myFarmIcon.png" width="50px" alt="我的农场">
+    </a>
+    <a href="<%=basePath%>/page/seedBagPage" target="workspace">
+        <img class="menu shadow" src="ext/images/advancePic/storeIcon.png" width="50px" alt="种子收纳袋">
+    </a>
+    <a href="<%=basePath%>/page/userLoginPage" target="workspace">
+        <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" width="50px" alt="玩家登录">
+    </a>
+    <a href="<%=basePath%>/page/userManagerPage" target="workspace">
+        <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" width="50px" alt="玩家管理">
+    </a>
+    <a href="<%=basePath%>/page/cropPage" target="workspace">
+        <img class="menu shadow" src="ext/images/advancePic/seedManageIcon.png" width="50px" alt="种子管理">
+    </a>
 </div>
 </body>
 </html>

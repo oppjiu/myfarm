@@ -6,9 +6,6 @@ package cn.jxufe.bean;
  * @description:
  **/
 public enum ResponseCode {
-    /**
-     * 全局状态码
-     */
     SUCCESS(10, "操作成功！"),
     ERROR(0, "操作失败！"),
     INVALID_PARAM(10003, "非法参数！"),
@@ -16,15 +13,9 @@ public enum ResponseCode {
     UNAUTHORISE(10002, "权限不⾜，⽆权操作！"),
     SERVER_ERROR(99999, "抱歉，系统繁忙，请稍后重试！");
 
-    final int code;//状态码
-    final String message;//文字信息
+    final int code; //状态码
+    final String message;   //文字信息
 
-    /**
-     * 构造方法
-     *
-     * @param code
-     * @param message
-     */
     ResponseCode(int code, String message) {
         this.code = code;
         this.message = message;

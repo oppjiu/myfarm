@@ -9,7 +9,7 @@
 %>
 <html>
 <head>
-    <title>种子表格</title>
+    <title>种子管理</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t=34355">
@@ -52,6 +52,7 @@
             url: '<%=basePath%>/crop/list',
             striped: true,
             idField: 'id',
+            fit: true,
             rownumbers: true,
             remoteSort: false,
             pagination: true,
@@ -260,6 +261,7 @@
 <%-----------------------------------------------------------------------------------------------%>
 <script type="text/javascript">
     var grid;
+
     function saveRecord() {
         $('#formEditor').form('submit', {
             url: '<%=basePath%>/seed/save',

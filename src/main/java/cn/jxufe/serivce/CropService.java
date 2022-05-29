@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  * @description:
  **/
 public interface CropService {
-    EasyUIData<CropView> findAllByCropNameLike(String name, Pageable pageable);
+    EasyUIData<CropView> findAllPageableByCropNameLike(String name, Pageable pageable);
 
     Crop save(Crop crop);
 

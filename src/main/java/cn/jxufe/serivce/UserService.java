@@ -1,6 +1,7 @@
 package cn.jxufe.serivce;
 
 import cn.jxufe.bean.EasyUIData;
+import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import org.springframework.data.domain.Pageable;
 
@@ -13,9 +14,6 @@ import java.util.List;
  * @description:
  **/
 public interface UserService {
-
-    List<User> findAll();
-
     User findByUsername(String username);
 
     EasyUIData<User> findAllByUsernameLike(String username, Pageable pageable);
@@ -26,16 +24,44 @@ public interface UserService {
 
     void delete(User user);
 
-    boolean setCurUser(HttpSession session, User user);
+    boolean setCurUser(User user, HttpSession session);
 
-    void purchaseSeed(int seedId, User user, int seedNum);
+    SeedBag purchaseSeed(int cropId, int seedNumber, User user);
 
-    String userActionPlantSeed(int landId, int cId, HttpSession session);
+    /**
+     * 播种
+     *
+     * @param landId  土地id
+     * @param cropId  作物id
+     * @param session 操作用户
+     * @return
+     */
+    boolean userActionPlantSeed(int landId, int cropId, HttpSession session);
 
-    String userActionKillWorm(int landId, HttpSession session);
+    /**
+     * 除虫
+     *
+     * @param landId  土地id
+     * @param session 操作用户
+     * @return
+     */
+    User userActionKillWorm(int landId, HttpSession session);
 
-    String userActionHarvest(int landId, HttpSession session);
+    /**
+     * 收获
+     *
+     * @param landId  土地id
+     * @param session 操作用户
+     * @return
+     */
+    User userActionHarvest(int landId, HttpSession session);
 
-    String userActionCleanGrass(int landId, HttpSession session);
-
+    /**
+     * 除枯草
+     *
+     * @param landId  土地id
+     * @param session 操作用户
+     * @return
+     */
+    User userActionCleanGrass(int landId, HttpSession session);
 }
