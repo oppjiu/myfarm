@@ -45,6 +45,6 @@ public class CropGrowServiceImpl implements CropGrowService {
 
     @Override
     public void delete(CropGrow cropGrow) {
-        cropGrowRepository.delete(cropGrowRepository.findByStageIdAndCropId(cropGrow.getStageId(), cropGrow.getCropId()));
+        cropGrowRepository.delete(cropGrowRepository.findOne(cropGrow.getId()));
     }
 }

@@ -1,6 +1,5 @@
 package cn.jxufe.repository.view;
 
-import cn.jxufe.entity.Land;
 import cn.jxufe.entity.view.LandView;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -20,6 +19,10 @@ public interface LandViewRepository extends JpaRepository<LandView, Long> {
      * @return
      */
     List<LandView> findAllByHasCropAndIsWitheredAndIsMature(int hasCrop, int isWithered, int isMature);
+
     List<LandView> findAllByUsername(String username);
+
+    List<LandView> findAllByHasCrop(int hasCrop);
+
     LandView findByLandId(int id);
 }

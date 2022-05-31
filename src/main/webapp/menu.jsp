@@ -31,10 +31,14 @@
         .menu {
             margin: 3px 5px 5px 5px;
         }
+
+        img{
+            box-shadow: 10px 10px 10px black;
+        }
     </style>
 </head>
 <body class="bar">
-<div align="right" width="100%">
+<div align="right" width="50%">
     <a href="<%=basePath%>/page/farmGamePage" target="workspace">
         <img class="menu shadow" src="ext/images/advancePic/myFarmIcon.png" width="50px" alt="我的农场">
     </a>

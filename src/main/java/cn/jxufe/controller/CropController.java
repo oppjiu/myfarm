@@ -9,7 +9,6 @@ import cn.jxufe.serivce.CropService;
 import cn.jxufe.utils.EasyUIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,19 +47,20 @@ public class CropController {
      */
     @ResponseBody
     @RequestMapping("/save")
-    public ResponseResult<?> save(@RequestBody Crop crop) {
+    public ResponseResult<?> save(Crop crop) {
+        System.err.println("crop = " + crop);
         return new ResponseResult<>(ResponseCode.SUCCESS, cropService.save(crop));
     }
 
     /**
      * 删除种子数据（单条删除）
      *
-     * @param crop 种子信息（需含有种子id）
+     * @param crop 种子信息（需含有id）
      * @return
      */
     @ResponseBody
     @RequestMapping("/delete")
-    public ResponseResult<?> delete(@RequestBody Crop crop) {
+    public ResponseResult<?> delete(Crop crop) {
         cropService.delete(crop);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }

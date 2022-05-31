@@ -14,7 +14,10 @@ import java.util.List;
  **/
 public interface SeedBagViewRepository extends JpaRepository<SeedBagView, Long> {
     Page<SeedBagView> findAllByUsername(String username, Pageable pageable);
+
     List<SeedBagView> findAllByUsername(String username);
+
     SeedBagView findByUsername(String username);
+
     SeedBagView findByCropId(int cropId);
 }

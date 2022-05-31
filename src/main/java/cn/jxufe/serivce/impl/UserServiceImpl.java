@@ -14,7 +14,6 @@ import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.serivce.GameService;
 import cn.jxufe.serivce.UserService;
-import cn.jxufe.websocket.SystemWebsocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,8 +36,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     CropRepository cropRepository;
     @Autowired
-    private SystemWebsocketHandler systemWebsocketHandler;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private SeedBagRepository seedBagRepository;
@@ -48,12 +45,17 @@ public class UserServiceImpl implements UserService {
     private LandRepository landRepository;
 
     @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public EasyUIData<User> findAllByUsernameLike(String username, Pageable pageable) {
+    public EasyUIData<User> findAllByUsernameLikePageable(String username, Pageable pageable) {
         Page<User> page = userRepository.findAllByUsernameContaining(username, pageable);
         EasyUIData<User> easyUIData = new EasyUIData<User>();
         easyUIData.setTotal(page.getTotalElements());
@@ -100,7 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 删除
+     * 删除数据
      * 用户表User
      * 种子表SeedBag
      * 农场种植表UserLand
@@ -120,8 +122,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 切换用户
+     * 用户登录
      * 查询数据库玩家信息，并将数据缓存至服务器中
+     *
      * @param user
      * @param session
      * @return
@@ -167,24 +170,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean userActionPlantSeed(int landId, int cropId, HttpSession session) {
-        Land landByFind = landRepository.findByLandId(landId);
+        Land landByFind = landRepository.findByLandId(landId);//获取土地信息
+        //用户种子数量
+        SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, landByFind.getUsername());
         CropGrowView cropGrowViewByFind = cropGrowViewRepository.findByStageIdAndCropId(1, cropId);
-        //如果土地类型和种子所需土地类型不一致
-        if (landByFind.getLandTypeCode() != cropGrowViewByFind.getLandTypeCode()) {
+        int seedNumber = seedBag.getSeedNumber();
+
+        if (seedNumber <= 0) {
+            //种子数量不足
+            return false;
+        } else if (landByFind.getLandTypeCode() != cropGrowViewByFind.getLandTypeCode()) {
+            //土地类型和种子所需土地类型不一致
             return false;
         } else {
+            seedBag.setSeedNumber(seedNumber - 1);
+            seedBagRepository.save(seedBag);//保存种子收纳袋数据
             landByFind.setHasCrop(1);
             landByFind.setHasInsect(0);
             landByFind.setIsWithered(0);
             landByFind.setIsMature(0);
+            landByFind.setOutput(cropGrowViewByFind.getHarvestNum());//土地种子产出
             landByFind.setNowCropGrowStage(1);
             //TODO 可能超出范围
             landByFind.setNextCropGrowStage(2);
             landByFind.setGrowingSeason(1);
-            landByFind.setOutput(cropGrowViewByFind.getHarvestNum());//土地种子产出
             landByFind.setGrowthTimeOfEachState(0);
             landByFind.setStateEndTime(new Date(new Date().getTime() + cropGrowViewByFind.getGrowTime()));
-            landRepository.save(landByFind);//保存数据
+            landRepository.save(landByFind);//保存土地数据
             return true;
         }
     }

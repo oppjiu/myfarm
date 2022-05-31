@@ -1,5 +1,6 @@
 package cn.jxufe.serivce;
 
+import cn.jxufe.bean.FarmResponse;
 import cn.jxufe.entity.Land;
 import cn.jxufe.entity.User;
 
@@ -15,4 +16,6 @@ public interface GameService {
     void gameSeversInitiate();
 
     List<Land> initiateUserLands(int landNumber, User user);
+
+    List<FarmResponse> initiateFarmView(User user);
 }

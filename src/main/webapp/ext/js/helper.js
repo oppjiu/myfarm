@@ -13,7 +13,7 @@ function fromCode2Caption(code, arrayList) {
     return "";
 }
 
-function request(object, method, methodURL, successFunction, async) {
+function request(object, method, methodURL, async, successFunction) {
     $.ajax({
         cache: true,
         type: method,

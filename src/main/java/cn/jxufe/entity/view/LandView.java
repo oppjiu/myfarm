@@ -58,5 +58,5 @@ public class LandView extends EntityID {
     private String seedType;    //种子类型名称
     //土地需求
     private int landTypeCode;  //土地需求
-    private String landType;    //土壤类型名称m
+    private String landType;    //土壤类型名称
 }

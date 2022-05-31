@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @create: 2022-05-10 19:51
@@ -36,7 +37,18 @@ public class UserController {
     @RequestMapping("/list")
     @ResponseBody
     public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest, @RequestParam(value = "username", defaultValue = "") String username) {
-        return userService.findAllByUsernameLike(username, EasyUIUtils.requestProcess(pageRequest));
+        return userService.findAllByUsernameLikePageable(username, EasyUIUtils.requestProcess(pageRequest));
+    }
+
+    /**
+     * 查询所有玩家数据
+     *
+     * @return List
+     */
+    @RequestMapping("/listAll")
+    @ResponseBody
+    public List<?> findAll() {
+        return userService.findAll();
     }
 
     /**
@@ -126,5 +138,35 @@ public class UserController {
         } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }
+    }
+
+    @RequestMapping(value = "/plantSeed")
+    @ResponseBody
+    public ResponseResult<?> plantSeed(HttpSession session) {
+        //TODO 修改
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "/harvest")
+    @ResponseBody
+    public ResponseResult<?> harvest(HttpSession session) {
+        //TODO 修改
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+
+    @RequestMapping(value = "/killWorm")
+    @ResponseBody
+    public ResponseResult<?> killWorm(HttpSession session) {
+        //TODO 修改
+        return new ResponseResult<>(ResponseCode.SUCCESS);
+    }
+
+
+    @RequestMapping(value = "/cleanGrass")
+    @ResponseBody
+    public ResponseResult<?> cleanGrass(HttpSession session) {
+        //TODO 修改
+        return new ResponseResult<>(ResponseCode.SUCCESS);
     }
 }

@@ -12,7 +12,7 @@
     <title>作物生长管理</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
@@ -22,26 +22,412 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.draggable.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/imgPosition.css?t=0901">
-
-    <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/ext/js/imgPosition.js"></script>
+    <style>
+        #cropGrowForm td input {
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
+<table id="cropGrowGrid"></table>
+<div id="cropGrowFormDialogToolbar" style="padding: 10px;">
+    <a href="javascript:void(0)" class="easyui-linkbutton c2" iconCls="icon-add" plain="true"
+       onclick="openCropGrowFormDialog()">添加</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c4" iconCls="icon-edit" plain="true"
+       onclick="loadCropGrowFormDialog()">编辑</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c3" iconCls="icon-remove" plain="true"
+       onclick="cropGrowGrid.edatagrid('cancelRow')">取消</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton c5" iconCls="icon-cancel" plain="true"
+       onclick="cropGrowGrid.edatagrid('destroyRow')">删除</a>
+</div>
+<div id="cropGrowFormDialog" style="padding: 10px;">
+    <form id="cropGrowForm" method="POST" novalidate>
+        <table class='tbledit'>
+            <tr>
+                <td>ID：</td>
+                <td><input id="cropGrowId" name="id" required="true" class="easyui-textbox" value=""></td>
+                <td>种子ID：</td>
+                <td><input id="cropGrowCropId" name="cropId" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>生长阶段：</td>
+                <td><input name="stageId" required="true" class="easyui-textbox" value=""></td>
+                <td>生长标题：</td>
+                <td><input name="stageName" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>阶段生长时间：</td>
+                <td><input name="growTime" required="true" class="easyui-textbox" value=""></td>
+                <td>生虫概率：</td>
+                <td><input name="insectChance" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>作物状态：</td>
+                <td><input name="cropStateCode"></td>
+                <td></td>
+                <td><a href="javascript:void(0)" class="easyui-linkbutton c2" iconCls="icon-blank" style="width: 150px;"
+                       onclick="loadPositionDialog()">编辑图片位置</a></td>
+            </tr>
+            <tr>
+                <td>图片宽度：</td>
+                <td><input id="picWidth" name="picWidth" required="true" class="easyui-textbox" value="" disabled></td>
+                <td>图片高度：</td>
+                <td><input id="picHeight" name="picHeight" required="true" class="easyui-textbox" value="" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td style="white-space:nowrap">图片offsetX：</td>
+                <td><input id="picOffsetX" name="picOffsetX" required="true" class="easyui-textbox" value="" disabled>
+                </td>
+                <td style="white-space:nowrap">图片offsetY：</td>
+                <td><input id="picOffsetY" name="picOffsetY" required="true" class="easyui-textbox" value="" disabled>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="cropGrowFormButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" plain="true" onclick="saveCropGrowForm()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" plain="true"
+       onclick="closeCropGrowForm()">取消</a>
+</div>
+
 <div id="positionDialog" class="easyui-dialog" style="width:240px;height:420px;padding:10px 10px" closed="true"
      buttons="#positionDialogButtons">
     <div id="tools-imagePositioner-display" class="tools-imagePositioner-display">
-        <img class="easyui-draggable easyui-resizable" data-options="onDrag:imagePositioneronDrag" src="">
+        <img class="easyui-draggable easyui-resizable" data-options="onDrag:imagePositionerOnDrag"
+             src="<%=basePath%>/ext/images/crops/940/2.png">
     </div>
 </div>
 <div id="positionDialogButtons">
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="gainPostion()">确定</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-       onclick="javascript:$('#positionDialog').dialog('close')">取消</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" plain="true"
+       onclick="gainPosition()">确定</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" plain="true"
+       onclick="$('#positionDialog').dialog('close')">取消</a>
 </div>
-<script type="text/javascript">
 
+
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/imgPosition.css">
+<script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
+<script type="text/javascript" src="<%=basePath%>/ext/js/imgPosition.js"></script>
+<script type="text/javascript">
+    var cropGrowGrid;
+    var cropStateList = {};
+
+    $(function () {
+        $.parser.parse();//全局刷新，动态加载表单后，easyui样式失效需要刷新
+        /**
+         * 获取caption值
+         */
+        getRemoteData('<%=basePath%>/common/cropState', false, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                cropStateList[data[i]['cropStateCode']] = data[i]['cropState'];
+            }
+        });
+
+        //作物状态下拉框
+        $('input[name="cropStateCode"]').combobox({
+            required: true,
+            panelHeight: 'auto',
+            editable: false,
+            valueField: 'cropStateCode',
+            textField: 'cropState',
+            onSelect: function (rec) {
+            },
+            url: '<%=basePath%>/common/cropState'
+        });
+
+        //设置生长阶段dialog
+        $('#cropGrowFormDialog').dialog({
+            closed: 'true',
+            buttons: '#cropGrowFormButtons',
+            onClose: clearCropGrowForm
+        });
+
+        //设置种子图片编辑dialog
+        $('#positionDialog').dialog({
+            closed: 'true',
+            buttons: '#positionDialogButtons',
+            modal: true,
+        });
+
+        //生长阶段edatagrid
+        cropGrowGrid = $("#cropGrowGrid").edatagrid({
+            title: '生长阶段表格',
+            width: '100%',
+            height: '100%',
+            url: '<%=basePath%>/cropGrow/list/' + cropGrowId,
+            saveUrl: '<%=basePath%>/cropGrow/save',
+            updateUrl: '<%=basePath%>/cropGrow/save',
+            destroyUrl: '<%=basePath%>/cropGrow/delete',
+            method: 'post',
+            fitColumns: true,
+            striped: true,
+            idField: 'id',
+            fit: true,
+            rownumbers: true,
+            remoteSort: false,
+            toolbar: '#cropGrowFormDialogToolbar',
+            destroyMsg: {
+                norecord: {
+                    title: '警告',
+                    msg: '未选择任何记录。'
+                },
+                confirm: {
+                    title: '确认',
+                    msg: '是否删除该数据？'
+                }
+            },
+            columns: [[
+                {
+                    field: 'id',
+                    title: 'ID',
+                    halign: 'center',
+                    align: 'center'
+                },
+                {
+                    field: 'cropId',
+                    title: '种子id',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true
+                },
+                {
+                    field: 'stageId',
+                    title: '生长阶段',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+
+                    field: 'stageName',
+                    title: '生长标题',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'growTime',
+                    title: '阶段生长时间',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'insectChance',
+                    title: '生虫概率',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'picWidth',
+                    title: '图片宽度',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'picHeight',
+                    title: '图片高度',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'picOffsetX',
+                    title: '图片offsetX',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'picOffsetY',
+                    title: '图片offsetY',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
+                },
+                {
+                    field: 'cropStateCode',
+                    title: '作物状态',
+                    halign: 'center',
+                    align: 'center',
+                    sortable: true,
+                    width: $(this).width() * 0.1,
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            valueField: 'cropStateCode',
+                            textField: 'cropState',
+                            url: '<%=basePath%>/common/cropState',
+                            panelHeight: 'auto',
+                            required: true
+                        }
+                    },
+                    formatter: function (value, row, index) {
+                        return cropStateList[value];
+                    },
+                }
+            ]],
+            onLoadSuccess: function (data) {
+                if (data.total == 0) {
+                    $.messager.show({
+                        title: '消息',
+                        msg: '无记录'
+                    });
+                }
+            }
+        });
+    });
+
+    //打开表单编辑窗口
+    function openCropGrowFormDialog() {
+        $('#cropGrowFormDialog').dialog('open').dialog('setTitle', '新建生长阶段数据');//打开种子生长阶段编辑页面
+        $('#cropGrowId').textbox("setValue", 0);//设置id为0
+        $('#cropGrowCropId').textbox("setValue", cropGrowId);//设置cropId
+        //找到同一级下的easyui组件，设置禁用
+        $('#cropGrowForm input[name="id"]').prev().prop('disabled', true);
+        $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', true);
+    }
+
+    //关闭表单编辑窗口窗口
+    function closeCropGrowForm() {
+        $('#cropGrowFormDialog').dialog('close');
+        clearCropGrowForm();
+    }
+
+    //清空表单
+    function clearCropGrowForm() {
+        $('#cropGrowForm').form('clear');//清空表单数据
+        //找到同一级下的easyui组件，设置解除禁用
+        $('#cropGrowForm input[name="id"]').prev().prop('disabled', false);
+        $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', false);
+    }
+
+    //加载添加生长阶段表单
+    function loadCropGrowFormDialog() {
+        var row = cropGrowGrid.datagrid('getSelected');
+        if (row) {
+            $('#cropGrowFormDialog').dialog('open').dialog('setTitle', '更改生长阶段数据');//打开种子生长阶段编辑页面
+            $('#cropGrowForm').form('load', row);//加载表单
+
+            //找到同一级下的easyui组件，设置禁用
+            $('#cropGrowForm input[name="id"]').prev().prop('disabled', true);
+            $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', true);
+        } else {
+            $.messager.show({
+                title: '消息',
+                msg: '请先选择一行数据，然后再尝试点击操作按钮！'
+            });
+        }
+    }
+
+    //保存种子生长阶段表单
+    function saveCropGrowForm() {
+        $('#cropGrowForm').form('submit', {
+            url: '<%=basePath%>/cropGrow/save',
+            onSubmit: function (param) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return isValid;//返回false终止表单提交
+                }
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.code == 10) {
+                    $('#cropGrowFormDialog').dialog('close');
+                    cropGrowGrid.datagrid('reload');
+                    $.messager.show({
+                        title: '消息',
+                        msg: result.message
+                    });
+                } else {
+                    $.messager.show({
+                        title: '消息',
+                        msg: '操作失败'
+                    });
+                }
+            }
+        });
+    }
+
+    //加载保存种子位置页面
+    function loadPositionDialog() {
+        var cropId = $('#cropGrowForm input[name="cropId"]').val();
+        var stageId = $('#cropGrowForm input[name="stageId"]').val();
+        if (cropId == '' || stageId == '') {
+            //表格信息不全弹窗提示
+            $.messager.show({
+                title: '消息',
+                msg: '请填写相关数据后操作！'
+            });
+        } else {
+            var path;
+            //更改图片路径
+            if (stageId == 9 || stageId == 0) {
+                path = '<%=basePath%>/ext/images/crops/basic/' + stageId + '.png';
+            } else {
+                path = '<%=basePath%>/ext/images/crops/' + cropId + '/' + stageId + '.png';
+            }
+            $('#positionDialog img').attr('src', path);
+            positionerLoadImage();
+            $('#positionDialog').dialog('open').dialog('setTitle', '图片位置编辑');//打开编辑窗口
+        }
+    }
+
+    /**
+     * 获取图像的坐标
+     */
+    function gainPosition() {
+        console.log(imgExtData);
+        $('#positionDialog').dialog('close');
+        $('#picWidth').textbox('setValue', imgExtData.width);
+        $('#picHeight').textbox('setValue', imgExtData.height);
+        $('#picOffsetX').textbox('setValue', imgExtData.offsetX);
+        $('#picOffsetY').textbox('setValue', imgExtData.offsetY);
+    }
+
+    // //设置图片位置
+    // function gainPositionFromForm() {
+    //     //获取值
+    //     var width = $('#picWidth').textbox('getValue');
+    //     var height = $('#picHeight').textbox('getValue');
+    //     var offsetX = $('#picOffsetX').textbox('getValue');
+    //     var offsetY = $('#picOffsetY').textbox('getValue');
+    //     if (width == "" || height == "" || offsetX == "" || offsetY == "") {
+    //         $.messager.show({
+    //             title: '消息',
+    //             msg: '请填写相关数据后操作！'
+    //         });
+    //     } else {
+    //         imgExtData.width = width;
+    //         imgExtData.height = height;
+    //         imgExtData.offsetX = offsetX;
+    //         imgExtData.offsetY = offsetY;
+    //     }
+    // }
+
+    // //填充表格
+    // function setPositionToForm() {
+    //     console.log('imgExtData: ', imgExtData);
+    //     $('#positionDialog').dialog('close');
+    //     //设置值
+    //     $('#picWidth').textbox('setValue', imgExtData.width);
+    //     $('#picHeight').textbox('setValue', imgExtData.height);
+    //     $('#picOffsetX').textbox('setValue', imgExtData.offsetX);
+    //     $('#picOffsetY').textbox('setValue', imgExtData.offsetY);
+    // }
 </script>
 </body>
 </html>

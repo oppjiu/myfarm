@@ -18,7 +18,7 @@ public class EasyUIUtils {
      * EasyUI前端分页请求处理
      *
      * @param pageRequest EasyUIDataPageRequest封装数据
-     * @return Pageable
+     * @return PageRequest
      */
     public static Pageable requestProcess(EasyUIDataPageRequest pageRequest) {
         List<Sort.Order> orders = new ArrayList<Sort.Order>();

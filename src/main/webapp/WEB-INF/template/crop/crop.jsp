@@ -16,50 +16,187 @@
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
-    <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js?346t"></script>
+    <style>
+        #seedForm td input {
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
-
-<div id="controlBox">
-    <span style="color: white">种子名称:</span><input id="genderSearch"/>
-    <a href="#" class="easyui-linkbutton c1" iconCls="icon-search" onclick="doSearch()">查询</a>
-    <a href="#" class="easyui-linkbutton c2" iconCls="icon-add" onclick="loadSaveForm()">添加</a>
-    <a href="#" class="easyui-linkbutton c4" iconCls="icon-edit" onclick="loadForm()">编辑</a>
-    <a href="#" class="easyui-linkbutton c3" iconCls="icon-remove"
-       onclick="javascript:grid.edatagrid('cancelRow')">取消</a>
-    <a href="#" class="easyui-linkbutton c5" iconCls="icon-cancel"
-       onclick="javascript:grid.edatagrid('destroyRow')">删除</a>
+<table id="seedGrid"></table>
+<div id="cropGrowWindow" style="width:80%;height:80%;padding:10px;"></div>
+<div id="seedFormDialogToolbar" style="padding:10px;">
+    <a href="javascript:void(0);" class="easyui-linkbutton c2" iconCls="icon-add" plain="true"
+       onclick="openSeedFormDialog()">添加</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton c4" iconCls="icon-edit" plain="true"
+       onclick="loadSeedFormDialog()">编辑</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton c3" iconCls="icon-remove" plain="true"
+       onclick="$('#seedGrid').edatagrid('cancelRow');">取消</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton c5" iconCls="icon-cancel" plain="true"
+       onclick="$('#seedGrid').edatagrid('destroyRow');">删除</a>
+    <input id="seedNameSearchBox">
 </div>
-<table id="grid"></table>
-<div id="msgBox"></div>
+<div id="seedFormDialog" style="padding: 10px;">
+    <form id="seedForm" method="POST" novalidate>
+        <table class='tbledit'>
+            <tr>
+                <td>ID：</td>
+                <td><input id="seedId" name="id" required="true" class="easyui-textbox" value=""></td>
+                <td>种子ID：</td>
+                <td><input id="seedCropId" name="cropId" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>种子名称：</td>
+                <td><input name="cropName" required="true" class="easyui-textbox" value=""></td>
+                <td>X季作物：</td>
+                <td><input name="growSeason" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>种子等级：</td>
+                <td><input name="grade" required="true" class="easyui-textbox" value=""></td>
+                <td>种子类型：</td>
+                <td><input name="seedTypeCode" value=""></td>
+            </tr>
+            <tr>
+                <td>可获经验：</td>
+                <td><input name="harvestExp" required="true" class="easyui-textbox" value=""></td>
+                <td>每季成熟所需时间：</td>
+                <td><input name="growthTimeOfEachSeason" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>每季成熟可获得收成：</td>
+                <td><input name="harvestNum" required="true" class="easyui-textbox" value=""></td>
+                <td>种子采购价：</td>
+                <td><input name="purchasePrice" required="true" class="easyui-textbox" value=""></td>
+            </tr>
+            <tr>
+                <td>每个收获的果实单价：</td>
+                <td><input name="salePrice" required="true" class="easyui-textbox" value=""></td>
+                <td>土地需求：</td>
+                <td><input name="landTypeCode" value=""></td>
+            </tr>
+            <tr>
+                <td>每季成熟可获得积分：</td>
+                <td><input name="harvestScore" required="true" class="easyui-textbox" value=""></td>
+                <td>提示信息：</td>
+                <td><input name="tips" required="true" class="easyui-textbox" value="" data-options="multiline:true"
+                           style="height: 100px;"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="seedFormButtons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" plain="true"
+       onclick="saveSeedForm()">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="closeSeedForm()">取消</a>
+</div>
+
+<script type="text/javascript" src="<%=basePath%>/ext/js/helper.js?346t"></script>
 <script type="text/javascript">
-    var params = {
-        id: '',
-        mode: 'insert'
-    };
-    var grid;
-    $(document).ready(function () {
-        grid = $("#grid").edatagrid({
-            title: '种子清单',
-            /* data: someData,*/
+    var seedGrid;
+    var landTypeList = {};
+    var seedTypeList = {};
+    var cropGrowId;//打开cropGrowWindow的id
+    $(function () {
+        /**
+         * 获取caption值
+         */
+        getRemoteData('<%=basePath%>/common/landType', false, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                landTypeList[data[i]['landTypeCode']] = data[i]['landType'];
+            }
+        });
+        getRemoteData('<%=basePath%>/common/seedType', false, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                seedTypeList[data[i]['seedTypeCode']] = data[i]['seedType'];
+            }
+        });
+
+        //土地类型下拉框
+        $('input[name="landTypeCode"]').combobox({
+            panelHeight: 'auto',
+            editable: false,
+            valueField: 'landTypeCode',
+            textField: 'landType',
+            required: true,
+            onSelect: function (rec) {
+            },
+            url: '<%=basePath%>/common/landType'
+        });
+
+        //种子类型下拉框
+        $('input[name="seedTypeCode"]').combobox({
+            panelHeight: 'auto',
+            editable: false,
+            valueField: 'seedTypeCode',
+            textField: 'seedType',
+            required: true,
+            onSelect: function (rec) {
+            },
+            url: '<%=basePath%>/common/seedType'
+        });
+
+        $('#seedFormDialog').dialog({
+            closed: 'true',
+            buttons: '#seedFormButtons',
+            onClose: clearSeedForm
+        });
+
+        $('#cropGrowWindow').window({
+            title: '编辑成长阶段',
+            iconCls: 'icon-edit',
+            inline: true,
+            modal: true,
+            closed: 'true',
+        });
+
+        $('#seedNameSearchBox').searchbox({
+            prompt: '请输入种子名称',
+            searcher: function () {
+                seedGrid.datagrid('load', {
+                    cropName: $("#seedNameSearchBox").val()
+                });
+            },
+        });
+
+        //设置edatagrid
+        seedGrid = $('#seedGrid').edatagrid({
+            title: '种子表格',
             method: 'post',
+            width: '100%',
+            height: '100%',
             url: '<%=basePath%>/crop/list',
+            saveUrl: '<%=basePath%>/crop/save',
+            updateUrl: '<%=basePath%>/crop/save',
+            destroyUrl: '<%=basePath%>/crop/delete',
             striped: true,
             idField: 'id',
-            fit: true,
+            nowrap: false,
             rownumbers: true,
             remoteSort: false,
             pagination: true,
-            pageSize: 2,
-            pageList: [1, 2, 3],
+            pageSize: 10,
+            pageList: [5, 10, 20, 50],
             afterPageText: '页 共{pages}页',
             displayMsg: '当前显示{from}-{to}条记录，共{total}条记录',
+            toolbar: '#seedFormDialogToolbar',
+            destroyMsg: {
+                norecord: {
+                    title: '警告',
+                    msg: '未选择任何记录。'
+                },
+                confirm: {
+                    title: '确认',
+                    msg: '是否删除该数据？'
+                }
+            },
             columns: [[
                 {
                     field: 'id',
@@ -68,116 +205,131 @@
                     align: 'center'
                 },
                 {
-                    field: 'seedId',
+                    field: 'cropId',
                     title: '种子id',
                     halign: 'center',
                     align: 'center',
                     sortable: true
                 },
                 {
-                    field: 'seedName',
+                    field: 'cropName',
                     title: '种子名称',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-
                     field: 'growSeason',
                     title: 'X季作物',
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'level',
+                    field: 'grade',
                     title: '种子等级',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'kind',
+                    field: 'seedTypeCode',
                     title: '种子类型',
                     halign: 'center',
                     align: 'center',
+                    sortable: true,
                     editor: {
                         type: 'combobox',
                         options: {
-                            valueField: 'key',
-                            textField: 'value',
-                            data: [{key: '0', value: '普通'}, {key: '1', value: '传说'}, {key: '2', value: '神话'}],
+                            valueField: 'seedTypeCode',
+                            textField: 'seedType',
+                            url: '<%=basePath%>/common/seedType',
                             panelHeight: 'auto',
                             required: true
                         }
                     },
-                    sortable: true
+                    formatter: function (value, row, index) {
+                        return seedTypeList[value];
+                    }
                 },
                 {
-                    field: 'gainExperience',
+                    field: 'harvestExp',
                     title: '可获经验',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'seasonTime',
+                    field: 'growthTimeOfEachSeason',
                     title: '每季成熟所需时间',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'gainHarvestInEachRipeSeason',
+                    field: 'harvestNum',
                     title: '每季成熟可获得收成',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'seedPurchasePrice',
+                    field: 'purchasePrice',
                     title: '种子采购价',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'unitPriceOfEachHarvest',
+                    field: 'salePrice',
                     title: '每个收获的果实单价',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
-                    field: 'landDemand',
+                    field: 'landTypeCode',
                     title: '土地需求',
                     halign: 'center',
                     align: 'center',
+                    sortable: true,
                     editor: {
                         type: 'combobox',
                         options: {
-                            valueField: 'key',
-                            textField: 'value',
-                            data: [{key: '0', value: '黄土地'}, {key: '1', value: '红土地'}, {key: '2', value: '黑土地'}],
+                            valueField: 'landTypeCode',
+                            textField: 'landType',
+                            url: '<%=basePath%>/common/landType',
                             panelHeight: 'auto',
                             required: true
                         }
                     },
-                    sortable: true
+                    formatter: function (value, row, index) {
+                        return landTypeList[value];
+                    },
                 },
                 {
-                    field: 'gainPointsInEachRipeSeason',
+                    field: 'harvestScore',
                     title: '每季成熟可获得积分',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
                     field: 'tips',
                     title: '提示信息',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
                     field: 'operate',
@@ -185,125 +337,95 @@
                     align: 'center',
                     width: $(this).width() * 0.1,
                     formatter: function (value, row, index) {
-                        return '<input type="button" value="成长阶段" onClick="livePeriod(' + row.id + ')">';
+                        return $('<input type="button" value="成长阶段" onclick="openCropGrowWindow(\'' + row.cropId + '\')"/>').prop("outerHTML");
                     }
                 }
             ]],
+            onLoadSuccess: function (data) {
+                if (data.total == 0) {
+                    $.messager.show({
+                        title: '消息',
+                        msg: '无记录'
+                    });
+                }
+            }
         });
     });
 
-    function livePeriod(id) {
-        alert(id);
+    //打开种子成长阶段窗口
+    function openCropGrowWindow(cropId) {
+        cropGrowId = cropId;//传递cropId给cropGrowWindow
+        $('#cropGrowWindow').window('open');
+        $('#cropGrowWindow').window('refresh', '<%=basePath%>/page/cropGrowPage/');
     }
 
-    function loadForm() {
-        var row = grid.datagrid('getSelected');
+    function openSeedFormDialog() {
+        $('#seedFormDialog').dialog('open').dialog('setTitle', '编辑数据');//打开种子编辑页面
+        $('#seedId').textbox("setValue", 0);//id为0
+        //找到同一级下的easyui组件，设置禁用
+        $('#seedForm input[name="id"]').prev().prop('disabled', true);
+    }
+
+    function clearSeedForm() {
+        $('#seedForm').form('clear');//清空表单数据
+        //找到同一级下的easyui组件，设置解除禁用
+        $('#seedForm input[name="id"]').prev().prop('disabled', false);
+        $('#seedForm input[name="cropId"]').prev().prop('disabled', false);
+    }
+
+    //编辑种子编辑页面
+    function closeSeedForm() {
+        $('#seedFormDialog').dialog('close');//关闭表单窗口
+        clearSeedForm();
+    }
+
+
+    //加载种子编辑页面，并加载数据
+    function loadSeedFormDialog() {
+        var row = seedGrid.datagrid('getSelected');
         if (row) {
-            params.id = row.id;
-            params.mode = 'edit';
-            $('#formEditContainer').dialog('open').dialog('setTitle', '编辑数据');
-            $('#formEditSeed').form('load', row);
-        } else {
-            alert('请先选择一行数据，然后再尝试点击操作按钮！');
-        }
-    }
-
-    function editSeedForm() {
-        $('#formEditSeed').form('submit', {
-            url: 'http://localhost:8080/student/save',
-            onSubmit: function (param) {
-                //param.id = params.id;
-                //param.mode = params.mode;
-                return $(this).form('validate');
-            },
-            success: function (result) {
-                var result = eval('(' + result + ')');
-                if (result.code == 0) {
-                    $('#formEditContainer').dialog('close');
-                    grid.datagrid('reload');
-                }
-                $.messager.show({
-                    title: '消息',
-                    msg: result.msg
-                });
-            }
-        });
-    }
-
-    function loadSaveForm() {
-        params.mode = 'edit';
-        $('#formSaveContainer').dialog('open').dialog('setTitle', '添加数据');
-    }
-
-    function saveSeedForm() {
-        $('#formSaveSeed').form('submit', {
-            url: '<%=basePath%>/student/save',
-            onSubmit: function (param) {
-                //param.id = params.id;
-                //param.mode = params.mode;
-                return $(this).form('validate');
-            },
-            success: function (result) {
-                var result = eval('(' + result + ')');
-                if (result.code == 0) {
-                    $('#formSaveContainer').dialog('close');
-                    grid.datagrid('reload');
-                }
-                $.messager.show({
-                    title: '消息',
-                    msg: result.msg
-                });
-            }
-        });
-    }
-</script>
-
-<%-----------------------------------------------------------------------------------------------%>
-<script type="text/javascript">
-    var grid;
-
-    function saveRecord() {
-        $('#formEditor').form('submit', {
-            url: '<%=basePath%>/seed/save',
-            onSubmit: function (param) {
-                return $(this).form('validate');
-            },
-            success: function (result) {
-                var result = eval('(' + result + ')');
-                if (result.code == 0) {
-                    $('#formContainer').dialog('close');
-                    grid.datagrid('reload');
-                }
-                $.messager.show({
-                    title: "消息",
-                    msg: result.msg
-                });
-            }
-        });
-    }
-
-    function editRecord() {
-        var row = grid.datagrid('getSelected');
-        if (row) {
-            $('#formContainer').dialog('open').dialog('center')
-
-                .dialog('setTitle', '编辑数据');
-
-            $('#formEditor').form('load', row);
+            //找到同一级下的easyui组件，设置禁用
+            $('#seedForm input[name="id"]').prev().prop('disabled', true);
+            $('#seedForm input[name="cropId"]').prev().prop('disabled', true);
+            $('#seedFormDialog').dialog('open').dialog('setTitle', '编辑数据');//打开窗口
+            $('#seedForm').form('load', row);//加载表单
         } else {
             $.messager.show({
-                title: "消息",
-                msg: "请先选择一行数据，然后再尝试点击操作按钮！"
+                title: '消息',
+                msg: '请先选择一行数据，然后再尝试点击操作按钮！'
             });
         }
     }
 
-    function newRecord() {
-        $('#formContainer').dialog('open').dialog('center').dialog('setTitle', '添加数据');
-        $('#formEditor').form('clear');
-        $('#formEditor').find("input[name='id']").val(0);
+    //保存种子表单
+    function saveSeedForm() {
+        $('#seedForm').form('submit', {
+            url: '<%=basePath%>/crop/save',
+            onSubmit: function (param) {
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return isValid;//返回false终止表单提交
+                }
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                //
+                if (result.code == 10) {
+                    $('#seedFormDialog').dialog('close');
+                    seedGrid.datagrid('reload');
+                    $.messager.show({
+                        title: '消息',
+                        msg: result.message
+                    });
+                } else {
+                    $.messager.show({
+                        title: '消息',
+                        msg: '操作失败'
+                    });
+                }
+            }
+        });
     }
-
 </script>
 </body>
 </html>

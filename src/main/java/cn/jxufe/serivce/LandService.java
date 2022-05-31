@@ -1,7 +1,6 @@
 package cn.jxufe.serivce;
 
 import cn.jxufe.entity.Land;
-import cn.jxufe.entity.User;
 import cn.jxufe.entity.view.LandView;
 
 import java.util.List;
@@ -13,8 +12,6 @@ import java.util.List;
  **/
 public interface LandService {
     List<LandView> findAll();
-
-    List<LandView> findAllByUsername(User user);
 
     Land save(Land land);
 

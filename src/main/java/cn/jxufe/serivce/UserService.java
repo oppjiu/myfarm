@@ -14,9 +14,11 @@ import java.util.List;
  * @description:
  **/
 public interface UserService {
+    List<User> findAll();
+
     User findByUsername(String username);
 
-    EasyUIData<User> findAllByUsernameLike(String username, Pageable pageable);
+    EasyUIData<User> findAllByUsernameLikePageable(String username, Pageable pageable);
 
     User modify(User user);
 

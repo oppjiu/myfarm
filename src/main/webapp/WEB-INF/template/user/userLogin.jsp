@@ -29,6 +29,28 @@
     <script type="text/javascript" src="<%=basePath%>/ext/js/imgPosition.js"></script>
 </head>
 <body>
-
+<div id="formUserSelectContainer" class="easyui-dialog" style="width: auto; height: auto; padding: 10px 10px">
+    <form id="formUserSelect" method="POST" novalidate>
+        <span>当前用户：</span>
+        <span><input class="easyui-combobox" style="width: 188px" name="language" data-options="
+				url: '<%=basePath%>/user/listAll',
+				method: 'get',
+				valueField: 'id',
+				textField: 'text',
+				panelWidth: 240,
+				panelHeight: 'auto',
+				formatter: formatItem
+			"></span>
+        <p><span>请在下拉框中选择用户昵称，并点击<br/>
+               “确认”按钮设定当前用户信息。<input type="submit" value="确认"></span></p>
+    </form>
+</div>
+<script type="text/javascript">
+    function formatItem(row) {
+        var s = '<span style="color:black"><img src="' + row.headImgUrl + '"style="height: 20px;height: 20px">' + row.nickname + "|" + "经验：" + row.exp + "|" + "金币：" + row.money + "|" + "积分：" + row.point + '</span>';
+        return s;
+        alert("hello")
+    }
+</script>
 </body>
 </html>

@@ -9,10 +9,7 @@ import cn.jxufe.serivce.CropGrowService;
 import cn.jxufe.utils.EasyUIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @create: 2022-05-05 12:38
@@ -33,9 +30,9 @@ public class CropGrowController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/list")
+    @RequestMapping("/list/{cropId}")
     public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest,
-                                         @RequestParam("cropId") int cropId) {
+                                         @PathVariable("cropId") int cropId) {
         return cropGrowService.findAllPageableByCropId(cropId, EasyUIUtils.requestProcess(pageRequest));
     }
 
@@ -54,12 +51,12 @@ public class CropGrowController {
     /**
      * 删除作物生长阶段数据（单条删除）
      *
-     * @param cropGrow 作物生长阶段信息（需含有作物生长阶段id和种子id）
+     * @param cropGrow 作物生长阶段信息（需含有作物生长阶段id和id）
      * @return
      */
     @ResponseBody
     @RequestMapping("/delete")
-    public ResponseResult<?> delete(@RequestBody CropGrow cropGrow) {
+    public ResponseResult<?> delete(CropGrow cropGrow) {
         cropGrowService.delete(cropGrow);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }

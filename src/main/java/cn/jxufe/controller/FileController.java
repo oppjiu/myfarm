@@ -39,9 +39,10 @@ public class FileController {
             String serverFilePath = FileUpAndDownloadUtil.fileUpload(savePathname, session, uploadFile);
             //获取用户信息
             User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
-            userService.findByUsername(curUser.getUsername());
-            curUser.setHeadImgUrl(serverFilePath);
-            userService.modify(curUser);//保存数据
+            //获取用户数据
+            User userByFind = userService.findByUsername(curUser.getUsername());
+            userByFind.setHeadImgUrl(serverFilePath);
+            userService.modify(userByFind);//保存数据
             result = new ResponseResult<>(ResponseCode.SUCCESS, serverFilePath);
         } catch (IOException e) {
             result = new ResponseResult<>(ResponseCode.ERROR);

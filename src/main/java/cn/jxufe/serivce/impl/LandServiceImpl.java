@@ -1,10 +1,8 @@
 package cn.jxufe.serivce.impl;
 
 import cn.jxufe.entity.Land;
-import cn.jxufe.entity.User;
 import cn.jxufe.entity.view.LandView;
 import cn.jxufe.repository.LandRepository;
-import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.LandViewRepository;
 import cn.jxufe.serivce.LandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +24,7 @@ public class LandServiceImpl implements LandService {
 
     @Override
     public List<LandView> findAll() {
-        //TODO UserLandViewRepository 视图
-//        return userLandViewRepository.findAll();
-        return null;
-    }
-
-    @Override
-    public List<LandView> findAllByUsername(User user) {
-        return landViewRepository.findAllByUsername(user.getUsername());
+        return landViewRepository.findAll();
     }
 
 

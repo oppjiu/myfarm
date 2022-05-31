@@ -38,6 +38,8 @@ public class PageJumpController {
 
     @RequestMapping("/farmGamePage")
     public String jump2FarmGamePage() {
+        //TODO 修改 重定向到GameController /initiateFarmView
+//        return "redirect:/game/initiateFarmView";
         return "/farmGame/farmGame";
     }
 }

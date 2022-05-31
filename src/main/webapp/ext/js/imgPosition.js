@@ -1,7 +1,12 @@
 var draggableImg;
+var imgExtData = {
+    offsetX: '',
+    offsetY: '',
+    width: '',
+    height: ''
+}
 $(document).ready(function () {
     draggableImg = $('#tools-imagePositioner-display img');
-
     draggableImg.draggable({
         onStopDrag: function () {
             imgExtData.offsetX = draggableImg.position().left;
@@ -11,11 +16,9 @@ $(document).ready(function () {
         }
     });
     draggableImg.resizable();
-
 });
 
 function positionerLoadImage() {
-    console.log(imgExtData);
     draggableImg.css("position", "absolute");
     draggableImg.css("left", imgExtData.offsetX + "px");
     draggableImg.css("top", imgExtData.offsetY + "px");
