@@ -70,17 +70,17 @@
             </tr>
             <tr>
                 <td>图片宽度：</td>
-                <td><input id="picWidth" name="picWidth" required="true" class="easyui-textbox" value="" disabled></td>
+                <td><input id="picWidth" name="picWidth" required="true" class="easyui-textbox" value="" readonly></td>
                 <td>图片高度：</td>
-                <td><input id="picHeight" name="picHeight" required="true" class="easyui-textbox" value="" disabled>
+                <td><input id="picHeight" name="picHeight" required="true" class="easyui-textbox" value="" readonly>
                 </td>
             </tr>
             <tr>
                 <td style="white-space:nowrap">图片offsetX：</td>
-                <td><input id="picOffsetX" name="picOffsetX" required="true" class="easyui-textbox" value="" disabled>
+                <td><input id="picOffsetX" name="picOffsetX" required="true" class="easyui-textbox" value="" readonly>
                 </td>
                 <td style="white-space:nowrap">图片offsetY：</td>
-                <td><input id="picOffsetY" name="picOffsetY" required="true" class="easyui-textbox" value="" disabled>
+                <td><input id="picOffsetY" name="picOffsetY" required="true" class="easyui-textbox" value="" readonly>
                 </td>
             </tr>
         </table>
@@ -154,7 +154,7 @@
 
         //生长阶段edatagrid
         cropGrowGrid = $("#cropGrowGrid").edatagrid({
-            title: '生长阶段表格',
+            title: '',
             width: '100%',
             height: '100%',
             url: '<%=basePath%>/cropGrow/list/' + cropGrowId,
@@ -191,7 +191,8 @@
                     title: '种子id',
                     halign: 'center',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    width: $(this).width() * 0.1,
                 },
                 {
                     field: 'stageId',
@@ -199,6 +200,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -208,6 +210,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -216,6 +219,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -224,6 +228,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -232,6 +237,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -240,6 +246,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -248,6 +255,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -256,6 +264,7 @@
                     halign: 'center',
                     align: 'center',
                     sortable: true,
+                    width: $(this).width() * 0.1,
                     editor: {type: 'textbox', options: {required: true}}
                 },
                 {
@@ -282,10 +291,7 @@
             ]],
             onLoadSuccess: function (data) {
                 if (data.total == 0) {
-                    $.messager.show({
-                        title: '消息',
-                        msg: '无记录'
-                    });
+                    messageBox('提示', '无记录');
                 }
             }
         });
@@ -326,10 +332,7 @@
             $('#cropGrowForm input[name="id"]').prev().prop('disabled', true);
             $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', true);
         } else {
-            $.messager.show({
-                title: '消息',
-                msg: '请先选择一行数据，然后再尝试点击操作按钮！'
-            });
+            messageBox('提示', '请先选择一行数据，然后再尝试点击操作按钮！');
         }
     }
 
@@ -348,15 +351,9 @@
                 if (result.code == 10) {
                     $('#cropGrowFormDialog').dialog('close');
                     cropGrowGrid.datagrid('reload');
-                    $.messager.show({
-                        title: '消息',
-                        msg: result.message
-                    });
+                    messageBox('消息',result.message);
                 } else {
-                    $.messager.show({
-                        title: '消息',
-                        msg: '操作失败'
-                    });
+                    messageBox('错误','操作失败');
                 }
             }
         });
@@ -368,10 +365,7 @@
         var stageId = $('#cropGrowForm input[name="stageId"]').val();
         if (cropId == '' || stageId == '') {
             //表格信息不全弹窗提示
-            $.messager.show({
-                title: '消息',
-                msg: '请填写相关数据后操作！'
-            });
+            messageBox('提示', '请填写相关数据后操作！');
         } else {
             var path;
             //更改图片路径
@@ -397,37 +391,6 @@
         $('#picOffsetX').textbox('setValue', imgExtData.offsetX);
         $('#picOffsetY').textbox('setValue', imgExtData.offsetY);
     }
-
-    // //设置图片位置
-    // function gainPositionFromForm() {
-    //     //获取值
-    //     var width = $('#picWidth').textbox('getValue');
-    //     var height = $('#picHeight').textbox('getValue');
-    //     var offsetX = $('#picOffsetX').textbox('getValue');
-    //     var offsetY = $('#picOffsetY').textbox('getValue');
-    //     if (width == "" || height == "" || offsetX == "" || offsetY == "") {
-    //         $.messager.show({
-    //             title: '消息',
-    //             msg: '请填写相关数据后操作！'
-    //         });
-    //     } else {
-    //         imgExtData.width = width;
-    //         imgExtData.height = height;
-    //         imgExtData.offsetX = offsetX;
-    //         imgExtData.offsetY = offsetY;
-    //     }
-    // }
-
-    // //填充表格
-    // function setPositionToForm() {
-    //     console.log('imgExtData: ', imgExtData);
-    //     $('#positionDialog').dialog('close');
-    //     //设置值
-    //     $('#picWidth').textbox('setValue', imgExtData.width);
-    //     $('#picHeight').textbox('setValue', imgExtData.height);
-    //     $('#picOffsetX').textbox('setValue', imgExtData.offsetX);
-    //     $('#picOffsetY').textbox('setValue', imgExtData.offsetY);
-    // }
 </script>
 </body>
 </html>

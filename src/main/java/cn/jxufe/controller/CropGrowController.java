@@ -9,7 +9,9 @@ import cn.jxufe.serivce.CropGrowService;
 import cn.jxufe.utils.EasyUIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @create: 2022-05-05 12:38

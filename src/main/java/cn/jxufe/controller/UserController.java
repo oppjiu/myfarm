@@ -28,6 +28,17 @@ public class UserController {
 
     /**
      * 查询所有玩家数据
+     *
+     * @return List
+     */
+    @RequestMapping("/listAll")
+    @ResponseBody
+    public List<?> findAll() {
+        return userService.findAll();
+    }
+
+    /**
+     * 查询所有玩家数据
      * 模糊查询玩家数据
      *
      * @param pageRequest 请求
@@ -41,17 +52,6 @@ public class UserController {
     }
 
     /**
-     * 查询所有玩家数据
-     *
-     * @return List
-     */
-    @RequestMapping("/listAll")
-    @ResponseBody
-    public List<?> findAll() {
-        return userService.findAll();
-    }
-
-    /**
      * 注册用户
      *
      * @param user 用户信息（需含有用户名标识）
@@ -59,7 +59,7 @@ public class UserController {
      */
     @RequestMapping("/register")
     @ResponseBody
-    public ResponseResult<?> register(@RequestBody User user) {
+    public ResponseResult<?> register(User user) {
         //TODO 修改
         User registerUser = userService.register(user);
         //判断注册用户是否重名
@@ -78,7 +78,8 @@ public class UserController {
      */
     @RequestMapping("/modify")
     @ResponseBody
-    public ResponseResult<?> modify(@RequestBody User user) {
+    public ResponseResult<?> modify(User user) {
+        System.err.println("user = " + user);
         //TODO 修改
         User modifyUser = userService.modify(user);
         return new ResponseResult<>(ResponseCode.SUCCESS, modifyUser);
@@ -92,7 +93,7 @@ public class UserController {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public ResponseResult<?> delete(@RequestBody User user) {
+    public ResponseResult<?> delete(User user) {
         //TODO 修改
         userService.delete(user);
         return new ResponseResult<>(ResponseCode.SUCCESS);
@@ -107,15 +108,15 @@ public class UserController {
      */
     @RequestMapping(value = "/setCurUser")
     @ResponseBody
-    public ResponseResult<?> setCurUser(@RequestBody User user, HttpSession session) {
+    public ResponseResult<?> setCurUser(User user, HttpSession session) {
         //TODO 是否需要增加shiro
-        boolean isTure = userService.setCurUser(user, session);
+        User userByFind = userService.setCurUser(user, session);
         //检测是否登录成功
         ResponseResult<?> result;
-        if (isTure) {
-            result = new ResponseResult<>(ResponseCode.SUCCESS, user);
+        if (userByFind != null) {
+            result = new ResponseResult<>(ResponseCode.SUCCESS, userByFind);
         } else {
-            result = new ResponseResult<>(ResponseCode.ERROR, user);
+            result = new ResponseResult<>(ResponseCode.ERROR);
         }
         return result;
     }

@@ -26,7 +26,7 @@ public interface UserService {
 
     void delete(User user);
 
-    boolean setCurUser(User user, HttpSession session);
+    User setCurUser(User user, HttpSession session);
 
     SeedBag purchaseSeed(int cropId, int seedNumber, User user);
 

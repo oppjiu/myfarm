@@ -28,3 +28,10 @@ function request(object, method, methodURL, async, successFunction) {
         success: successFunction
     });
 }
+
+function messageBox(title, msg) {
+    $.messager.show({
+        title: title,
+        msg: msg
+    });
+}

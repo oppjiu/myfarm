@@ -21,106 +21,112 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.draggable.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/imgPosition.css?t=0901">
-
-    <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/ext/js/imgPosition.js"></script>
 </head>
 <body>
 
-
-<div id="formUserListContainer" class="easyui-dialog" style="width: 1000px; height:600px; padding: 10px 10px">
-    <div id="controlBox">
-        <span>用户名:</span> <input id="nameSearch">
-        <a href="#" class="easyui-linkbutton c1" iconCls="icon-search" onclick="doSearch()">查询</a>
-        <a href="#" class="easyui-linkbutton c2" iconCls="icon-add"
-           onclick="javascript:seedGrid.edatagrid('addRow')">添加</a>
-        <a href="#" class="easyui-linkbutton c3" iconCls="icon-remove"
-           onclick="javascript:seedGrid.edatagrid('cancelRow')">取消</a>
-        <a href="#" class="easyui-linkbutton c5" iconCls="icon-cancel"
-           onclick="javascript:seedGrid.edatagrid('destroyRow')">删除</a>
+<div id="userFormWindow" style="padding: 10px;">
+    <table id="userGrid"></table>
+    <div id="userFormWindowToolbar" style="padding: 10px;">
+        <input id="usernameSearchBox">
+        <a href="javascript:void(0)" class="easyui-linkbutton c2" iconCls="icon-add"
+           onclick="userGrid.edatagrid('addRow')">添加</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c3" iconCls="icon-remove"
+           onclick="userGrid.edatagrid('cancelRow')">取消</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c5" iconCls="icon-cancel"
+           onclick="userGrid.edatagrid('destroyRow')">删除</a>
     </div>
-    <table id="grid"></table>
-    <div id="msgBox"></div>
 
-
-    <div id="formPicContainer" class="easyui-dialog" style="width: auto; height: auto; padding: 10px 10px" closed="true"
-         buttons="#formEditSeedButtons">
-        <form id="formUploadPic" method="POST" enctype="multipart/form-data">
-            <table class='tbledit'>
-                <tr>
-                    <td>头像文件：</td>
-                    <td><input id="file" name="headPic" required="true" class="w200" value="请选择头像" disabled="disabled">
-                    </td>
-                    <td><input type="file" name="upload" multiple="multiple" onchange="changeFile(this.value)"></td>
-                </tr>
-            </table>
+    <div id="uploadPicDialog" style="padding: 10px;">
+        <form id="uploadPic" method="POST" enctype="multipart/form-data">
+            <input id="file" name="file" style="width: 100%;">
+            <input id="username" name="username" type="hidden" style="width: 100%;">
         </form>
     </div>
-
     <!--编辑视图的按钮-->
-    <div id="formEditSeedButtons">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="savePicForm()">保存</a>
+    <div id="uploadPicButtons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="savePicForm()">开始上传</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-           onclick="javascript:$('#formPicContainer').dialog('close')">取消</a>
+           onclick="$('#uploadPicDialog').dialog('close')">关闭窗口</a>
     </div>
-
 </div>
 
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+
+<script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript">
-    var params = {
-        id: '',
-        mode: 'insert'
-    };
-    var cropGrowGrid;
-    $(document).ready(function () {
-        seedGrid = $("#cropGrowGrid").edatagrid({
-            title: '用户清单',
-            width: 900,
-            height: 500,
-            /* data: someData,*/
+    var userGrid;
+    $(function () {
+        //用户清单窗口
+        $('#userFormWindow').window({
+            title: '用户管理',
+            width: '80%',
+            height: '80%',
+            inline: true,
+        });
+        //上传头像窗口
+        $('#uploadPicDialog').dialog({
+            title: '',
+            width: '50%',
+            closed: 'true',
+            inline: true,
+            buttons: '#uploadPicButtons',
+        });
+        //上传文件box
+        $('#file').filebox({
+            buttonText: '选择文件',
+            buttonAlign: 'right',
+            prompt: '选择文件上传……',
+            label: '文件上传：',
+            labelPosition: 'left'
+        });
+
+        userGrid = $("#userGrid").edatagrid({
+            title: '',
+            width: '100%',
+            height: '100%',
             url: '<%=basePath%>/user/list',
-            //保存 更新 删除
-            saveUrl: '<%=basePath%>/user/save',
-            updateUrl: '<%=basePath%>/user/save',
+            saveUrl: '<%=basePath%>/user/register',
+            updateUrl: '<%=basePath%>/user/modify',
             destroyUrl: '<%=basePath%>/user/delete',
             method: "post",
             striped: true,
+            fitColumns: true,
             idField: "id",
             rownumbers: true,
             remoteSort: false,
+            fit: true,
             pagination: true,
-            pageSize: 6,
-            pageList: [2, 4, 6],
+            pageSize: 10,
+            pageList: [5, 10, 20, 50],
             afterPageText: '页 共{pages}页',
             displayMsg: '当前显示{from}-{to}条记录，共{total}条记录',
+            toolbar: '#userFormWindowToolbar',
+            destroyMsg: {
+                norecord: {
+                    title: '警告',
+                    msg: '未选择任何记录。'
+                },
+                confirm: {
+                    title: '确认',
+                    msg: '是否删除该数据？'
+                }
+            },
             columns: [[
                 {
                     field: 'id',
                     title: 'ID',
                     halign: 'center',
                     align: 'center',
-                    width: 60
                 },
                 {
-                    field: 'headImg',
+                    field: 'headImgUrl',
                     title: '头像',
-                    width: 60,
-                    align: 'right',
+                    align: 'center',
                     halign: 'center',
-                    formatter: function (value, row) {
-                        if (value == null) value = "0.jpg";
-                        return '<img src="<%=basePath%>/ext/images/headImages/' + value + '" width="60px">';
-                    },
-                    editor: {
-                        type: 'validatebox',
-                        options: {
-                            validType: 'length[0,1024]',
-                            invalidMessage: '有效长度0-1024',
-                            required: true
-                        }
+                    width: $(this).width() * 0.1,
+                    formatter: function (value, row, index) {
+                        var imgUrl = '<%=basePath%>/' + row.headImgUrl;
+                        return $('<div><img src="' + imgUrl + '" style="width:60px;" alt="图片"></div>').prop("outerHTML");
                     }
                 },
                 {
@@ -128,69 +134,43 @@
                     title: '用户名',
                     halign: 'center',
                     align: 'center',
-                    width: 60,
                     sortable: true,
-                    editor: {
-                        type: 'validatebox',
-                        options: {
-                            validType: 'length[1,5]',
-                            invalidMessage: '有效长度1-5',
-                            required: true
-                        }
-                    }
+                    width: $(this).width() * 0.1,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
                     field: 'nickname',
                     title: '昵称',
                     halign: 'center',
-                    width: 60,
                     align: 'center',
                     sortable: true,
-                    editor: {
-                        type: 'validatebox',
-                        options: {
-                            validType: 'length[1,5]',
-                            invalidMessage: '有效长度1-5',
-                            required: true
-                        }
-                    }
+                    width: $(this).width() * 0.1,
+                    editor: {type: 'textbox', options: {required: true}}
                 },
                 {
                     field: 'exp',
                     title: '经验',
                     halign: 'center',
                     align: 'center',
-                    width: 150,
                     sortable: true,
-                    formatter: function (value, row) {
-                        return '<div><img src="<%=basePath%>/ext/images/headImages/5.jpg" width="30px">' + value + '</div>';
-                    },
-                    editor: {
-                        type: 'validatebox',
-                        options: {
-                            validType: 'length[1,5]',
-                            invalidMessage: '有效长度1-5',
-                            required: true
-                        }
+                    width: $(this).width() * 0.1,
+                    editor: {type: 'textbox', options: {required: true}},
+                    formatter: function (value, row, index) {
+                        var imgUrl = '<%=basePath%>/ext/images/headImages/6.jpg';
+                        return $('<div><img src="' + imgUrl + '" style="width:30px;" alt="图片">' + value + '</div>').prop("outerHTML");
                     }
                 },
                 {
                     field: 'point',
                     title: '积分',
                     halign: 'center',
-                    width: 150,
                     align: 'center',
                     sortable: true,
-                    formatter: function (value, row) {
-                        return '<div><img src="<%=basePath%>/ext/images/headImages/6.jpg" width="30px">' + value + '</div>';
-                    },
-                    editor: {
-                        type: 'validatebox',
-                        options: {
-                            validType: 'length[1,5]',
-                            invalidMessage: '有效长度1-5',
-                            required: true
-                        }
+                    width: $(this).width() * 0.1,
+                    editor: {type: 'textbox', options: {required: true}},
+                    formatter: function (value, row, index) {
+                        var imgUrl = '<%=basePath%>/ext/images/headImages/6.jpg';
+                        return $('<div><img src="' + imgUrl + '" style="width:30px;" alt="图片">' + value + '</div>').prop("outerHTML");
                     }
                 },
                 {
@@ -198,18 +178,12 @@
                     title: '金币',
                     halign: 'center',
                     align: 'center',
-                    width: 150,
                     sortable: true,
-                    formatter: function (value, row) {
-                        return '<div><img src="<%=basePath%>/ext/images/headImages/7.jpg" width="30px">' + value + '</div>';
-                    },
-                    editor: {
-                        type: 'validatebox',
-                        options: {
-                            validType: 'length[1,5]',
-                            invalidMessage: '有效长度1-5',
-                            required: true
-                        }
+                    width: $(this).width() * 0.1,
+                    editor: {type: 'textbox', options: {required: true}},
+                    formatter: function (value, row, index) {
+                        var imgUrl = '<%=basePath%>/ext/images/headImages/7.jpg';
+                        return $('<div><img src="' + imgUrl + '" style="width:30px;" alt="图片">' + value + '</div>').prop("outerHTML");
                     }
                 },
                 {
@@ -218,8 +192,9 @@
                     align: 'center',
                     width: $(this).width() * 0.1,
                     formatter: function (value, row, index) {
-                        var str = '<input type="button" value="上传头像" onclick="uploadHeadPic(' + row.id + ')">' +
-                            '<input type="button" value="保存数据" onclick="javascript:cropGrowGrid.edatagrid(' + "\'saveRow\'" + ')">';
+                        console.log('row.username', row.username);
+                        var str = $('<input type="button" value="上传头像" onclick="uploadHeadPic(\'' + row.username + '\')"/>').prop("outerHTML");
+                        str += $('<input type="button" value="保存数据" onclick="userGrid.edatagrid(\'saveRow\')"/>').prop("outerHTML");
                         return str;
                     }
                 }
@@ -227,49 +202,57 @@
         });
     });
 
-
     //上传头像
-    function uploadHeadPic(id) {
-        params.mode = 'edit';
-        $('#formPicContainer').dialog('open').dialog('setTitle', '添加头像');
-        console.log(id)
+    function uploadHeadPic(username) {
+        $('#uploadPicDialog').dialog('open');
+        $('#username').val(username);
+        console.log('username', username);
     }
-
+/*------------------------------------------------------------------------------*/
     //保存图片
     function savePicForm() {
-        $('#formUploadPic').form('submit', {
+        $('#uploadPic').form('submit', {
             url: '<%=basePath%>/file/upload',
             onSubmit: function (param) {
-                //param.id = params.id;
-                //param.mode = params.mode;
-                return $(this).form('validate');
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    return isValid;//返回false终止表单提交
+                }
             },
             success: function (result) {
                 var result = eval('(' + result + ')');
-                if (result.code == 200) {
-                    $('#formPicContainer').dialog('close');
-
-                    //获取图片名称
-                    var fileNamePic = $('#file').val();
-
-
-                    // alert(fileNamePic);
-                    // cropGrowGrid.datagrid('reload');
+                if (result.code == 10) {
+                    $('#seedFormDialog').dialog('close');
+                    seedGrid.datagrid('reload');
+                    messageBox('消息', result.message);
+                } else {
+                    messageBox('错误', '操作失败');
                 }
-                $.messager.show({
-                    title: "消息",
-                    msg: result.msg
-                });
-            }
+            },
+            // success: function (result) {
+            //     var result = eval('(' + result + ')');
+            //     if (result.code == 200) {
+            //         $('#uploadPicDialog').dialog('close');
+            //
+            //         //获取图片名称
+            //         var fileNamePic = $('#file').val();
+            //     }
+            //     $.messager.show({
+            //         title: "消息",
+            //         msg: result.msg
+            //     });
+            // }
         });
     }
 
-    //查找用户
-    function doSearch() {
-        seedGrid.datagrid("load", {
-            name: $("#nameSearch").val()
-        });
-    }
+    $('#usernameSearchBox').searchbox({
+        prompt: '请输入用户名',
+        searcher: function () {
+            userGrid.datagrid('load', {
+                username: $("#usernameSearchBox").val()
+            });
+        },
+    });
 
     //获取上传图片的名称
     function changeFile(x) {

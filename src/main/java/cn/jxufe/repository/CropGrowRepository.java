@@ -15,5 +15,6 @@ public interface CropGrowRepository extends JpaRepository<CropGrow, Long> {
     List<CropGrow> findAllByCropId(int cropId);
 
     CropGrow findByStageIdAndCropId(int stageId, int cropId);
+
     CropGrow findByStageIdAndId(int stageId, long id);
 }

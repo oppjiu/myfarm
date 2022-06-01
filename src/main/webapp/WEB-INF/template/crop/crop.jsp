@@ -16,8 +16,6 @@
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
-
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
@@ -98,7 +96,8 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="closeSeedForm()">取消</a>
 </div>
 
-<script type="text/javascript" src="<%=basePath%>/ext/js/helper.js?346t"></script>
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+<script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript">
     var seedGrid;
     var landTypeList = {};
@@ -143,14 +142,17 @@
             url: '<%=basePath%>/common/seedType'
         });
 
+        //种子编辑窗口
         $('#seedFormDialog').dialog({
+            title: '种子编辑窗口',
             closed: 'true',
             buttons: '#seedFormButtons',
             onClose: clearSeedForm
         });
 
+        //生长阶段管理窗口
         $('#cropGrowWindow').window({
-            title: '编辑成长阶段',
+            title: '生长阶段管理',
             iconCls: 'icon-edit',
             inline: true,
             modal: true,
@@ -168,7 +170,7 @@
 
         //设置edatagrid
         seedGrid = $('#seedGrid').edatagrid({
-            title: '种子表格',
+            title: '种子管理',
             method: 'post',
             width: '100%',
             height: '100%',
@@ -176,6 +178,7 @@
             saveUrl: '<%=basePath%>/crop/save',
             updateUrl: '<%=basePath%>/crop/save',
             destroyUrl: '<%=basePath%>/crop/delete',
+            fitColumns: true,
             striped: true,
             idField: 'id',
             nowrap: false,
@@ -343,10 +346,7 @@
             ]],
             onLoadSuccess: function (data) {
                 if (data.total == 0) {
-                    $.messager.show({
-                        title: '消息',
-                        msg: '无记录'
-                    });
+                    messageBox('提示', '无记录');
                 }
             }
         });
@@ -360,7 +360,7 @@
     }
 
     function openSeedFormDialog() {
-        $('#seedFormDialog').dialog('open').dialog('setTitle', '编辑数据');//打开种子编辑页面
+        $('#seedFormDialog').dialog('open');//打开种子编辑页面
         $('#seedId').textbox("setValue", 0);//id为0
         //找到同一级下的easyui组件，设置禁用
         $('#seedForm input[name="id"]').prev().prop('disabled', true);
@@ -387,13 +387,10 @@
             //找到同一级下的easyui组件，设置禁用
             $('#seedForm input[name="id"]').prev().prop('disabled', true);
             $('#seedForm input[name="cropId"]').prev().prop('disabled', true);
-            $('#seedFormDialog').dialog('open').dialog('setTitle', '编辑数据');//打开窗口
+            $('#seedFormDialog').dialog('open');//打开窗口
             $('#seedForm').form('load', row);//加载表单
         } else {
-            $.messager.show({
-                title: '消息',
-                msg: '请先选择一行数据，然后再尝试点击操作按钮！'
-            });
+            messageBox('提示', '请先选择一行数据，然后再尝试点击操作按钮！');
         }
     }
 
@@ -409,19 +406,12 @@
             },
             success: function (result) {
                 var result = eval('(' + result + ')');
-                //
                 if (result.code == 10) {
                     $('#seedFormDialog').dialog('close');
                     seedGrid.datagrid('reload');
-                    $.messager.show({
-                        title: '消息',
-                        msg: result.message
-                    });
+                    messageBox('消息', result.message);
                 } else {
-                    $.messager.show({
-                        title: '消息',
-                        msg: '操作失败'
-                    });
+                    messageBox('错误', '操作失败');
                 }
             }
         });

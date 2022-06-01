@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public User modify(User user) {
         User hasUsername = userRepository.findByUsername(user.getUsername());
         //如果重名
-        if (hasUsername != null) {
+        if (hasUsername == null) {
             return null;
         } else {
             return userRepository.save(user);
@@ -130,15 +130,15 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public boolean setCurUser(User user, HttpSession session) {
+    public User setCurUser(User user, HttpSession session) {
         //TODO 修改
         User curUser = userRepository.findByUsername(user.getUsername());
         //查询到玩家数据
         if (curUser != null) {
             session.setAttribute(SystemCode.USER_SESSION_NAME, curUser);
-            return true;
+            return curUser;
         } else {
-            return false;
+            return null;
         }
     }
 
