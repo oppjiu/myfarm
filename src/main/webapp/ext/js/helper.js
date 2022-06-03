@@ -1,5 +1,5 @@
 function getRemoteData(url, async, callBack) {
-    return request({}, "post", url, async, callBack);
+    return request({}, 'post', url, async, callBack);
 }
 
 
@@ -17,8 +17,8 @@ function request(object, method, methodURL, async, successFunction) {
     $.ajax({
         cache: true,
         type: method,
-        datatype: "json",
-        contentType: "application/json",
+        datatype: 'json',
+        contentType: 'application/json',
         url: methodURL,
         data: JSON.stringify(object),
         error: function (XMLHttpRequest, textStatus, errorThrown) {

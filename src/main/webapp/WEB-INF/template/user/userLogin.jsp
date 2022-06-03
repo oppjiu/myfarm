@@ -73,18 +73,18 @@
      */
     function login() {
         var username = $('#userSelection').combobox('getValue');
-        if (username != '') {
+        if (username != '' || username != undefined) {
             request({'username': username}, 'post', '<%=basePath%>/user/setCurUser', false, function (result) {
                 if (result.code == 10) {
                     var data = result.data;
                     console.log('data: ', data);
-                    messageBox('消息','用户已经设定为' + data.nickname);
+                    messageBox('消息', '用户已经设定为' + data.nickname);
                 } else {
-                    messageBox('错误','操作失败');
+                    messageBox('错误', '操作失败');
                 }
             });
-        }else{
-            messageBox('提示','请选择用户');
+        } else {
+            messageBox('提示', '请选择用户');
         }
     }
 </script>

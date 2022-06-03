@@ -14,112 +14,141 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.min.js"></script>
 
     <style>
-        body {
-            margin: 0px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         .bar {
             background-image: url(ext/images/basicPic/topbar.png);
             background-size: 25% 60px;
             background-repeat: repeat-x;
+            width: 100%;
+            height: 60px;
+
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
         }
 
-        .shadow {
+        .leftBar {
+            margin-left: 5px;
+
+            flex: 3;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .leftBar img {
+            width: 50px;
+            height: 50px;
             -moz-box-shadow: 2px 2px 5px #333333;
             -webkit-box-shadow: 2px 2px 5px #333333;
             box-shadow: 2px 2px 5px #333333;
         }
 
-        .menu {
-            margin: 3px 5px 5px 5px;
-        }
+        .rightBar {
+            margin-right: 5px;
 
-        img {
-            box-shadow: 10px 10px 10px black;
-        }
-
-        /*用户信息*/
-        .userHeadDiv {
-            width: 300px;
-            height: 50px;
-            border: red 1px solid;
+            flex: 1;
             display: flex;
-            justify-content: center;
-        }
-
-        .userImage {
-            width: 48px;
-            height: 48px;
-            border: red 1px solid;
-            justify-content: center;
-        }
-
-        .userImage img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .userNameDiv {
-            width: 245px;
-            height: 45px;
-            border: red 1px solid;
-            display: inline-flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .userDetails {
             flex-direction: row;
-            display: inline-flex;
-            background: #1a7bc9;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .rightBar img {
+            width: 50px;
+            height: 50px;
+            -moz-box-shadow: 2px 2px 5px #333333;
+            -webkit-box-shadow: 2px 2px 5px #333333;
+            box-shadow: 2px 2px 5px #333333;
+
+            display: block;
+        }
+
+        .leftBarContent {
+            margin-left: 20px;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .leftBarContent div {
+            flex: 1;
+        }
+
+        .leftBarBottom {
+            padding: 0 20px 0;
+            background-color: #40AFE5;
+            -moz-box-shadow: 2px 2px 5px #333333;
+            -webkit-box-shadow: 2px 2px 5px #333333;
+            box-shadow: 2px 2px 5px #333333;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body class="bar">
-<div align="left" width="100%">
-    <div class="userHeadDiv">
-        <div class="userImage">
-            <img src="<%=basePath%>/ext/images/headImages/0.jpg">
-        </div>
-        <div class="userNameDiv">
-            <div style="font-size: 30px">未知用户</div>
-            <div class="userDetails">
-                <div class="exp">经验:<label>0</label></div>
-                <div class="money">金币：<label>0</label></div>
-                <div class="score">积分：<label>0</label></div>
+<div class="bar">
+    <div class="leftBar">
+        <img src="ext/images/headImages/0.jpg" alt="图片">
+        <div class="leftBarContent">
+            <div id="userinfoUsername"
+                 style="text-shadow: 0 0 5px #5eff79, 0 0 5px #ff5a5a;font-weight: bold;font-size: 20px;color: gold;">
+                未知用户
+            </div>
+            <div class="leftBarBottom">
+                <span>经验：</span><span style="margin-right: 20px;" id="userinfoExp">0</span>
+                <span>金币：</span><span style="margin-right: 20px;" id="userinfoMoney">0</span>
+                <span>积分：</span><span style="margin-right: 20px;" id="userinfoPoint">0</span>
             </div>
         </div>
     </div>
-</div>
-<div align="right" width="50%">
-    <a href="<%=basePath%>/page/farmGamePage" target="workspace" onclick="restoreRows()">
-        <img class="menu shadow" src="ext/images/advancePic/myFarmIcon.png" style="width: 50px;" alt="我的农场">
-    </a>
-    <a href="<%=basePath%>/page/seedPurchasePage" target="workspace" onclick="changeRows()">
-        <img class="menu shadow" src="ext/images/advancePic/storeIcon.png" style="width: 50px;" alt="种子收纳袋">
-    </a>
-    <a href="<%=basePath%>/page/userLoginPage" target="workspace" onclick="restoreRows()">
-        <img class="menu shadow" src="ext/images/advancePic/userIcon.png" style="width: 50px;" alt="玩家登录">
-    </a>
-    <a href="<%=basePath%>/page/userManagePage" target="workspace" onclick="restoreRows()">
-        <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" style="width: 50px;" alt="玩家管理">
-    </a>
-    <a href="<%=basePath%>/page/cropPage" target="workspace" onclick="restoreRows()">
-        <img class="menu shadow" src="ext/images/advancePic/barnIcon.png" style="width: 50px;" alt="种子管理">
-    </a>
+    <div class="rightBar">
+        <a href="<%=basePath%>/page/farmGamePage" target="workspace">
+            <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/myFarmIcon.png" alt="我的农场">
+        </a>
+        <a>
+            <img onclick="changeRows()" src="<%=basePath%>/ext/images/advancePic/storeIcon.png" alt="种子收纳袋">
+        </a>
+        <a href="<%=basePath%>/page/userLoginPage" target="workspace">
+            <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/userIcon.png" alt="玩家登录">
+        </a>
+        <a href="<%=basePath%>/page/userManagePage" target="workspace">
+            <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/farmerIcon.png" alt="玩家管理">
+        </a>
+        <a href="<%=basePath%>/page/cropPage" target="workspace">
+            <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/barnIcon.png" alt="种子管理">
+        </a>
+    </div>
 </div>
 
 
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script>
     function changeRows() {
-        parent.document.getElementById("main").rows = "60,*,200"
+        request({}, 'post', '<%=basePath%>/page/seedPurchasePageConfirm', false, function (result) {
+            console.log('result: ', result);
+            if (result.code == 10) {
+                parent.document.querySelector('#main').rows = "60,*,200";
+                parent.frames['workspace'].src = '<%=basePath%>/page/seedPurchasePage';
+                parent.frames['bottomSpace'].src = '<%=basePath%>/page/seedBagPage';
+            } else if (result.code == 0) {
+                parent.frames['workspace'].src = '<%=basePath%>/page/userLoginPage';
+                messageBox('提示', '请先登录');
+            }
+        });
     }
 
     function restoreRows() {
-        parent.document.getElementById("main").rows = "60,*,50"
+        parent.document.getElementById("main").rows = "60,*,50";
+        parent.frames['bottomSpace'].src = '<%=basePath%>/page/seedBagPage';
     }
 </script>
 </body>

@@ -1,7 +1,14 @@
 package cn.jxufe.controller;
 
+import cn.jxufe.bean.ResponseCode;
+import cn.jxufe.bean.ResponseResult;
+import cn.jxufe.bean.SystemCode;
+import cn.jxufe.entity.User;
+import cn.jxufe.utils.PrintUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @create: 2022-05-05 10:23
@@ -30,9 +37,23 @@ public class PageJumpController {
     public String jump2SeedBagPage() {
         return "/seedBag/seedBag";
     }
+
     @RequestMapping("/seedPurchasePage")
     public String jump2SeedPurchasePage() {
         return "/seedBag/seedPurchase";
+    }
+
+    @RequestMapping("/seedPurchasePageConfirm")
+    public ResponseResult<?> seedPurchasePageConfirm(HttpSession session) {
+        PrintUtil.println("this is seedPurchasePageConfirm");
+        User user = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
+        if (user != null) {
+            PrintUtil.println("this is true");
+            return new ResponseResult<>(ResponseCode.SUCCESS);
+        }else{
+            PrintUtil.println("this is false");
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 
     @RequestMapping("/userLoginPage")

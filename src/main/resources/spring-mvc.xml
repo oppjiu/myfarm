@@ -58,4 +58,15 @@
             <bean class="cn.jxufe.websocket.SystemWebsocketInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
+
+<!--    &lt;!&ndash;配置拦截器&ndash;&gt;-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash;/** 包括子路径&ndash;&gt;-->
+<!--            &lt;!&ndash;/* 不包括子路径&ndash;&gt;-->
+<!--            <mvc:mapping path="/page/seedPurchasePage"/>-->
+<!--            &lt;!&ndash;注册拦截器的bean&ndash;&gt;-->
+<!--            <bean id="loginInterceptor" class="cn.jxufe.interceptor.LoginInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
 </beans>

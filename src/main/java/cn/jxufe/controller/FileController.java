@@ -32,8 +32,8 @@ public class FileController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public ResponseResult<?> saveFile(@RequestParam("username")String username,
-                                      @RequestParam("upload")MultipartFile uploadFile,
+    public ResponseResult<?> saveFile(@RequestParam("username") String username,
+                                      @RequestParam("upload") MultipartFile uploadFile,
                                       HttpSession session) {
         ResponseResult<?> result;
         //照片存放地址

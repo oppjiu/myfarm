@@ -1,9 +1,6 @@
 package cn.jxufe.controller;
 
-import cn.jxufe.bean.EasyUIData;
-import cn.jxufe.bean.EasyUIDataPageRequest;
-import cn.jxufe.bean.ResponseCode;
-import cn.jxufe.bean.ResponseResult;
+import cn.jxufe.bean.*;
 import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.SeedBagService;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @create: 2022-05-18 10:48
@@ -28,19 +26,32 @@ public class SeedBagController {
     SeedBagService seedBagService;
 
     /**
-     * 查询该用户拥有的所有种子数据
+     * 查询所有种子数据
      *
      * @param pageRequest 请求
-     * @param session     当前用户session
      * @return
      */
     @RequestMapping("/list")
     @ResponseBody
-    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest, HttpSession session) {
-//        User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
-        User curUser = new User();
-        curUser.setUsername("caocao");
-        return seedBagService.findAllByUsernamePageable(curUser.getUsername(), EasyUIUtil.requestProcess(pageRequest));
+    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest) {
+        return seedBagService.findAllPageable(EasyUIUtil.requestProcess(pageRequest));
+    }
+
+    /**
+     * 查询该用户拥有的所有种子数据
+     *
+     * @param session 当前用户session
+     * @return
+     */
+    @RequestMapping("/userSeed")
+    @ResponseBody
+    public ResponseResult<?> findAllByUsername(HttpSession session) {
+        User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
+        if (curUser != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, seedBagService.findAllByUsername(curUser.getUsername()));
+        }else{
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 
 

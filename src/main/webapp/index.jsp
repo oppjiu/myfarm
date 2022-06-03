@@ -18,8 +18,8 @@
     </style>
 </head>
 <frameset id="main" rows="60,*,50" border="0">
-    <frame name="topSpace" src="menu.jsp" scrolling="no">
-    <frame name="workspace" src="welcome.jsp" scrolling="no">
-    <frame name="bottomSpace" src="tools.jsp" scrolling="no">
+    <frame id="topSpace" name="topSpace" src="menu.jsp" scrolling="no">
+    <frame id="workspace" name="workspace" src="welcome.jsp" scrolling="no">
+    <frame id="bottomSpace" name="bottomSpace" src="tools.jsp" scrolling="no">
 </frameset>
 </html>

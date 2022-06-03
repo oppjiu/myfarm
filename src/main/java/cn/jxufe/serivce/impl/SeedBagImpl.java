@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @create: 2022-05-26 09:46
  * @author: lwz
@@ -24,12 +26,17 @@ public class SeedBagImpl implements SeedBagService {
     SeedBagViewRepository seedBagViewRepository;
 
     @Override
-    public EasyUIData<SeedBagView> findAllByUsernamePageable(String username, Pageable pageable) {
-        Page<SeedBagView> page = seedBagViewRepository.findAllByUsername(username, pageable);
+    public EasyUIData<SeedBagView> findAllPageable(Pageable pageable) {
+        Page<SeedBagView> page = seedBagViewRepository.findAll(pageable);
         EasyUIData<SeedBagView> easyUIData = new EasyUIData<SeedBagView>();
         easyUIData.setTotal(page.getTotalElements());
         easyUIData.setRows(page.getContent());
         return easyUIData;
+    }
+
+    @Override
+    public List<SeedBagView> findAllByUsername(String username) {
+        return seedBagViewRepository.findAllByUsername(username);
     }
 
     @Override

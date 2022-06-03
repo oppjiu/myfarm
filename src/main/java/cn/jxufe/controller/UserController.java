@@ -7,6 +7,7 @@ import cn.jxufe.serivce.UserService;
 import cn.jxufe.utils.EasyUIUtil;
 import cn.jxufe.utils.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,7 +110,7 @@ public class UserController {
      * @param session session
      * @return
      */
-    @RequestMapping(value = "/setCurUser")
+    @RequestMapping(value = "/setCurUser", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseResult<?> setCurUser(@RequestBody User user, HttpSession session) {
         //TODO 是否需要增加shiro
@@ -133,9 +134,10 @@ public class UserController {
      * @param session    购买用户
      * @return
      */
-    @RequestMapping(value = "/purchaseSeed")
+    @RequestMapping(value = "/purchaseSeed", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseResult<?> purchaseSeed(@RequestParam("seedId") int seedId, @RequestParam("seedNumber") int seedNumber, HttpSession session) {
+        PrintUtil.println("seedId: " + seedId + " seedNumber: " + seedNumber);
         User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
         SeedBag seedBag = userService.purchaseSeed(seedId, seedNumber, curUser);
         if (seedBag != null) {

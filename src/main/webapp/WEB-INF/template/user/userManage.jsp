@@ -231,7 +231,7 @@
             onDestroy: function (index, row) {
                 messageBox('消息', '数据删除成功');
             },
-            onError: function(index,row){
+            onError: function (index, row) {
                 messageBox('消息', '操作失败');
             }
         });
