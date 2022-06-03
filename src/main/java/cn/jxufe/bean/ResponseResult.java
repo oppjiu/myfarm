@@ -9,10 +9,11 @@ import java.io.Serializable;
  * @author: lwz
  * @description:
  **/
-@Data
 public class ResponseResult<T> implements Serializable {
     private Integer code;//响应码
     private String message;//响应信息
+
+    private boolean isError;
     private T data;//数据
 
     public ResponseResult() {
@@ -27,6 +28,19 @@ public class ResponseResult<T> implements Serializable {
         this.code = responseCode.code();
         this.message = responseCode.message();
         this.data = data;
+    }
+
+    public ResponseResult(ResponseCode responseCode, boolean isError) {
+        this.code = responseCode.code();
+        this.message = responseCode.message();
+        this.isError = isError;
+    }
+
+    public ResponseResult(ResponseCode responseCode, boolean isError, T data) {
+        this.code = responseCode.code();
+        this.message = responseCode.message();
+        this.data = data;
+        this.isError = isError;
     }
 
     public static ResponseResult<?> success() {
@@ -45,5 +59,37 @@ public class ResponseResult<T> implements Serializable {
         ResponseResult<Object> result = new ResponseResult<>(responseCode, data);
         result.setData(data);
         return result;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isError() {
+        return isError;
+    }
+
+    public void setError(boolean error) {
+        isError = error;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

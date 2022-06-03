@@ -19,8 +19,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "T_SeedBag")
 public class SeedBag extends EntityID {
-    private int seedNumber = 0;    //种子数量
+    private int seedNumber;    //种子数量
     //多对多外键
-    private int cropId = 0;    //种子ID
-    private String username = "";    //用户ID
+    private int cropId;    //种子ID
+    private String username;    //用户ID
 }

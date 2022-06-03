@@ -4,7 +4,8 @@ import cn.jxufe.bean.*;
 import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.UserService;
-import cn.jxufe.utils.EasyUIUtils;
+import cn.jxufe.utils.EasyUIUtil;
+import cn.jxufe.utils.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,25 +49,24 @@ public class UserController {
     @RequestMapping("/list")
     @ResponseBody
     public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest, @RequestParam(value = "username", defaultValue = "") String username) {
-        return userService.findAllByUsernameLikePageable(username, EasyUIUtils.requestProcess(pageRequest));
+        return userService.findAllByUsernameLikePageable(username, EasyUIUtil.requestProcess(pageRequest));
     }
 
     /**
      * 注册用户
      *
      * @param user 用户信息（需含有用户名标识）
-     * @return
+     * @return easyui onError方法需添加isError判断
      */
     @RequestMapping("/register")
     @ResponseBody
     public ResponseResult<?> register(User user) {
-        //TODO 修改
         User registerUser = userService.register(user);
         //判断注册用户是否重名
         if (registerUser != null) {
             return new ResponseResult<>(ResponseCode.SUCCESS, registerUser);
         } else {
-            return new ResponseResult<>(ResponseCode.ERROR);
+            return new ResponseResult<>(ResponseCode.ERROR, true);
         }
     }
 
@@ -74,27 +74,30 @@ public class UserController {
      * 修改用户
      *
      * @param user 用户信息（需含有用户名标识）
-     * @return
+     * @return easyui onError方法需添加isError判断
      */
     @RequestMapping("/modify")
     @ResponseBody
     public ResponseResult<?> modify(User user) {
-        System.err.println("user = " + user);
-        //TODO 修改
         User modifyUser = userService.modify(user);
-        return new ResponseResult<>(ResponseCode.SUCCESS, modifyUser);
+        if (modifyUser != null) {
+
+            return new ResponseResult<>(ResponseCode.SUCCESS, modifyUser);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR, true);
+        }
     }
 
     /**
      * 删除用户
      *
-     * @param user 用户信息（需含有用户名标识）
-     * @return
+     * @param user 带有用户id信息
+     * @return easyui onError方法需添加isError判断
      */
     @RequestMapping("/delete")
     @ResponseBody
     public ResponseResult<?> delete(User user) {
-        //TODO 修改
+        PrintUtil.println("usr: " + user);
         userService.delete(user);
         return new ResponseResult<>(ResponseCode.SUCCESS);
     }
@@ -108,9 +111,10 @@ public class UserController {
      */
     @RequestMapping(value = "/setCurUser")
     @ResponseBody
-    public ResponseResult<?> setCurUser(User user, HttpSession session) {
+    public ResponseResult<?> setCurUser(@RequestBody User user, HttpSession session) {
         //TODO 是否需要增加shiro
         User userByFind = userService.setCurUser(user, session);
+        PrintUtil.println("user: " + user);
         //检测是否登录成功
         ResponseResult<?> result;
         if (userByFind != null) {

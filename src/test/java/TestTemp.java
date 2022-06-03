@@ -1,6 +1,8 @@
 import cn.jxufe.entity.Land;
+import cn.jxufe.entity.User;
 import cn.jxufe.repository.CropRepository;
 import cn.jxufe.repository.LandRepository;
+import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.serivce.SeedBagService;
 import org.junit.Test;
@@ -75,6 +77,8 @@ public class TestTemp {
     CropGrowViewRepository cropGrowViewRepository;
     @Autowired
     CropRepository cropRepository;
+    @Autowired
+    UserRepository userRepository;
     @Test
     public void testTemp() {
 //        System.err.println("userService.findByUsername(\"nihao\") = " + userService.findByUsername("nihao"));
@@ -87,6 +91,8 @@ public class TestTemp {
 //            System.out.println("crop = " + crop);
 //        }
 
-        System.out.println("landRepository.maxIdIndex() = " + landRepository.getMaxLandIdIndex());
+//        System.out.println("landRepository.maxIdIndex() = " + landRepository.getMaxLandIdIndex());
+        User allByNickname = userRepository.findAllByNickname("123");
+        System.out.println("allByNickname = " + allByNickname);
     }
 }

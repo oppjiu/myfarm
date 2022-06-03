@@ -21,11 +21,6 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <style>
-        #seedForm td input {
-            width: 150px;
-        }
-    </style>
 </head>
 <body>
 <table id="seedGrid"></table>
@@ -42,7 +37,7 @@
     <input id="seedNameSearchBox">
 </div>
 <div id="seedFormDialog" style="padding: 10px;">
-    <form id="seedForm" method="POST" novalidate>
+    <form id="seedForm" method="POST">
         <table class='tbledit'>
             <tr>
                 <td>ID：</td>
@@ -348,7 +343,13 @@
                 if (data.total == 0) {
                     messageBox('提示', '无记录');
                 }
-            }
+            },
+            onSuccess: function (index, row) {
+                messageBox('消息', '数据保存成功');
+            },
+            onDestroy: function (index, row) {
+                messageBox('消息', '数据删除成功');
+            },
         });
     });
 
@@ -360,17 +361,18 @@
     }
 
     function openSeedFormDialog() {
+        var $seedId = $('#seedId');
         $('#seedFormDialog').dialog('open');//打开种子编辑页面
-        $('#seedId').textbox("setValue", 0);//id为0
-        //找到同一级下的easyui组件，设置禁用
-        $('#seedForm input[name="id"]').prev().prop('disabled', true);
+        $seedId.textbox("setValue", 0);//id为0
+        //$seedId设置只读
+        $seedId.textbox('readonly', true);
     }
 
     function clearSeedForm() {
         $('#seedForm').form('clear');//清空表单数据
-        //找到同一级下的easyui组件，设置解除禁用
-        $('#seedForm input[name="id"]').prev().prop('disabled', false);
-        $('#seedForm input[name="cropId"]').prev().prop('disabled', false);
+        //$seedId和$seedCropId解除只读
+        $('#seedId').textbox('readonly', false);
+        $('#seedCropId').textbox('readonly', false);
     }
 
     //编辑种子编辑页面
@@ -384,11 +386,11 @@
     function loadSeedFormDialog() {
         var row = seedGrid.datagrid('getSelected');
         if (row) {
-            //找到同一级下的easyui组件，设置禁用
-            $('#seedForm input[name="id"]').prev().prop('disabled', true);
-            $('#seedForm input[name="cropId"]').prev().prop('disabled', true);
-            $('#seedFormDialog').dialog('open');//打开窗口
             $('#seedForm').form('load', row);//加载表单
+            $('#seedFormDialog').dialog('open');//打开窗口
+            //$seedId和$seedCropId设置只读
+            $('#seedId').textbox('readonly', true);
+            $('#seedCropId').textbox('readonly', true);
         } else {
             messageBox('提示', '请先选择一行数据，然后再尝试点击操作按钮！');
         }

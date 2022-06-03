@@ -41,7 +41,7 @@
        onclick="cropGrowGrid.edatagrid('destroyRow')">删除</a>
 </div>
 <div id="cropGrowFormDialog" style="padding: 10px;">
-    <form id="cropGrowForm" method="POST" novalidate>
+    <form id="cropGrowForm" method="POST">
         <table class='tbledit'>
             <tr>
                 <td>ID：</td>
@@ -51,7 +51,7 @@
             </tr>
             <tr>
                 <td>生长阶段：</td>
-                <td><input name="stageId" required="true" class="easyui-textbox" value=""></td>
+                <td><input id="cropGrowStageId" name="stageId" required="true" class="easyui-textbox" value=""></td>
                 <td>生长标题：</td>
                 <td><input name="stageName" required="true" class="easyui-textbox" value=""></td>
             </tr>
@@ -70,17 +70,21 @@
             </tr>
             <tr>
                 <td>图片宽度：</td>
-                <td><input id="picWidth" name="picWidth" required="true" class="easyui-textbox" value="" readonly></td>
+                <td><input id="cropGrowPicWidth" name="picWidth" required="true" class="easyui-textbox" value=""
+                           readonly></td>
                 <td>图片高度：</td>
-                <td><input id="picHeight" name="picHeight" required="true" class="easyui-textbox" value="" readonly>
+                <td><input id="cropGrowPicHeight" name="picHeight" required="true" class="easyui-textbox" value=""
+                           readonly>
                 </td>
             </tr>
             <tr>
                 <td style="white-space:nowrap">图片offsetX：</td>
-                <td><input id="picOffsetX" name="picOffsetX" required="true" class="easyui-textbox" value="" readonly>
+                <td><input id="cropGrowPicOffsetX" name="picOffsetX" required="true" class="easyui-textbox" value=""
+                           readonly>
                 </td>
                 <td style="white-space:nowrap">图片offsetY：</td>
-                <td><input id="picOffsetY" name="picOffsetY" required="true" class="easyui-textbox" value="" readonly>
+                <td><input id="cropGrowPicOffsetY" name="picOffsetY" required="true" class="easyui-textbox" value=""
+                           readonly>
                 </td>
             </tr>
         </table>
@@ -293,18 +297,23 @@
                 if (data.total == 0) {
                     messageBox('提示', '无记录');
                 }
-            }
+            },
+            onSuccess: function (index, row) {
+                messageBox('消息', '数据保存成功');
+            },
         });
     });
 
     //打开表单编辑窗口
     function openCropGrowFormDialog() {
+        var $cropGrowId = $('#cropGrowId');
+        var $cropGrowCropId = $('#cropGrowCropId');
         $('#cropGrowFormDialog').dialog('open').dialog('setTitle', '新建生长阶段数据');//打开种子生长阶段编辑页面
-        $('#cropGrowId').textbox("setValue", 0);//设置id为0
-        $('#cropGrowCropId').textbox("setValue", cropGrowId);//设置cropId
-        //找到同一级下的easyui组件，设置禁用
-        $('#cropGrowForm input[name="id"]').prev().prop('disabled', true);
-        $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', true);
+        $cropGrowId.textbox("setValue", 0);//设置id为0
+        $cropGrowCropId.textbox("setValue", cropGrowId);//设置cropId
+        //$cropGrowId和$cropGrowCropId设置只读
+        $cropGrowId.textbox('readonly', true);
+        $cropGrowCropId.textbox('readonly', true);
     }
 
     //关闭表单编辑窗口窗口
@@ -316,21 +325,20 @@
     //清空表单
     function clearCropGrowForm() {
         $('#cropGrowForm').form('clear');//清空表单数据
-        //找到同一级下的easyui组件，设置解除禁用
-        $('#cropGrowForm input[name="id"]').prev().prop('disabled', false);
-        $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', false);
+        //$cropGrowId和$cropGrowCropId解除只读
+        $('#cropGrowId').textbox('readonly', false);
+        $('#cropGrowCropId').textbox('readonly', false);
     }
 
     //加载添加生长阶段表单
     function loadCropGrowFormDialog() {
         var row = cropGrowGrid.datagrid('getSelected');
         if (row) {
-            $('#cropGrowFormDialog').dialog('open').dialog('setTitle', '更改生长阶段数据');//打开种子生长阶段编辑页面
             $('#cropGrowForm').form('load', row);//加载表单
-
-            //找到同一级下的easyui组件，设置禁用
-            $('#cropGrowForm input[name="id"]').prev().prop('disabled', true);
-            $('#cropGrowForm input[name="cropId"]').prev().prop('disabled', true);
+            $('#cropGrowFormDialog').dialog('open').dialog('setTitle', '更改生长阶段数据');//打开种子生长阶段编辑页面
+            //$cropGrowId和$cropGrowCropId设置只读
+            $('#cropGrowId').textbox('readonly', true);
+            $('#cropGrowCropId').textbox('readonly', true);
         } else {
             messageBox('提示', '请先选择一行数据，然后再尝试点击操作按钮！');
         }
@@ -351,9 +359,9 @@
                 if (result.code == 10) {
                     $('#cropGrowFormDialog').dialog('close');
                     cropGrowGrid.datagrid('reload');
-                    messageBox('消息',result.message);
+                    messageBox('消息', result.message);
                 } else {
-                    messageBox('错误','操作失败');
+                    messageBox('错误', '操作失败');
                 }
             }
         });
@@ -361,9 +369,13 @@
 
     //加载保存种子位置页面
     function loadPositionDialog() {
-        var cropId = $('#cropGrowForm input[name="cropId"]').val();
-        var stageId = $('#cropGrowForm input[name="stageId"]').val();
-        if (cropId == '' || stageId == '') {
+        var stageId = $('#cropGrowStageId').textbox('getValue');
+        var cropId = $('#cropGrowCropId').textbox('getValue');
+        var picWidth = $('#cropGrowPicWidth').textbox('getValue');
+        var picHeight = $('#cropGrowPicHeight').textbox('getValue');
+        var picOffsetX = $('#cropGrowPicOffsetX').textbox('getValue');
+        var picOffsetY = $('#cropGrowPicOffsetY').textbox('getValue');
+        if (stageId == '' || (stageId > 5 && stageId < 1)) {
             //表格信息不全弹窗提示
             messageBox('提示', '请填写相关数据后操作！');
         } else {
@@ -375,6 +387,13 @@
                 path = '<%=basePath%>/ext/images/crops/' + cropId + '/' + stageId + '.png';
             }
             $('#positionDialog img').attr('src', path);
+            //定位图片
+            if (picWidth != 0 && picHeight != 0 && picOffsetX != 0 && picOffsetY != 0) {
+                imgExtData.width = picWidth;
+                imgExtData.height = picHeight;
+                imgExtData.offsetX = picOffsetX;
+                imgExtData.offsetY = picOffsetY;
+            }
             positionerLoadImage();
             $('#positionDialog').dialog('open').dialog('setTitle', '图片位置编辑');//打开编辑窗口
         }
@@ -384,7 +403,7 @@
      * 获取图像的坐标
      */
     function gainPosition() {
-        console.log(imgExtData);
+        console.log('imgExtData: ', imgExtData);
         $('#positionDialog').dialog('close');
         $('#picWidth').textbox('setValue', imgExtData.width);
         $('#picHeight').textbox('setValue', imgExtData.height);

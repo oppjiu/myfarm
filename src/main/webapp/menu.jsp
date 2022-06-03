@@ -11,6 +11,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>菜单</title>
+    <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.min.js"></script>
+
     <style>
         body {
             margin: 0px;
@@ -39,25 +41,27 @@
         }
 
         /*用户信息*/
-        .userHeadDiv{
+        .userHeadDiv {
             width: 300px;
             height: 50px;
             border: red 1px solid;
             display: flex;
             justify-content: center;
         }
-        .userImage{
+
+        .userImage {
             width: 48px;
             height: 48px;
             border: red 1px solid;
             justify-content: center;
         }
 
-        .userImage img{
+        .userImage img {
             width: 100%;
             height: 100%;
         }
-        .userNameDiv{
+
+        .userNameDiv {
             width: 245px;
             height: 45px;
             border: red 1px solid;
@@ -65,7 +69,8 @@
             flex-direction: column;
             justify-content: center;
         }
-        .userDetails{
+
+        .userDetails {
             flex-direction: row;
             display: inline-flex;
             background: #1a7bc9;
@@ -89,21 +94,33 @@
     </div>
 </div>
 <div align="right" width="50%">
-    <a href="<%=basePath%>/page/farmGamePage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/myFarmIcon.png" width="50px" alt="我的农场">
+    <a href="<%=basePath%>/page/farmGamePage" target="workspace" onclick="restoreRows()">
+        <img class="menu shadow" src="ext/images/advancePic/myFarmIcon.png" style="width: 50px;" alt="我的农场">
     </a>
-    <a href="<%=basePath%>/page/seedBagPage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/storeIcon.png" width="50px" alt="种子收纳袋">
+    <a href="<%=basePath%>/page/seedPurchasePage" target="workspace" onclick="changeRows()">
+        <img class="menu shadow" src="ext/images/advancePic/storeIcon.png" style="width: 50px;" alt="种子收纳袋">
     </a>
-    <a href="<%=basePath%>/page/userLoginPage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/userIcon.png" width="50px" alt="玩家登录">
+    <a href="<%=basePath%>/page/userLoginPage" target="workspace" onclick="restoreRows()">
+        <img class="menu shadow" src="ext/images/advancePic/userIcon.png" style="width: 50px;" alt="玩家登录">
     </a>
-    <a href="<%=basePath%>/page/userManagerPage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" width="50px" alt="玩家管理">
+    <a href="<%=basePath%>/page/userManagePage" target="workspace" onclick="restoreRows()">
+        <img class="menu shadow" src="ext/images/advancePic/farmerIcon.png" style="width: 50px;" alt="玩家管理">
     </a>
-    <a href="<%=basePath%>/page/cropPage" target="workspace">
-        <img class="menu shadow" src="ext/images/advancePic/barnIcon.png" width="50px" alt="种子管理">
+    <a href="<%=basePath%>/page/cropPage" target="workspace" onclick="restoreRows()">
+        <img class="menu shadow" src="ext/images/advancePic/barnIcon.png" style="width: 50px;" alt="种子管理">
     </a>
 </div>
+
+
+<script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
+<script>
+    function changeRows() {
+        parent.document.getElementById("main").rows = "60,*,200"
+    }
+
+    function restoreRows() {
+        parent.document.getElementById("main").rows = "60,*,50"
+    }
+</script>
 </body>
 </html>

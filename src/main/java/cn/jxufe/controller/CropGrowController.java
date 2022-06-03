@@ -6,7 +6,7 @@ import cn.jxufe.bean.ResponseCode;
 import cn.jxufe.bean.ResponseResult;
 import cn.jxufe.entity.CropGrow;
 import cn.jxufe.serivce.CropGrowService;
-import cn.jxufe.utils.EasyUIUtils;
+import cn.jxufe.utils.EasyUIUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,7 @@ public class CropGrowController {
     @RequestMapping("/list/{cropId}")
     public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest,
                                          @PathVariable("cropId") int cropId) {
-        return cropGrowService.findAllPageableByCropId(cropId, EasyUIUtils.requestProcess(pageRequest));
+        return cropGrowService.findAllPageableByCropId(cropId, EasyUIUtil.requestProcess(pageRequest));
     }
 
     /**

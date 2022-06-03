@@ -13,14 +13,13 @@
     <title>我的农场</title>
     <style>
         body {
-            margin: 0px;
+            margin: 0;
         }
     </style>
 </head>
-<frameset rows="60,*,50" border="0">
-    <frame src="menu.jsp" scrolling="no">
+<frameset id="main" rows="60,*,50" border="0">
+    <frame name="topSpace" src="menu.jsp" scrolling="no">
     <frame name="workspace" src="welcome.jsp" scrolling="no">
-    <frame src="tools.jsp" scrolling="no">
+    <frame name="bottomSpace" src="tools.jsp" scrolling="no">
 </frameset>
-
 </html>

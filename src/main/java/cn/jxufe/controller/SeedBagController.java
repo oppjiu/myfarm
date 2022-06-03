@@ -7,7 +7,7 @@ import cn.jxufe.bean.ResponseResult;
 import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.SeedBagService;
-import cn.jxufe.utils.EasyUIUtils;
+import cn.jxufe.utils.EasyUIUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +40,7 @@ public class SeedBagController {
 //        User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
         User curUser = new User();
         curUser.setUsername("caocao");
-        return seedBagService.findAllByUsernamePageable(curUser.getUsername(), EasyUIUtils.requestProcess(pageRequest));
+        return seedBagService.findAllByUsernamePageable(curUser.getUsername(), EasyUIUtil.requestProcess(pageRequest));
     }
 
 

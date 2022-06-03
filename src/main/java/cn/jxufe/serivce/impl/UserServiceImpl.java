@@ -14,6 +14,7 @@ import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.serivce.GameService;
 import cn.jxufe.serivce.UserService;
+import cn.jxufe.utils.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @create: 2022-05-11 08:37
@@ -73,11 +75,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User modify(User user) {
         User hasUsername = userRepository.findByUsername(user.getUsername());
-        //如果重名
-        if (hasUsername == null) {
-            return null;
-        } else {
+        //如果未重名，或者修改的为本人
+        if (hasUsername == null || Objects.equals(hasUsername.getUsername(), user.getUsername())) {
             return userRepository.save(user);
+        } else {
+            return null;
         }
     }
 
@@ -113,7 +115,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delete(User user) {
-        User findUser = userRepository.findByUsername(user.getUsername());
+        User findUser = userRepository.findOne(user.getId());
         if (findUser != null) {
             userRepository.delete(findUser);//删除用户表数据
             seedBagRepository.deleteInBatch(seedBagRepository.findAllByUsername(findUser.getUsername()));//批量删除种子表有关用户的数据
@@ -131,7 +133,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User setCurUser(User user, HttpSession session) {
-        //TODO 修改
         User curUser = userRepository.findByUsername(user.getUsername());
         //查询到玩家数据
         if (curUser != null) {

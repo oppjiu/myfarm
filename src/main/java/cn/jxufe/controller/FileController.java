@@ -6,6 +6,7 @@ import cn.jxufe.bean.SystemCode;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.UserService;
 import cn.jxufe.utils.FileUpAndDownloadUtil;
+import cn.jxufe.utils.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,16 +32,17 @@ public class FileController {
 
     @RequestMapping("/upload")
     @ResponseBody
-    public ResponseResult<?> saveFile(@RequestParam("upload") MultipartFile uploadFile, HttpSession session) {
+    public ResponseResult<?> saveFile(@RequestParam("username")String username,
+                                      @RequestParam("upload")MultipartFile uploadFile,
+                                      HttpSession session) {
         ResponseResult<?> result;
         //照片存放地址
         String savePathname = SystemCode.DEFAULT_HEAD_IMAGE_SAVE_PATH;
         try {
             String serverFilePath = FileUpAndDownloadUtil.fileUpload(savePathname, session, uploadFile);
-            //获取用户信息
-            User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
+            PrintUtil.println("username = " + username);
             //获取用户数据
-            User userByFind = userService.findByUsername(curUser.getUsername());
+            User userByFind = userService.findByUsername(username);
             userByFind.setHeadImgUrl(serverFilePath);
             userService.modify(userByFind);//保存数据
             result = new ResponseResult<>(ResponseCode.SUCCESS, serverFilePath);

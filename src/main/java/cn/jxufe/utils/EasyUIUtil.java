@@ -13,7 +13,7 @@ import java.util.List;
  * @author: lwz
  * @description:
  **/
-public class EasyUIUtils {
+public class EasyUIUtil {
     /**
      * EasyUI前端分页请求处理
      *

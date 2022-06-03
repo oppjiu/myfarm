@@ -6,7 +6,7 @@ import cn.jxufe.bean.ResponseCode;
 import cn.jxufe.bean.ResponseResult;
 import cn.jxufe.entity.Crop;
 import cn.jxufe.serivce.CropService;
-import cn.jxufe.utils.EasyUIUtils;
+import cn.jxufe.utils.EasyUIUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +36,7 @@ public class CropController {
     @RequestMapping("/list")
     public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest,
                                          @RequestParam(value = "cropName", defaultValue = "") String cropName) {
-        return cropService.findAllPageableByCropNameLike(cropName, EasyUIUtils.requestProcess(pageRequest));
+        return cropService.findAllPageableByCropNameLike(cropName, EasyUIUtil.requestProcess(pageRequest));
     }
 
     /**
@@ -48,7 +48,6 @@ public class CropController {
     @ResponseBody
     @RequestMapping("/save")
     public ResponseResult<?> save(Crop crop) {
-        System.err.println("crop = " + crop);
         return new ResponseResult<>(ResponseCode.SUCCESS, cropService.save(crop));
     }
 

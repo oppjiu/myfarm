@@ -1,12 +1,12 @@
 body {
     font-family: "Microsoft YaHei";
     margin: 10px;
-    background:url(../images/basicPic/background.png?t876);
-    background-size:100% 100%;
-    background-repeat:no-repeat;
+    background: url(../images/basicPic/background.png?t876);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
-.op-linkbutton{
+.op-linkbutton {
     position: relative;
     display: inline-block;
     top: 0px;
@@ -18,4 +18,32 @@ body {
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
     text-decoration: none;
+}
+
+/*自定义滚动条*/
+.scrollbar-wrapper {
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(239, 239, 239);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #bfbfbf;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+::-webkit-scrollbar-corner {
+    background: #179a16;
 }

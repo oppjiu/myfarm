@@ -21,14 +21,18 @@ public class PageJumpController {
         return "/crop/cropGrow";
     }
 
-    @RequestMapping("/userManagerPage")
+    @RequestMapping("/userManagePage")
     public String jump2UserManagerPage() {
-        return "/user/userManager";
+        return "/user/userManage";
     }
 
     @RequestMapping("/seedBagPage")
     public String jump2SeedBagPage() {
         return "/seedBag/seedBag";
+    }
+    @RequestMapping("/seedPurchasePage")
+    public String jump2SeedPurchasePage() {
+        return "/seedBag/seedPurchase";
     }
 
     @RequestMapping("/userLoginPage")
