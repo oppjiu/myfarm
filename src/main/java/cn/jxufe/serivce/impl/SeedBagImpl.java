@@ -2,8 +2,10 @@ package cn.jxufe.serivce.impl;
 
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.entity.SeedBag;
+import cn.jxufe.entity.view.CropView;
 import cn.jxufe.entity.view.SeedBagView;
 import cn.jxufe.repository.SeedBagRepository;
+import cn.jxufe.repository.view.CropViewRepository;
 import cn.jxufe.repository.view.SeedBagViewRepository;
 import cn.jxufe.serivce.SeedBagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,13 @@ public class SeedBagImpl implements SeedBagService {
     SeedBagRepository seedBagRepository;
     @Autowired
     SeedBagViewRepository seedBagViewRepository;
+    @Autowired
+    public CropViewRepository cropViewRepository;
 
     @Override
-    public EasyUIData<SeedBagView> findAllPageable(Pageable pageable) {
-        Page<SeedBagView> page = seedBagViewRepository.findAll(pageable);
-        EasyUIData<SeedBagView> easyUIData = new EasyUIData<SeedBagView>();
+    public EasyUIData<CropView> findAllCropPageable(Pageable pageable) {
+        Page<CropView> page = cropViewRepository.findAll(pageable);
+        EasyUIData<CropView> easyUIData = new EasyUIData<CropView>();
         easyUIData.setTotal(page.getTotalElements());
         easyUIData.setRows(page.getContent());
         return easyUIData;

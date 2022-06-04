@@ -77,8 +77,16 @@
             request({'username': username}, 'post', '<%=basePath%>/user/setCurUser', false, function (result) {
                 if (result.code == 10) {
                     var data = result.data;
-                    console.log('data: ', data);
-                    messageBox('消息', '用户已经设定为' + data.nickname);
+                    messageBox('消息', '用户已经设定为' + data.nickname + '[' + data.username + ']');
+                    parent.frames['topSpace'].document.getElementById('userinfoExp').innerText = data.exp;
+                    parent.frames['topSpace'].document.getElementById('userinfoMoney').innerText = data.money;
+                    parent.frames['topSpace'].document.getElementById('userinfoPoint').innerText = data.point;
+                    parent.frames['topSpace'].document.getElementById('userinfoUsername').innerText = data.nickname;
+                    // 设置方法
+                    sessionStorage.setItem('userinfoExp', data.exp);
+                    sessionStorage.setItem('userinfoMoney', data.money);
+                    sessionStorage.setItem('userinfoPoint', data.point);
+                    sessionStorage.setItem('userinfoUsername', data.nickname);
                 } else {
                     messageBox('错误', '操作失败');
                 }

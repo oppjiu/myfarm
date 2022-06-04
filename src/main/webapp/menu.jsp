@@ -11,7 +11,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>菜单</title>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
+
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.edatagrid.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.draggable.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
     <style>
         * {
@@ -101,12 +109,11 @@
         <div class="leftBarContent">
             <div id="userinfoUsername"
                  style="text-shadow: 0 0 5px #5eff79, 0 0 5px #ff5a5a;font-weight: bold;font-size: 20px;color: gold;">
-                未知用户
             </div>
             <div class="leftBarBottom">
-                <span>经验：</span><span style="margin-right: 20px;" id="userinfoExp">0</span>
-                <span>金币：</span><span style="margin-right: 20px;" id="userinfoMoney">0</span>
-                <span>积分：</span><span style="margin-right: 20px;" id="userinfoPoint">0</span>
+                <span>经验：</span><span style="margin-right: 20px;" id="userinfoExp"></span>
+                <span>金币：</span><span style="margin-right: 20px;" id="userinfoMoney"></span>
+                <span>积分：</span><span style="margin-right: 20px;" id="userinfoPoint"></span>
             </div>
         </div>
     </div>
@@ -132,23 +139,52 @@
 
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script>
+    $(function () {
+        //初始化用户栏信息
+        let userinfoUsername = sessionStorage.getItem('userinfoUsername');
+        let userinfoExp = sessionStorage.getItem('userinfoExp');
+        let userinfoMoney = sessionStorage.getItem('userinfoMoney');
+        let userinfoPoint = sessionStorage.getItem('userinfoPoint');
+        if (userinfoPoint != null) {
+            document.getElementById('userinfoUsername').innerText = userinfoUsername;
+        } else {
+            document.getElementById('userinfoUsername').innerText = '未知用户';
+        }
+        if (userinfoUsername != null) {
+            document.getElementById('userinfoExp').innerText = userinfoExp;
+        } else {
+            document.getElementById('userinfoExp').innerText = '0';
+        }
+        if (userinfoExp != null) {
+            document.getElementById('userinfoMoney').innerText = userinfoMoney;
+        } else {
+            document.getElementById('userinfoMoney').innerText = '0';
+        }
+        if (userinfoMoney != null) {
+            document.getElementById('userinfoPoint').innerText = userinfoPoint;
+        } else {
+            document.getElementById('userinfoPoint').innerText = '0';
+        }
+    });
+
     function changeRows() {
-        request({}, 'post', '<%=basePath%>/page/seedPurchasePageConfirm', false, function (result) {
-            console.log('result: ', result);
+        request(null, 'get', '<%=basePath%>/page/seedPurchasePageConfirm', false, function (result) {
             if (result.code == 10) {
-                parent.document.querySelector('#main').rows = "60,*,200";
-                parent.frames['workspace'].src = '<%=basePath%>/page/seedPurchasePage';
-                parent.frames['bottomSpace'].src = '<%=basePath%>/page/seedBagPage';
+                parent.document.querySelector('#main').rows = "60,*,220";
+                parent.document.querySelector('#workspace').src = '<%=basePath%>/page/seedPurchasePage';
+                parent.document.querySelector('#bottomSpace').src = '<%=basePath%>/page/seedBagPage';
             } else if (result.code == 0) {
-                parent.frames['workspace'].src = '<%=basePath%>/page/userLoginPage';
-                messageBox('提示', '请先登录');
+                parent.document.querySelector('#workspace').src = '<%=basePath%>/page/userLoginPage';
+                // parent.messageBox('提示', '请先登录');
             }
         });
     }
 
     function restoreRows() {
         parent.document.getElementById("main").rows = "60,*,50";
-        parent.frames['bottomSpace'].src = '<%=basePath%>/page/seedBagPage';
+        if (parent.document.querySelector('#bottomSpace').src != 'tools.jsp') {
+            parent.document.querySelector('#bottomSpace').src = 'tools.jsp';
+        }
     }
 </script>
 </body>

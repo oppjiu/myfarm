@@ -2,6 +2,7 @@ package cn.jxufe.serivce;
 
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.entity.SeedBag;
+import cn.jxufe.entity.view.CropView;
 import cn.jxufe.entity.view.SeedBagView;
 import org.springframework.data.domain.Pageable;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @description:
  **/
 public interface SeedBagService {
-    EasyUIData<SeedBagView> findAllPageable(Pageable pageable);
+    EasyUIData<CropView> findAllCropPageable(Pageable pageable);
 
     List<SeedBagView> findAllByUsername(String username);
 

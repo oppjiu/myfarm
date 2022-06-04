@@ -41,7 +41,6 @@
             height: 200px;
             overflow: hidden;
             position: relative;
-            border: 1px solid #ccc;
         }
 
         .all {
@@ -71,6 +70,8 @@
 
         #root {
             display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .right, .left {
@@ -95,7 +96,7 @@
         <div class="total">
             <span>{{total}}</span>
         </div>
-        <img src="{{src}}">
+        <img src="<%=basePath%>/ext/images/crops/{{cropId}}/5.png">
     </div>
 </script>
 </body>

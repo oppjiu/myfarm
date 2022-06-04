@@ -1,4 +1,4 @@
-function getData(url) {
+﻿function getData(url) {
     return new Promise(function (resolve, reject) {
         $.ajax({
             url,
@@ -25,9 +25,9 @@ function getData(url) {
         right.addEventListener('click', function () {
             change(false);
         });
-        getData('http://localhost:8080/myfarm/seedBag/userList').then(function (res) {
+        getData('http://localhost:8080/myfarm/seedBag/userCrop').then(function (res) {
             if (res.code === 10) {
-                insertImg(res.data.list, tpl, content);
+                insertImg(res.data, tpl, content);
             }
         });
     }
@@ -39,9 +39,8 @@ function getData(url) {
         data.forEach(function (item, i) {
             width += 160;
             str += tpl.replace(/{{([^%>]+)?}}/g, function (a, b) {
-                if (b === 'total') {
-                    const total = Number(item.total) > 99 ? '99+' : item.total;
-                    return total
+                if (b === 'seedNumber') {
+                    return Number(item.seedNumber) > 99 ? '99+' : item.seedNumber
                 }
                 return item[b]
             });

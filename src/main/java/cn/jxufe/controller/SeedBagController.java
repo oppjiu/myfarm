@@ -33,8 +33,8 @@ public class SeedBagController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    public EasyUIData<?> findAllPageable(EasyUIDataPageRequest pageRequest) {
-        return seedBagService.findAllPageable(EasyUIUtil.requestProcess(pageRequest));
+    public EasyUIData<?> findAllCropPageable(EasyUIDataPageRequest pageRequest) {
+        return seedBagService.findAllCropPageable(EasyUIUtil.requestProcess(pageRequest));
     }
 
     /**
@@ -43,13 +43,13 @@ public class SeedBagController {
      * @param session 当前用户session
      * @return
      */
-    @RequestMapping("/userSeed")
+    @RequestMapping("/userCrop")
     @ResponseBody
     public ResponseResult<?> findAllByUsername(HttpSession session) {
         User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
         if (curUser != null) {
             return new ResponseResult<>(ResponseCode.SUCCESS, seedBagService.findAllByUsername(curUser.getUsername()));
-        }else{
+        } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }
     }

@@ -7,6 +7,7 @@ import cn.jxufe.entity.User;
 import cn.jxufe.utils.PrintUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -43,19 +44,6 @@ public class PageJumpController {
         return "/seedBag/seedPurchase";
     }
 
-    @RequestMapping("/seedPurchasePageConfirm")
-    public ResponseResult<?> seedPurchasePageConfirm(HttpSession session) {
-        PrintUtil.println("this is seedPurchasePageConfirm");
-        User user = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
-        if (user != null) {
-            PrintUtil.println("this is true");
-            return new ResponseResult<>(ResponseCode.SUCCESS);
-        }else{
-            PrintUtil.println("this is false");
-            return new ResponseResult<>(ResponseCode.ERROR);
-        }
-    }
-
     @RequestMapping("/userLoginPage")
     public String jump2RegisterPage() {
         return "/user/userLogin";
@@ -66,5 +54,19 @@ public class PageJumpController {
         //TODO 修改 重定向到GameController /initiateFarmView
 //        return "redirect:/game/initiateFarmView";
         return "/farmGame/farmGame";
+    }
+
+    @RequestMapping("/seedPurchasePageConfirm")
+    @ResponseBody
+    public ResponseResult<?> seedPurchasePageConfirm(HttpSession session) {
+        PrintUtil.println("this is seedPurchasePageConfirm");
+        User user = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
+        if (user != null) {
+            PrintUtil.println("this is true");
+            return new ResponseResult<>(ResponseCode.SUCCESS);
+        }else{
+            PrintUtil.println("this is false");
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 }

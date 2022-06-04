@@ -206,7 +206,7 @@
                     align: 'center',
                     width: $(this).width() * 0.1,
                     formatter: function (value, row, index) {
-                        var str = $('<input type="button" value="上传头像" onclick="uploadHeadPic(' + index + ',' + row.username + ')"/>').prop("outerHTML");
+                        var str = $('<input type="button" value="上传头像" onclick="uploadHeadPic(\'' + index + ',' + row.username + '\')"/>').prop("outerHTML");
                         str += $('<input type="button" value="保存数据" onclick="userManageGrid.edatagrid(\'saveRow\')"/>').prop("outerHTML");
                         return str;
                     }
@@ -240,7 +240,6 @@
     //上传头像
     function uploadHeadPic(index, username) {
         rowIndex = index;
-        console.log('rowIndex: ', rowIndex);
         $('#uploadPicDialog').dialog('open');
         $('#username').val(username);
     }
