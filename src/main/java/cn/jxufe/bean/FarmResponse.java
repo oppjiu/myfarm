@@ -1,5 +1,6 @@
 package cn.jxufe.bean;
 
+import cn.jxufe.entity.Land;
 import cn.jxufe.entity.view.CropGrowView;
 
 /**
@@ -8,23 +9,23 @@ import cn.jxufe.entity.view.CropGrowView;
  * @description:
  **/
 public class FarmResponse {
-    private int landId;
+    private Land land;
     private CropGrowView cropGrowView;
 
     public FarmResponse() {
     }
 
-    public FarmResponse(int landId, CropGrowView cropGrowView) {
-        this.landId = landId;
+    public FarmResponse(Land land, CropGrowView cropGrowView) {
+        this.land = land;
         this.cropGrowView = cropGrowView;
     }
 
-    public int getLandId() {
-        return landId;
+    public Land getLand() {
+        return land;
     }
 
-    public void setLandId(int landId) {
-        this.landId = landId;
+    public void setLand(Land land) {
+        this.land = land;
     }
 
     public CropGrowView getCropGrowView() {
@@ -38,7 +39,7 @@ public class FarmResponse {
     @Override
     public String toString() {
         return "FarmResponse{" +
-                "landId=" + landId +
+                "land=" + land +
                 ", cropGrowView=" + cropGrowView +
                 '}';
     }

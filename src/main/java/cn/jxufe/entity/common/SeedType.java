@@ -19,6 +19,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "T_SeedType")
 public class SeedType extends EntityID {
-    private int seedTypeCode = 0;   //种子类型code
-    private String seedType = "";    //种子类型名称
+    private int seedTypeCode;   //种子类型code
+    private String seedType;    //种子类型名称
 }

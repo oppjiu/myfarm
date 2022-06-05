@@ -19,6 +19,11 @@
         const content = dom.getElementsByClassName('all')[0];
         const left = dom.getElementsByClassName('left')[0];
         const right = dom.getElementsByClassName('right')[0];
+        const empty = dom.getElementsByClassName('empty')[0];
+        content.style.display = 'none'
+        left.style.display = 'none'
+        right.style.display = 'none'
+        empty.style.display = "block"
         left.addEventListener('click', function () {
             change(true);
         });
@@ -27,20 +32,34 @@
         });
         getData('http://localhost:8080/myfarm/seedBag/userCrop').then(function (res) {
             if (res.code === 10) {
-                insertImg(res.data, tpl, content);
+                // insertImg(res.data, tpl, content);
+                if (!res.data.length) {
+                    return
+                }
+                empty.style.display = "none"
+                content.style.display = 'block'
+                left.style.display = 'block'
+                right.style.display = 'block'
+
+                res.data.forEach(function (item) {
+                    item.total = item.seedNumber;
+                    item.src = `../images/crops/${item.id}/5.png`
+                })
+                insertImg(res.data, tpl, content)
             }
         });
     }
 
     function insertImg(data, tpl, dom) {
+        console.log(data)
         var str = '';
         var width = 0;
-        console.log(data);
         data.forEach(function (item, i) {
             width += 160;
             str += tpl.replace(/{{([^%>]+)?}}/g, function (a, b) {
-                if (b === 'seedNumber') {
-                    return Number(item.seedNumber) > 99 ? '99+' : item.seedNumber
+                if (b === 'total') {
+                    const total = Number(item.total) > 99 ? '99+' : item.total;
+                    return total
                 }
                 return item[b]
             });
@@ -52,7 +71,7 @@
     function change(isLeft) {
         console.log(document.getElementsByClassName('all')[0].offsetWidth);
         if ((Math.abs(width) + 640 >= document.getElementsByClassName('all')[0].offsetWidth && isLeft) || (width >= 0 && !isLeft)) {
-            alert('已经到头了')
+            messageBox('提示', '没有了');
             return;
         }
         width = isLeft ? width - 160 : width + 160;

@@ -403,12 +403,11 @@
      * 获取图像的坐标
      */
     function gainPosition() {
-        console.log('imgExtData: ', imgExtData);
         $('#positionDialog').dialog('close');
-        $('#picWidth').textbox('setValue', imgExtData.width);
-        $('#picHeight').textbox('setValue', imgExtData.height);
-        $('#picOffsetX').textbox('setValue', imgExtData.offsetX);
-        $('#picOffsetY').textbox('setValue', imgExtData.offsetY);
+        $('#cropGrowPicWidth').textbox('setValue', imgExtData.width);
+        $('#cropGrowPicHeight').textbox('setValue', imgExtData.height);
+        $('#cropGrowPicOffsetX').textbox('setValue', imgExtData.offsetX);
+        $('#cropGrowPicOffsetY').textbox('setValue', imgExtData.offsetY);
     }
 </script>
 </body>

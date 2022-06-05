@@ -53,20 +53,21 @@
     <!--配置websocket-->
     <bean id="websocket" class="cn.jxufe.websocket.SystemWebsocketHandler"/>
     <websocket:handlers>
-        <websocket:mapping path="/chat/action" handler="websocket"/>
+        <websocket:mapping path="/game/action" handler="websocket"/>
         <websocket:handshake-interceptors>
             <bean class="cn.jxufe.websocket.SystemWebsocketInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
 
-<!--    &lt;!&ndash;配置拦截器&ndash;&gt;-->
-<!--    <mvc:interceptors>-->
-<!--        <mvc:interceptor>-->
-<!--            &lt;!&ndash;/** 包括子路径&ndash;&gt;-->
-<!--            &lt;!&ndash;/* 不包括子路径&ndash;&gt;-->
-<!--            <mvc:mapping path="/page/seedPurchasePage"/>-->
-<!--            &lt;!&ndash;注册拦截器的bean&ndash;&gt;-->
-<!--            <bean id="loginInterceptor" class="cn.jxufe.interceptor.LoginInterceptor"/>-->
-<!--        </mvc:interceptor>-->
-<!--    </mvc:interceptors>-->
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--/** 包括子路径-->
+            <!--/* 不包括子路径-->
+            <mvc:mapping path="/page/**"/>
+            <mvc:exclude-mapping path="/page/userLoginPage"/>
+            <!--注册拦截器的bean-->
+            <bean id="loginInterceptor" class="cn.jxufe.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

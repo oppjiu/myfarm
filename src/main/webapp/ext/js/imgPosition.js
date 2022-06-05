@@ -13,6 +13,7 @@ $(document).ready(function () {
             imgExtData.offsetY = draggableImg.position().top;
             imgExtData.width = draggableImg.width();
             imgExtData.height = draggableImg.height();
+            console.log('imgExtData: ', imgExtData);
         }
     });
     draggableImg.resizable();

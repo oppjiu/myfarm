@@ -39,34 +39,18 @@ public class PageJumpController {
         return "/seedBag/seedBag";
     }
 
-    @RequestMapping("/seedPurchasePage")
-    public String jump2SeedPurchasePage() {
-        return "/seedBag/seedPurchase";
-    }
-
     @RequestMapping("/userLoginPage")
     public String jump2RegisterPage() {
         return "/user/userLogin";
     }
 
-    @RequestMapping("/farmGamePage")
-    public String jump2FarmGamePage() {
-        //TODO 修改 重定向到GameController /initiateFarmView
-//        return "redirect:/game/initiateFarmView";
-        return "/farmGame/farmGame";
+    @RequestMapping("/seedPurchasePage")
+    public String jump2SeedPurchasePage() {
+        return "/seedBag/seedPurchase";
     }
 
-    @RequestMapping("/seedPurchasePageConfirm")
-    @ResponseBody
-    public ResponseResult<?> seedPurchasePageConfirm(HttpSession session) {
-        PrintUtil.println("this is seedPurchasePageConfirm");
-        User user = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
-        if (user != null) {
-            PrintUtil.println("this is true");
-            return new ResponseResult<>(ResponseCode.SUCCESS);
-        }else{
-            PrintUtil.println("this is false");
-            return new ResponseResult<>(ResponseCode.ERROR);
-        }
+    @RequestMapping("/farmGamePage")
+    public String jump2FarmGamePage() {
+        return "/farmGame/farmGame";
     }
 }

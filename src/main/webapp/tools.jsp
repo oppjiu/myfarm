@@ -13,7 +13,7 @@
     <title>工具</title>
     <style>
         body {
-            margin: 0px;
+            margin: 0;
         }
 
         .bar {

@@ -24,7 +24,7 @@
 </head>
 <body>
 <div id="userSelectionDialog" style=" padding: 10px;">
-    <form id="formUserSelect" method="POST" novalidate>
+    <form id="formUserSelect" method="POST">
         <input id="userSelection" name="userSelection" style="width: 100%;">
         <hr>
         <div>请在下拉框中选择用户昵称，并点击“确认”按钮设定当前用户信息。</div>
@@ -32,16 +32,15 @@
            style="float:  right;">确认</a>
     </form>
 </div>
-
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript">
     $(function () {
-        //TODO title需要增加用户头像
         //用户选择窗口
         $('#userSelectionDialog').dialog({
             title: '用户登录',
+            iconCls: 'icon-userLogin',
             width: '400px',
             height: 'auto'
         });
@@ -82,7 +81,7 @@
                     parent.frames['topSpace'].document.getElementById('userinfoMoney').innerText = data.money;
                     parent.frames['topSpace'].document.getElementById('userinfoPoint').innerText = data.point;
                     parent.frames['topSpace'].document.getElementById('userinfoUsername').innerText = data.nickname;
-                    // 设置方法
+                    //设置session保存到本地
                     sessionStorage.setItem('userinfoExp', data.exp);
                     sessionStorage.setItem('userinfoMoney', data.money);
                     sessionStorage.setItem('userinfoPoint', data.point);

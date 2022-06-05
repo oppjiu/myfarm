@@ -206,8 +206,8 @@
                     align: 'center',
                     width: $(this).width() * 0.1,
                     formatter: function (value, row, index) {
-                        var str = $('<input type="button" value="上传头像" onclick="uploadHeadPic(\'' + index + ',' + row.username + '\')"/>').prop("outerHTML");
-                        str += $('<input type="button" value="保存数据" onclick="userManageGrid.edatagrid(\'saveRow\')"/>').prop("outerHTML");
+                        var str = $('<input type="button" class="blueColorButton" value="上传头像" onclick="uploadHeadPic(\'' + index + ',' + row.username + '\')"/>').prop("outerHTML");
+                        str += $('<input type="button" class="pinkColorButton" value="保存数据" onclick="userManageGrid.edatagrid(\'saveRow\')"/>').prop("outerHTML");
                         return str;
                     }
                 }

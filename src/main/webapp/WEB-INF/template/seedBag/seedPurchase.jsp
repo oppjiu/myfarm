@@ -46,7 +46,7 @@
                 '<div style="display: table-row;"><div class="scrollbar-wrapper" style="display:table-cell;border: gold 1px solid;"><p style="padding:10px;height: 40px;">"' + rowData['tips'] + '</p></div></div>' +
                 '<div id="mainBoxImg_' + rowData['cropId'] + '" style="display: table-row;"><div style="display:table-cell;"><img style="display:block;width: 150px;height: 140px;" src="' + imgUrl + '" alt="种子图片"></div></div>' +
                 '<div style="display: table-row;"><div style="display:table-cell;padding: 10px;text-align: center;">' +
-                '<input type="button" value="我要购买" onclick="purchaseSeed(' + rowData['cropId'] + ')"></div></div>' +
+                '<input type="button" value="我要购买" class="greenColorButton" onclick="purchaseSeed(' + rowData['cropId'] + ')"></div></div>' +
                 '</div></div>';
             return $(divStr).prop('outerHTML');
         }
@@ -54,8 +54,16 @@
 
 
     $(function () {
+        /**
+         * 初始化页面
+         *
+         */
+        parent.document.querySelector('#main').rows = "60,*,220";
+        parent.document.querySelector('#bottomSpace').src = '<%=basePath%>/page/seedBagPage';
+
         $('#seedStoreWindow').dialog({
             title: '种子商店',
+            iconCls: 'icon-seedPurchase',
             width: '60%',
             height: '90%',
         });

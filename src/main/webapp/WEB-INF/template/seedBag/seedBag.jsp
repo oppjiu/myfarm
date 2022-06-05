@@ -48,6 +48,19 @@
             transition: all .5s;
         }
 
+        .empty {
+            position: absolute;
+            font-size: 30px;
+            color: white;
+            width: 500px;
+            height: 100px;
+            left: 50%;
+            right: 50%;
+            top: 45%;
+            transform: translateX(-50%);
+        }
+
+
         .total > span {
             font-size: 12px;
             display: inline-block;
@@ -75,24 +88,30 @@
         }
 
         .right, .left {
-            height: 200px;
-            line-height: 200px;
+            width: 140px;
+            height: 140px;
+            line-height: 140px;
         }
     </style>
 </head>
 <body>
 <div id="root">
-    <div class="left">left</div>
+    <%--    <div class="left" style="background:url(<%=basePath%>/ext/images/advancePic/other/leftarrow.png)"></div>--%>
+    <div class="right" style="background: url(<%=basePath%>/ext/images/other/rightarrow.png)"></div>
     <div class="content">
         <div class="all"></div>
+        <div class="empty">
+            用户种子袋为空，请购买种子
+        </div>
     </div>
-    <div class="right">right</div>
+    <div class="left" style="background:url(<%=basePath%>/ext/images/other/leftarrow.png)"></div>
+    <%--    <div class="right" style="background: url(<%=basePath%>/ext/images/advancePic/other/rightarrow.png)"></div>--%>
 </div>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript" src="<%=basePath%>/ext/js/seedBag.js"></script>
 <script type="text/html" id="tpl">
-    <div class="item" >
+    <div class="item">
         <div class="total">
             <span>{{total}}</span>
         </div>

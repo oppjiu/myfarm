@@ -19,6 +19,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "T_CropState")
 public class CropState extends EntityID {
-    private int cropStateCode = 1; //作物生长状态code
-    private String cropState = "";  //作物生长状态名称
+    private int cropStateCode; //作物生长状态code
+    private String cropState;  //作物生长状态名称
 }

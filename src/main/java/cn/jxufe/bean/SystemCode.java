@@ -33,5 +33,6 @@ public class SystemCode {
     public final static String USER_SESSION_NAME = "curUser";
     //webSocketSession用户数据存储名称
     public final static String WEBSOCKET_SESSION_NAME = "user";
+    public final static String LOGIN_SESSION_NAME = "userLogin";
 
 }

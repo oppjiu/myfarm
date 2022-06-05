@@ -16,4 +16,6 @@ public interface CropGrowViewRepository extends JpaRepository<CropGrowView, Long
     Page<CropGrowView> findAllByCropId(int cropId, Pageable pageable);
 
     CropGrowView findByStageIdAndCropId(int stageId, int cropId);
+
+    CropGrowView  findByStageIdAndCropIdOrderByStageIdAsc(int stageId, int cropId);
 }

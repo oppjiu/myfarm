@@ -147,33 +147,34 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/plantSeed")
+    @RequestMapping(value = "/plantSeed", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseResult<?> plantSeed(HttpSession session) {
+    public ResponseResult<?> plantSeed(@RequestParam("landId") int landId, @RequestParam("cropId") int cropId, HttpSession session) {
         //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS);
+
+        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionPlantSeed(landId, cropId, session));
     }
 
-    @RequestMapping(value = "/harvest")
+    @RequestMapping(value = "/harvest", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseResult<?> harvest(HttpSession session) {
+    public ResponseResult<?> harvest(@RequestParam("landId") int landId, HttpSession session) {
         //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS);
-    }
-
-
-    @RequestMapping(value = "/killWorm")
-    @ResponseBody
-    public ResponseResult<?> killWorm(HttpSession session) {
-        //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS);
+        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionHarvest(landId, session));
     }
 
 
-    @RequestMapping(value = "/cleanGrass")
+    @RequestMapping(value = "/killWorm", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseResult<?> cleanGrass(HttpSession session) {
+    public ResponseResult<?> killWorm(@RequestParam("landId") int landId, HttpSession session) {
         //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS);
+        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionKillWorm(landId, session));
+    }
+
+
+    @RequestMapping(value = "/cleanGrass", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseResult<?> cleanGrass(@RequestParam("landId") int landId, HttpSession session) {
+        //TODO 修改
+        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionCleanGrass(landId, session));
     }
 }

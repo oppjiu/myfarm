@@ -70,12 +70,18 @@ public class GameServiceImpl implements GameService {
     public List<Land> initiateUserLands(int landNumber, User user) {
         int landId = landRepository.getMaxLandIdIndex() + 1;
         ArrayList<Land> landList = new ArrayList<>();
-        for (int i = 0; i < landNumber; i++, landId++) {
+        for (int i = 0, landTypeCode = 1; i < landNumber; i++, landId++) {
             Land createLand = new Land();
             //TODO 随机生成id or 根据自增设置id
             createLand.setLandId(landId);
+            //几种土地
+            if (i % (SystemCode.INITIATE_USER_LANDS / 4) == 0 && i != 0) {
+                landTypeCode++;
+            }
+            createLand.setLandTypeCode(landTypeCode);
             createLand.setUsername(user.getUsername());
             landList.add(createLand);
+
         }
         return landRepository.save(landList);
     }
@@ -89,13 +95,19 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<FarmResponse> initiateFarmView(User user) {
         ArrayList<FarmResponse> farmResponsesList = new ArrayList<>();
-        List<LandView> landViewList = landViewRepository.findAllByUsername(user.getUsername());
-        for (LandView landView : landViewList) {
-            //玩家种植了作物的土地
-            if (landView.getHasCrop() != 0) {
-                FarmResponse farmResponse = new FarmResponse(landView.getLandId(), cropGrowViewRepository.findByStageIdAndCropId(landView.getNowCropGrowStage(), landView.getCropId()));
-                farmResponsesList.add(farmResponse);
-            }
+        List<Land> landList = landRepository.findAllByUsername(user.getUsername());
+        for (Land land : landList) {
+//            //玩家种植了作物的土地
+//            if (land.getHasCrop() != 0) {
+//                FarmResponse farmResponse = new FarmResponse(land.getLandId(), cropGrowViewRepository.findByStageIdAndCropId(land.getNowCropGrowStage(), land.getCropId()));
+//                farmResponsesList.add(farmResponse);
+//            }
+            //玩家拥有的所有土地信息
+            FarmResponse farmResponse = new FarmResponse(land,
+                    cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(
+                            land.getNowCropGrowStage(),
+                            land.getCropId()));//升序查找
+            farmResponsesList.add(farmResponse);
         }
         return farmResponsesList;
     }
@@ -139,7 +151,7 @@ public class GameServiceImpl implements GameService {
                 //保存数据
                 landRepository.save(landByFind);
                 //TODO 发送封装的消息，前端需要接受的参数landId
-                FarmResponse farmResponse = new FarmResponse(landByFind.getLandId(), cropGrowViewRepository.findByStageIdAndCropId(landByFind.getNowCropGrowStage(), landByFind.getCropId()));
+                FarmResponse farmResponse = new FarmResponse(landByFind, cropGrowViewRepository.findByStageIdAndCropId(landByFind.getNowCropGrowStage(), landByFind.getCropId()));
                 systemWebsocketHandler.sendMessageToOne(username, new TextMessage(farmResponse.toString()));
             }
         }

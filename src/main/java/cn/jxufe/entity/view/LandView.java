@@ -36,10 +36,10 @@ public class LandView extends EntityID {
     //用户表
     private String username;   //用户名
     private String nickname;   //昵称
-    private int exp;    //经验
-    private int point;  //分数
-    private int money;  //金钱
-    private String headImgUrl;    //头像
+//    private int exp;    //经验
+//    private int point;  //分数
+//    private int money;  //金钱
+//    private String headImgUrl;    //头像
 
     //种子视图
     private int cropId;    //种子ID

@@ -19,6 +19,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "T_LandType")
 public class LandType extends EntityID {
-    private int landTypeCode = 1;   //土壤类型code
-    private String landType = "";    //土壤类型名称
+    private int landTypeCode;   //土壤类型code
+    private String landType;    //土壤类型名称
 }

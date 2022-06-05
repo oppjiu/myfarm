@@ -121,8 +121,8 @@
         <a href="<%=basePath%>/page/farmGamePage" target="workspace">
             <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/myFarmIcon.png" alt="我的农场">
         </a>
-        <a>
-            <img onclick="changeRows()" src="<%=basePath%>/ext/images/advancePic/storeIcon.png" alt="种子收纳袋">
+        <a href="<%=basePath%>/page/seedPurchasePage" target="workspace">
+            <img  src="<%=basePath%>/ext/images/advancePic/storeIcon.png" alt="种子收纳袋">
         </a>
         <a href="<%=basePath%>/page/userLoginPage" target="workspace">
             <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/userIcon.png" alt="玩家登录">
@@ -166,19 +166,6 @@
             document.getElementById('userinfoPoint').innerText = '0';
         }
     });
-
-    function changeRows() {
-        request(null, 'get', '<%=basePath%>/page/seedPurchasePageConfirm', false, function (result) {
-            if (result.code == 10) {
-                parent.document.querySelector('#main').rows = "60,*,220";
-                parent.document.querySelector('#workspace').src = '<%=basePath%>/page/seedPurchasePage';
-                parent.document.querySelector('#bottomSpace').src = '<%=basePath%>/page/seedBagPage';
-            } else if (result.code == 0) {
-                parent.document.querySelector('#workspace').src = '<%=basePath%>/page/userLoginPage';
-                // parent.messageBox('提示', '请先登录');
-            }
-        });
-    }
 
     function restoreRows() {
         parent.document.getElementById("main").rows = "60,*,50";

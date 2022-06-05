@@ -335,7 +335,7 @@
                     align: 'center',
                     width: $(this).width() * 0.1,
                     formatter: function (value, row, index) {
-                        return $('<input type="button" value="成长阶段" onclick="openCropGrowWindow(\'' + row.cropId + '\')"/>').prop("outerHTML");
+                        return $('<input type="button" class="greenColorButton" value="成长阶段" onclick="openCropGrowWindow(\'' + row.cropId + '\')"/>').prop("outerHTML");
                     }
                 }
             ]],
