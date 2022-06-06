@@ -23,9 +23,7 @@ public class SystemWebsocketHandler extends TextWebSocketHandler {
     private static final ArrayList<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        /*message.getPayload()获取String类型的数据*/
-        /*session.getId()获取连接对象的sessionId*/
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
     }
 
     @Override

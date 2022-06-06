@@ -1,6 +1,7 @@
 package cn.jxufe.serivce;
 
 import cn.jxufe.bean.EasyUIData;
+import cn.jxufe.bean.FarmResponse;
 import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public interface UserService {
      * @param session 操作用户
      * @return
      */
-    boolean userActionPlantSeed(int landId, int cropId, HttpSession session);
+    FarmResponse userActionPlantSeed(int landId, int cropId, HttpSession session);
 
     /**
      * 除虫
@@ -49,7 +50,7 @@ public interface UserService {
      * @param session 操作用户
      * @return
      */
-    User userActionKillWorm(int landId, HttpSession session);
+    FarmResponse userActionKillWorm(int landId, HttpSession session);
 
     /**
      * 收获
@@ -58,7 +59,7 @@ public interface UserService {
      * @param session 操作用户
      * @return
      */
-    User userActionHarvest(int landId, HttpSession session);
+    FarmResponse userActionHarvest(int landId, HttpSession session);
 
     /**
      * 除枯草
@@ -67,5 +68,5 @@ public interface UserService {
      * @param session 操作用户
      * @return
      */
-    User userActionCleanGrass(int landId, HttpSession session);
+    FarmResponse userActionCleanGrass(int landId, HttpSession session);
 }

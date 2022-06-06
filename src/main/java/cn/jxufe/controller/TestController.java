@@ -25,7 +25,7 @@ public class TestController {
     @ResponseBody
     @RequestMapping("/testFarmResponse")
     public ResponseResult<?> testFarmResponse(@RequestBody Land landByFind) {
-        FarmResponse farmResponse = new FarmResponse(landByFind, cropGrowViewRepository.findByStageIdAndCropId(landByFind.getNowCropGrowStage(), landByFind.getCropId()));
+        FarmResponse farmResponse = new FarmResponse(100, landByFind, cropGrowViewRepository.findByStageIdAndCropId(landByFind.getNowCropGrowStage(), landByFind.getCropId()));
         return new ResponseResult<>(ResponseCode.SUCCESS, farmResponse);
     }
 }

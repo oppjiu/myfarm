@@ -15,7 +15,7 @@ public class SystemCode {
     //减产数量
     public final static int REDUCE_OUTPUT = 2;
     //作物生长阶段
-    public final static int CROP_GROW_STAGE_IS_MATURE = 3;
+    public final static int CROP_GROW_STAGE_IS_MATURE = 5;
     public final static int CROP_GROW_STAGE_IS_WITHERED = 4;
     //除虫获得的经验、积分和金币
     public final static int KILL_WORM_GAIN_EXP = 2;
@@ -32,7 +32,10 @@ public class SystemCode {
     //用户session名称
     public final static String USER_SESSION_NAME = "curUser";
     //webSocketSession用户数据存储名称
-    public final static String WEBSOCKET_SESSION_NAME = "user";
+    public final static String WEBSOCKET_SESSION_NAME = "curUser";
     public final static String LOGIN_SESSION_NAME = "userLogin";
+
+    public final static int FARM_RESPONSE_CODE_A = 100;//农场响应数据A
+    public final static int FARM_RESPONSE_CODE_B = 200;//农场响应数据B
 
 }

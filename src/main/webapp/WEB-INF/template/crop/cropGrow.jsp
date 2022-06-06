@@ -387,11 +387,13 @@
         } else {
             var path;
             //更改图片路径
-            if (stageId == 9 || stageId == 0) {
-                path = '<%=basePath%>/ext/images/crops/basic/' + stageId + '.png';
+            if (stageId == 6 || stageId == 0) {
+                path = '<%=basePath%>/ext/images/crops/basic/' + 6 + '.png';
             } else {
                 path = '<%=basePath%>/ext/images/crops/' + cropId + '/' + stageId + '.png';
             }
+            //初始化插件
+            initDraggable();
             $('#positionDialog img').attr('src', path);
             //定位图片
             if (picWidth != 0 && picHeight != 0 && picOffsetX != 0 && picOffsetY != 0) {

@@ -27,7 +27,7 @@ public class Land extends EntityID {
     private int isMature;    //是否成熟
     private int output;    //作物产量
     private int nowCropGrowStage;    //当前生长阶段
-    private int nextCropGrowStage;    //下一生长阶段
+    private int nextCropGrowStage;    //下一生长阶段/*暂无作用*/
     private int growingSeason;    //第几季度
     private int growthTimeOfEachState;    //作物在每种状态下生长的时间
     private Date stateEndTime = new Date();    //作物在每种状态已经生长的时间

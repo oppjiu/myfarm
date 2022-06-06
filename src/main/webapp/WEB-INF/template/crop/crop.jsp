@@ -92,7 +92,9 @@
 </div>
 
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/imgPosition.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
+<script type="text/javascript" src="<%=basePath%>/ext/js/imgPosition.js"></script>
 <script type="text/javascript">
     var seedGrid;
     var landTypeList = {};
@@ -152,6 +154,7 @@
             inline: true,
             modal: true,
             closed: 'true',
+            onClose: clearImgExtData
         });
 
         $('#seedNameSearchBox').searchbox({
@@ -356,8 +359,9 @@
     //打开种子成长阶段窗口
     function openCropGrowWindow(cropId) {
         cropGrowId = cropId;//传递cropId给cropGrowWindow
-        $('#cropGrowWindow').window('open');
-        $('#cropGrowWindow').window('refresh', '<%=basePath%>/page/cropGrowPage/');
+        let $cropGrowWindow = $('#cropGrowWindow');
+        $cropGrowWindow.window('open');
+        $cropGrowWindow.window('refresh', '<%=basePath%>/page/cropGrowPage');
     }
 
     function openSeedFormDialog() {
@@ -417,6 +421,13 @@
                 }
             }
         });
+    }
+
+    function clearImgExtData() {
+        imgExtData.width = 0;
+        imgExtData.height = 0;
+        imgExtData.offsetX = 0;
+        imgExtData.offsetY = 0;
     }
 </script>
 </body>

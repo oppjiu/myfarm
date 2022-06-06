@@ -5,7 +5,8 @@ var imgExtData = {
     width: '',
     height: ''
 }
-$(document).ready(function () {
+
+function initDraggable() {
     draggableImg = $('#tools-imagePositioner-display img');
     draggableImg.draggable({
         onStopDrag: function () {
@@ -17,7 +18,7 @@ $(document).ready(function () {
         }
     });
     draggableImg.resizable();
-});
+}
 
 function positionerLoadImage() {
     draggableImg.css("position", "absolute");

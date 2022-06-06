@@ -15,6 +15,8 @@
 (function (dom) {
     var width = 0;
     window.onload = function () {
+        $.parser.parse();//全局刷新，动态加载表单后，easyui样式失效需要刷新
+
         const tpl = dom.getElementById('tpl').innerHTML;
         const content = dom.getElementsByClassName('all')[0];
         const left = dom.getElementsByClassName('left')[0];

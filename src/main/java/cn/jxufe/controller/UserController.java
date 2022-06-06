@@ -147,10 +147,10 @@ public class UserController {
     @RequestMapping(value = "/plantSeed")
     @ResponseBody
     public ResponseResult<?> plantSeed(@RequestBody JSONObject jsonObject, HttpSession session) {
-        PrintUtil.println("plantSeed landId: "+jsonObject.get("landId"));
-        boolean feasible = userService.userActionPlantSeed((Integer) jsonObject.get("landId"), (Integer) jsonObject.get("cropId"), session);
-        if (feasible) {
-            return new ResponseResult<>(ResponseCode.SUCCESS);
+        PrintUtil.println("plantSeed landId: " + jsonObject.get("landId"));
+        FarmResponse farmResponse = userService.userActionPlantSeed((Integer) jsonObject.get("landId"), (Integer) jsonObject.get("cropId"), session);
+        if (farmResponse != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, farmResponse);
         } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }
@@ -159,10 +159,10 @@ public class UserController {
     @RequestMapping(value = "/harvest")
     @ResponseBody
     public ResponseResult<?> harvest(@RequestBody JSONObject jsonObject, HttpSession session) {
-        PrintUtil.println("harvest landId: "+jsonObject.get("landId"));
-        User user = userService.userActionHarvest((Integer) jsonObject.get("landId"), session);
-        if (user != null) {
-            return new ResponseResult<>(ResponseCode.SUCCESS, user);
+        PrintUtil.println("harvest landId: " + jsonObject.get("landId"));
+        FarmResponse farmResponse = userService.userActionHarvest((Integer) jsonObject.get("landId"), session);
+        if (farmResponse != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, farmResponse);
         } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }
@@ -172,11 +172,11 @@ public class UserController {
     @RequestMapping(value = "/killWorm")
     @ResponseBody
     public ResponseResult<?> killWorm(@RequestBody JSONObject jsonObject, HttpSession session) {
-        PrintUtil.println("killWorm landId: "+jsonObject.get("landId"));
+        PrintUtil.println("killWorm landId: " + jsonObject.get("landId"));
         //TODO 修改
-        User user = userService.userActionKillWorm((Integer) jsonObject.get("landId"), session);
-        if (user != null) {
-            return new ResponseResult<>(ResponseCode.SUCCESS, user);
+        FarmResponse farmResponse = userService.userActionKillWorm((Integer) jsonObject.get("landId"), session);
+        if (farmResponse != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, farmResponse);
         } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }
@@ -188,10 +188,10 @@ public class UserController {
     @ResponseBody
     public ResponseResult<?> cleanGrass(@RequestBody JSONObject jsonObject, HttpSession session) {
         //TODO 修改
-        PrintUtil.println("cleanGrass landId: "+jsonObject.get("landId"));
-        User user = userService.userActionCleanGrass((Integer) jsonObject.get("landId"), session);
-        if (user != null) {
-            return new ResponseResult<>(ResponseCode.SUCCESS, user);
+        PrintUtil.println("cleanGrass landId: " + jsonObject.get("landId"));
+        FarmResponse farmResponse = userService.userActionCleanGrass((Integer) jsonObject.get("landId"), session);
+        if (farmResponse != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, farmResponse);
         } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }

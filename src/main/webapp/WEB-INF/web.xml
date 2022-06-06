@@ -62,6 +62,12 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>farmGame</servlet-name>
+        <servlet-class>cn.jxufe.config.FarmServlet</servlet-class>
+        <load-on-startup>256</load-on-startup>
+    </servlet>
+
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

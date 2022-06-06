@@ -39,7 +39,55 @@
     <div><input type="submit" value="下载" onclick="download()"></div>
 </form>
 
+<input class="hoverButton" type="button" value="1">
+<input class="hoverButton" type="button" value="2">
+<input class="hoverButton" type="button" value="3">
+<input class="hoverButton" type="button" value="4">
+<input class="hoverButton" type="button" value="5">
+
 <script>
+    $(function () {
+        /*动态绑定鼠标进入事件*/
+        let $hoverButton = $('.hoverButton');
+        $(document).on('mouseenter', '.hoverButton', function () {
+            console.log('this, ', this);
+            let url = 'ext/cursor/plantCrop.cur'
+            if (this.value == 1) {
+                url = 'ext/cursor/plantCrop.cur';
+                $hoverButton.css({
+                    cursor: 'url(' + url + '), default',
+                });
+            } else if (this.value == 2) {
+                url = 'ext/cursor/harvest.cur';
+                $hoverButton.css({
+                    cursor: 'url(' + url + '), default',
+                });
+            } else if (this.value == 3) {
+                url = 'ext/cursor/killWorm.cur';
+                $hoverButton.css({
+                    cursor: 'url(' + url + '), default',
+                });
+            } else if (this.value == 4) {
+                url = 'ext/cursor/waitGrow.cur';
+                $hoverButton.css({
+                    cursor: 'url(' + url + '), default',
+                });
+            } else if (this.value == 5) {
+                url = 'ext/cursor/cleanGrass.cur';
+                $hoverButton.css({
+                    cursor: 'url(' + url + '), default',
+                });
+            }
+        });
+
+        /*动态绑定鼠标划出事件*/
+        $(document).on('mouseleave', '.hoverButton', function () {
+            $hoverButton.css({
+                cursor: 'pointer',
+            });
+        });
+    });
+
     function upload() {
         var fileInput = $('#file').get(0).files[0];
         if (fileInput) {

@@ -11,6 +11,7 @@ import cn.jxufe.repository.LandRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.repository.view.LandViewRepository;
 import cn.jxufe.serivce.GameService;
+import cn.jxufe.utils.PrintUtil;
 import cn.jxufe.websocket.SystemWebsocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class GameServiceImpl implements GameService {
                 new TimerTask() {
                     @Override
                     public void run() {
+                        PrintUtil.println("现在服务器时间是：" + new Date());
                         systemWebsocketHandler.sendMessageToAll(new TextMessage("现在服务器时间是：" + new Date()));
                         //更新游戏数据
 //                        updateCropStage();
@@ -72,6 +74,29 @@ public class GameServiceImpl implements GameService {
             Land createLand = new Land();
             //TODO 随机生成id or 根据自增设置id
             createLand.setLandId(landId);
+            //TODO 测试数据
+            if (i == 0) {
+                createLand.setHasCrop(0);
+            } else if (i == 1) {
+                createLand.setIsWithered(0);
+                createLand.setNowCropGrowStage(6);
+                createLand.setHasCrop(1);
+                createLand.setHasInsect(0);
+                createLand.setCropId(1);
+            } else if (i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8) {
+                createLand.setHasInsect(1);
+                createLand.setNowCropGrowStage(6);
+                createLand.setHasCrop(1);
+                createLand.setHasInsect(1);
+                createLand.setCropId(6);
+            } else {
+                createLand.setNowCropGrowStage(1);
+                createLand.setNextCropGrowStage(2);
+                createLand.setHasCrop(1);
+                createLand.setHasInsect(0);
+                createLand.setCropId(1);
+            }
+
             //几种土地
             if (i % (SystemCode.INITIATE_USER_LANDS / 4) == 0 && i != 0) {
                 landTypeCode++;
@@ -101,7 +126,7 @@ public class GameServiceImpl implements GameService {
 //                farmResponsesList.add(farmResponse);
 //            }
             //玩家拥有的所有土地信息
-            FarmResponse farmResponse = new FarmResponse(land,
+            FarmResponse farmResponse = new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, land,
                     cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(
                             land.getNowCropGrowStage(),
                             land.getCropId()));//升序查找
@@ -149,7 +174,9 @@ public class GameServiceImpl implements GameService {
                 //保存数据
                 landRepository.save(landByFind);
                 //TODO 发送封装的消息，前端需要接受的参数landId
-                FarmResponse farmResponse = new FarmResponse(landByFind, cropGrowViewRepository.findByStageIdAndCropId(landByFind.getNowCropGrowStage(), landByFind.getCropId()));
+                FarmResponse farmResponse = new FarmResponse(SystemCode.FARM_RESPONSE_CODE_A, landByFind,
+                        cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
+                                landByFind.getCropId()));
                 systemWebsocketHandler.sendMessageToOne(username, new TextMessage(farmResponse.toString()));
             }
         }
