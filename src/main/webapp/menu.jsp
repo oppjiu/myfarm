@@ -105,7 +105,7 @@
 <body class="bar">
 <div class="bar">
     <div class="leftBar">
-        <img src="ext/images/headImages/0.jpg" alt="图片">
+        <img id="userinfoHeadImg" src="ext/images/headImages/0.jpg" alt="图片">
         <div class="leftBarContent">
             <div id="userinfoUsername"
                  style="text-shadow: 0 0 5px #5eff79, 0 0 5px #ff5a5a;font-weight: bold;font-size: 20px;color: gold;">
@@ -122,7 +122,7 @@
             <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/myFarmIcon.png" alt="我的农场">
         </a>
         <a href="<%=basePath%>/page/seedPurchasePage" target="workspace">
-            <img  src="<%=basePath%>/ext/images/advancePic/storeIcon.png" alt="种子收纳袋">
+            <img src="<%=basePath%>/ext/images/advancePic/storeIcon.png" alt="种子收纳袋">
         </a>
         <a href="<%=basePath%>/page/userLoginPage" target="workspace">
             <img onclick="restoreRows()" src="<%=basePath%>/ext/images/advancePic/userIcon.png" alt="玩家登录">
@@ -141,10 +141,16 @@
 <script>
     $(function () {
         //初始化用户栏信息
+        let userinfoHeadImg = sessionStorage.getItem('userinfoHeadImg');
         let userinfoUsername = sessionStorage.getItem('userinfoUsername');
         let userinfoExp = sessionStorage.getItem('userinfoExp');
         let userinfoMoney = sessionStorage.getItem('userinfoMoney');
         let userinfoPoint = sessionStorage.getItem('userinfoPoint');
+        if (userinfoHeadImg != null) {
+            document.getElementById('userinfoHeadImg').src = '<%=basePath%>/' + userinfoHeadImg;
+        } else {
+            document.getElementById('userinfoHeadImg').src = '<%=basePath%>/ext/images/headImages/0.jpg';
+        }
         if (userinfoPoint != null) {
             document.getElementById('userinfoUsername').innerText = userinfoUsername;
         } else {

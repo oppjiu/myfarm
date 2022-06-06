@@ -31,6 +31,7 @@
 </head>
 <body>
 <div><input type="file" id="file" name="upload"></div>
+<div><input type="text" id="username" name="username"></div>
 <div><input type="button" value="上传" onclick="upload()"></div>
 
 <form action="<%=basePath%>/file/download">

@@ -77,11 +77,13 @@
                 if (result.code == 10) {
                     var data = result.data;
                     messageBox('消息', '用户已经设定为' + data.nickname + '[' + data.username + ']');
+                    parent.frames['topSpace'].document.getElementById('userinfoHeadImg').src = '<%=basePath%>/' + data.headImgUrl;
                     parent.frames['topSpace'].document.getElementById('userinfoExp').innerText = data.exp;
                     parent.frames['topSpace'].document.getElementById('userinfoMoney').innerText = data.money;
                     parent.frames['topSpace'].document.getElementById('userinfoPoint').innerText = data.point;
                     parent.frames['topSpace'].document.getElementById('userinfoUsername').innerText = data.nickname;
                     //设置session保存到本地
+                    sessionStorage.setItem('userinfoHeadImg', data.headImgUrl);
                     sessionStorage.setItem('userinfoExp', data.exp);
                     sessionStorage.setItem('userinfoMoney', data.money);
                     sessionStorage.setItem('userinfoPoint', data.point);

@@ -23,11 +23,11 @@ import java.util.List;
 @Service
 public class SeedBagImpl implements SeedBagService {
     @Autowired
+    public CropViewRepository cropViewRepository;
+    @Autowired
     SeedBagRepository seedBagRepository;
     @Autowired
     SeedBagViewRepository seedBagViewRepository;
-    @Autowired
-    public CropViewRepository cropViewRepository;
 
     @Override
     public EasyUIData<CropView> findAllCropPageable(Pageable pageable) {

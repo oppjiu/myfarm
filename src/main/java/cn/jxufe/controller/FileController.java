@@ -4,6 +4,7 @@ import cn.jxufe.bean.ResponseCode;
 import cn.jxufe.bean.ResponseResult;
 import cn.jxufe.bean.SystemCode;
 import cn.jxufe.entity.User;
+import cn.jxufe.repository.UserRepository;
 import cn.jxufe.serivce.UserService;
 import cn.jxufe.utils.FileUpAndDownloadUtil;
 import cn.jxufe.utils.PrintUtil;
@@ -33,7 +34,7 @@ public class FileController {
     @RequestMapping("/upload")
     @ResponseBody
     public ResponseResult<?> saveFile(@RequestParam("username") String username,
-                                      @RequestParam("upload") MultipartFile uploadFile,
+                                      @RequestParam("file") MultipartFile uploadFile,
                                       HttpSession session) {
         ResponseResult<?> result;
         //照片存放地址
@@ -41,10 +42,9 @@ public class FileController {
         try {
             String serverFilePath = FileUpAndDownloadUtil.fileUpload(savePathname, session, uploadFile);
             PrintUtil.println("username = " + username);
-            //获取用户数据
-            User userByFind = userService.findByUsername(username);
-            userByFind.setHeadImgUrl(serverFilePath);
-            userService.modify(userByFind);//保存数据
+            PrintUtil.println("serverFilePath = " + serverFilePath);
+            //保存用户数据
+            userService.changImgUrl(username, serverFilePath);
             result = new ResponseResult<>(ResponseCode.SUCCESS, serverFilePath);
         } catch (IOException e) {
             result = new ResponseResult<>(ResponseCode.ERROR);

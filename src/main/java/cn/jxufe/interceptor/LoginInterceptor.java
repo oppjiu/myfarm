@@ -2,8 +2,6 @@ package cn.jxufe.interceptor;
 
 import cn.jxufe.bean.SystemCode;
 import cn.jxufe.entity.User;
-import cn.jxufe.utils.PrintUtil;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

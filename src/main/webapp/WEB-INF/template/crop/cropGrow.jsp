@@ -301,6 +301,12 @@
             onSuccess: function (index, row) {
                 messageBox('消息', '数据保存成功');
             },
+            onDestroy: function (index, row) {
+                messageBox('消息', '数据删除成功');
+            },
+            onError: function (index, row) {
+                messageBox('消息', '操作失败');
+            }
         });
     });
 

@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @create: 2022-05-25 09:55
@@ -40,15 +38,15 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void gameSeversInitiate() {
-//        new Timer().schedule(
-//                new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        talkToAll("现在服务器时间是：" + new Date());
-//                        //更新游戏数据
-////                        updateCropStage();
-//                    }
-//                }, 0, SystemCode.PER_TIME);
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        systemWebsocketHandler.sendMessageToAll(new TextMessage("现在服务器时间是：" + new Date()));
+                        //更新游戏数据
+//                        updateCropStage();
+                    }
+                }, 0, SystemCode.PER_TIME * 1000);
     }
 
     public boolean insectAlgorithm() {

@@ -1,7 +1,5 @@
 package cn.jxufe.bean;
 
-import lombok.Data;
-
 import java.io.Serializable;
 
 /**

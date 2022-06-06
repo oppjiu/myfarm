@@ -52,6 +52,15 @@
 </head>
 <body>
 <div id="landBox"></div>
+<div id="seedBagWindow"></div>
+<audio id="soundWorm" src="<%=basePath%>/ext/sounds/worm.mp3"></audio>
+<audio id="soundKillWorm" src="<%=basePath%>/ext/sounds/killWorm.mp3"></audio>
+<audio id="soundCleanGrass" src="<%=basePath%>/ext/sounds/cleanGrass.mp3"></audio>
+<audio id="soundHarvest" src="<%=basePath%>/ext/sounds/harvest.mp3"></audio>
+<audio id="soundNegative" src="<%=basePath%>/ext/sounds/negative.mp3"></audio>
+<audio id="soundPlantCrop" src="<%=basePath%>/ext/sounds/plantCrop.mp3"></audio>
+<audio id="soundPlantCropSuccess" src="<%=basePath%>/ext/sounds/plantCropSuccess.mp3"></audio>
+
 
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
@@ -79,23 +88,16 @@
         landTypeCode;
         cropState;
         cropName;
-
-        constructor(landId, hasCrop, hasInsect, isWithered, isMature,
-                    output, nowCropGrowStage, nextCropGrowStage,
-                    growingSeason, growthTimeOfEachState, stateEndTime,) {
-            this.landId = landId;
-            this.hasCrop = hasCrop;
-            this.hasInsect = hasInsect;
-            this.isWithered = isWithered;
-            this.isMature = isMature;
-            this.output = output;
-            this.nowCropGrowStage = nowCropGrowStage;
-            this.nextCropGrowStage = nextCropGrowStage;
-            this.growingSeason = growingSeason;
-            this.growthTimeOfEachState = growthTimeOfEachState;
-            this.stateEndTime = stateEndTime;
-        }
     }
+
+    /*音乐*/
+    var soundWorm = $('#soundWorm')[0];
+    var soundKillWorm = $('#soundKillWorm')[0];
+    var soundCleanGrass = $('#soundCleanGrass')[0];
+    var soundHarvest = $('#soundHarvest')[0];
+    var soundNegative = $('#soundNegative')[0];
+    var soundPlantCrop = $('#soundPlantCrop')[0];
+    var soundPlantCropSuccess = $('#soundPlantCropSuccess')[0];
 
     var landMap = new Map();//土地数据
     /*为标准的3/4相对应的作物的宽高就需设置为相等的比例*/
@@ -106,22 +108,30 @@
     var paddingX = 50;
     var paddingY = 25;
     /*土地的绝对位置*/
-    var positionX = 550;
-    var positionY = 120;
+    var positionX = 580;
+    var positionY = 80;
     /*害虫的大小*/
     var insectWidth = 100;
     var insectHeight = 100;
 
     $(function () {
+        /*种子收纳袋窗口*/
+        $('#seedBagWindow').window({
+            title: '种子收纳袋',
+            width: '80%',
+            height: '80%',
+            inline: true,
+            modal: true,
+            closed: 'true',
+        });
+
+        /*设置土地*/
         let $landBox = $('#landBox');
         $landBox.css({
             left: positionX + 'px',
             top: positionY + 'px'
         });
-        /**
-         * 获取数据
-         */
-        request({}, 'post', 'data/farm.json', false, function (result) {
+        request({}, 'post', '<%=basePath%>/farm.json', false, function (result) {
             console.log('result.data: ', result.data);
             //初始化游戏
             if (result.code == 10) {
@@ -150,76 +160,64 @@
             }
         });
 
-        /*绑定鼠标进入事件*/
+        /*动态绑定鼠标进入事件*/
         $(document).on('mouseenter', '.clickBox', function () {
             let land = landMap.get(parseInt(this.dataset.landid));
-            //土地没有作物
-            // if (land.hasCrop == 0) {
-            //     $('.clickBox').css({
-            //         cursor: 'url(ext/cursor/可播种.cur), wait',
-            //     });
-            // } else {
-            //     //作物成熟
-            //     if (land.isMature == 1) {
-            //         $('.clickBox').css({
-            //             cursor: 'url(ext/cursor/可播种.cur), wait',
-            //         });
-            //     } else if (land.isWithered == 1) { //作物枯萎
-            //         $('.clickBox').css({
-            //             cursor: 'url(ext/cursor/可播种.cur), wait',
-            //         });
-            //     } else { //作物成长中
-            //         $('.clickBox').css({
-            //             cursor: 'url(ext/cursor/可播种.cur), wait',
-            //         });
-            //     }
-            //     //作物生虫
-            //     if (land.hasInsect == 1) {
-            //         $('.clickBox').css({
-            //             cursor: 'url(ext/cursor/可播种.cur), wait',
-            //         });
-            //     }
-            // }
+            土地没有作物
+            if (land.hasCrop == 0) {
+                $('.clickBox').css({
+                    cursor: 'url(ext/cursor/可播种.cur), wait',
+                });
+            } else {
+                //作物成熟
+                if (land.isMature == 1) {
+                    $('.clickBox').css({
+                        cursor: 'url(ext/cursor/可播种.cur), wait',
+                    });
+                } else if (land.isWithered == 1) { //作物枯萎
+                    $('.clickBox').css({
+                        cursor: 'url(ext/cursor/可播种.cur), wait',
+                    });
+                } else { //作物成长中
+                    $('.clickBox').css({
+                        cursor: 'url(ext/cursor/可播种.cur), wait',
+                    });
+                }
+                //作物生虫
+                if (land.hasInsect == 1) {
+                    $('.clickBox').css({
+                        cursor: 'url(ext/cursor/可播种.cur), wait',
+                    });
+                }
+            }
+            let url = '<%=basePath%>/ext/cursor/可播种.cur';
+            $('#clickBox_1').css('cursor', 'url(<%=basePath%>/ext/cursor/可播种.cur),default');
+            $('#clickBox_2').css('cursor', 'url(<%=basePath%>/ext/cursor/可收获.cur),default');
+            $('#clickBox_3').css('cursor', 'url(<%=basePath%>/ext/cursor/可除虫.cur),default');
+            $('#clickBox_4').css('cursor', 'url(<%=basePath%>/ext/cursor/生长等待.cur),default');
+            $('#clickBox_5').css('cursor', 'url(<%=basePath%>/ext/cursor/除枯叶.cur),default');
 
-            $('#clickBox_1').css({
-                cursor: 'url(ext/cursor/可收获.cur), wait',
-            });
-            $('#clickBox_2').css({
-                cursor: 'url(ext/cursor/可除虫.cur), wait',
-            });
-            $('#clickBox_3').css({
-                cursor: 'url(ext/cursor/杀虫剂.cur), wait',
-            });
-            $('#clickBox_4').css({
-                cursor: 'url(ext/cursor/生长等待.cur), wait',
-            });
-            $('#clickBox_5').css({
-                cursor: 'url(ext/cursor/除枯叶.cur), wait',
-            });
-            $('#clickBox_6').css({
-                cursor: 'url(ext/cursor/魔法棒.cur), wait',
-            });
+
         });
-        /*绑定鼠标划出事件*/
+        /*动态绑定鼠标划出事件*/
         $(document).on('mouseleave', '.clickBox', function () {
             $('.clickBox').css({
                 cursor: 'pointer',
             });
         });
 
-        /*绑定点击事件*/
+        /*动态绑定点击事件*/
         $(document).on('click', '.clickBox', function () {
             let land = landMap.get(parseInt(this.dataset.landid));
             //土地没有作物
             if (land.hasCrop == 0) {
                 plantCrop(land.landId);
             } else {
-                //作物成熟
                 if (land.isMature == 1) {
+                    //作物成熟
                     harvest(land.landId);
-                }
-                //作物枯萎
-                if (land.isWithered == 1) {
+                } else if (land.isWithered == 1) {
+                    //作物枯萎
                     cleanGrass(land.landId);
                 }
                 //作物生虫
@@ -228,9 +226,16 @@
                 }
             }
         });
-        initTipTool();
+        initTipTool();//初始化提示框
     });
 
+    /**
+     * 存储土地动态信息
+     * @param i
+     * @param j
+     * @param landData
+     * @param cropGrowData
+     */
     function saveGameData(i, j, landData, cropGrowData) {
         let land = new Land();
         land.i = i;
@@ -259,6 +264,9 @@
 
     function plantCrop(landId) {
         console.log('landId', landId);
+        let $seedBagWindow = $('#seedBagWindow');
+        $seedBagWindow.window('open');
+        $seedBagWindow.window('refresh', '<%=basePath%>/page/seedBag');
         // request({}, 'post', '')
     }
 
@@ -277,6 +285,9 @@
         request({}, 'post', '<%=basePath%>/user/killWorm')
     }
 
+    /**
+     * 初始化提示框
+     */
     function initTipTool() {
         $('.clickBox').tooltip({
             trackMouse: true,
@@ -307,15 +318,16 @@
             height: landHeight + 'px',
             left: fixPositionX(i, j) + 'px',
             top: fixPositionY(i, j) + 'px',
-            zIndex: 1000
+            zIndex: 30
         });
 
         return $clickBox;
     }
 
     function initLandImg(i, j, land) {
+        let url = '<%=basePath%>/ext/images/land/' + land.landTypeCode + '.png'
         //根据land的landTypeCode生成相应的土地类型
-        let $land = $('<img data-landTypeCode="' + land.landTypeCode + '" class="land" id="land_' + land.landId + '" src="ext/images/land/' + land.landTypeCode + '.png" alt="土地">');
+        let $land = $('<img data-landTypeCode="' + land.landTypeCode + '" class="land" id="land_' + land.landId + '" src="' + url + '" alt="土地">');
         $land.css({
             width: landWidth + 'px',
             height: landHeight + 'px',
@@ -332,7 +344,8 @@
 // let $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + landId + '" onclick="plantCrop(\'' + landId + '\')" src="ext/images/crops/1/5.png" alt="作物">');
 // let $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + landId + '" onclick="plantCrop(\'' + landId + '\')" src="ext/images/crops/basic/9.png" alt="作物">');
 // let $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + landId + '" onclick="plantCrop(\'' + landId + '\')" src="ext/images/crops/basic/0.png" alt="作物">');
-        let $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + land.landId + '" src="ext/images/crops/418/5.png" alt="作物">');
+        let url = '<%=basePath%>/ext/images/crops/418/5.png';
+        let $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + land.landId + '" src="' + url + '" alt="作物">');
         let picOffsetX = 40; //cropGrow['offsetX']
         let picOffsetY = 63; //cropGrow['offsetY']
         let picWidth = 141; //cropGrow['width']
@@ -348,13 +361,14 @@
     }
 
     function initInsectImg(i, j, land) {
-        let $insect = $('<img class="insect" id="insect_' + land.landId + '" src="ext/images/other/insect.png" alt="害虫">');
+        let url = '<%=basePath%>/ext/images/other/insect.png';
+        let $insect = $('<img class="insect" id="insect_' + land.landId + '" src="' + url + '" alt="害虫">');
         $insect.css({
             width: insectWidth + 'px',
             height: insectHeight + 'px',
             left: fixPositionX(i, j) - 20 + 'px', //-10 修正
             top: fixPositionY(i, j) - 30 + 'px', //-30 修正
-            zIndex: 100
+            zIndex: 20
         });
         return $insect;
     }
@@ -367,6 +381,11 @@
         return ((i + j) * (landHeight + paddingY) / 2 + 30);
     }
 
+    /**
+     * 时间戳转换日期
+     * @param time
+     * @returns {string}
+     */
     function getLocalTime(time) {
         var date = new Date(time + 8 * 3600 * 1000);
         return date.toJSON().substr(0, 19).replace('T', ' ');
@@ -374,4 +393,3 @@
 </script>
 </body>
 </html>
-

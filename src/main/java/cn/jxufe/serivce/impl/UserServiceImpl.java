@@ -14,7 +14,6 @@ import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.serivce.GameService;
 import cn.jxufe.serivce.UserService;
-import cn.jxufe.utils.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -81,6 +80,13 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public User changImgUrl(String username, String serverFilePath) {
+        User userByFind = userRepository.findByUsername(username);
+        userByFind.setHeadImgUrl(serverFilePath);
+        return userRepository.save(userByFind);
     }
 
 
@@ -150,22 +156,32 @@ public class UserServiceImpl implements UserService {
      * @param user   玩家信息
      */
     @Override
-    public SeedBag purchaseSeed(int cropId, int seedNumber, User user) {
-        SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, user.getUsername());
-        SeedBag saveSeed;
-        if (seedBag != null) {
-            //数据库中有相关字段，种子数量增加
-            seedBag.setSeedNumber(seedBag.getSeedNumber() + seedNumber);
-            saveSeed = seedBagRepository.save(seedBag);
-        } else {
-            //数据库中没有相关字段，创建关联
-            SeedBag newSeedBag = new SeedBag();
-            newSeedBag.setCropId(cropId);
-            newSeedBag.setUsername(user.getUsername());
-            newSeedBag.setSeedNumber(seedNumber);
-            saveSeed = seedBagRepository.save(newSeedBag);
+    public User purchaseSeed(int cropId, int seedNumber, User user) {
+        User userByFind = userRepository.findByUsername(user.getUsername());
+        Crop cropByFind = cropRepository.findByCropId(cropId);
+        //玩家没有足够金钱
+        if (userByFind.getMoney() - cropByFind.getPurchasePrice() < 0) {
+            return null;
+        }else{
+            SeedBag saveSeed;
+            SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, user.getUsername());
+            if (seedBag != null) {
+                //数据库中有相关字段，种子数量增加
+                seedBag.setSeedNumber(seedBag.getSeedNumber() + seedNumber);
+                saveSeed = seedBagRepository.save(seedBag);
+            } else {
+                //数据库中没有相关字段，创建关联
+                SeedBag newSeedBag = new SeedBag();
+                newSeedBag.setCropId(cropId);
+                newSeedBag.setUsername(user.getUsername());
+                newSeedBag.setSeedNumber(seedNumber);
+                saveSeed = seedBagRepository.save(newSeedBag);
+            }
+            //扣除玩家金币
+            userByFind.setMoney(userByFind.getMoney() - cropByFind.getPurchasePrice());
+            userRepository.save(userByFind);
+            return userByFind;
         }
-        return saveSeed;
     }
 
 

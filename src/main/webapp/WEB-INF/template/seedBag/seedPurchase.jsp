@@ -46,7 +46,7 @@
                 '<div style="display: table-row;"><div class="scrollbar-wrapper" style="display:table-cell;border: gold 1px solid;"><p style="padding:10px;height: 40px;">"' + rowData['tips'] + '</p></div></div>' +
                 '<div id="mainBoxImg_' + rowData['cropId'] + '" style="display: table-row;"><div style="display:table-cell;"><img style="display:block;width: 150px;height: 140px;" src="' + imgUrl + '" alt="种子图片"></div></div>' +
                 '<div style="display: table-row;"><div style="display:table-cell;padding: 10px;text-align: center;">' +
-                '<input type="button" value="我要购买" class="greenColorButton" onclick="purchaseSeed(' + rowData['cropId'] + ')"></div></div>' +
+                '<input type="button" value="我要购买" class="greenColorButton" onclick="purchaseSeed(' + rowData['cropId'] + ",\'" + rowData['cropName'] + '\')"></div></div>' +
                 '</div></div>';
             return $(divStr).prop('outerHTML');
         }
@@ -258,29 +258,28 @@
                     });
                 }
             });
-
-            var getPanel = seedStoreGrid.datagrid('getPanel');
-            getPanel.height = 'auto';
-            console.log('getPanel: ', getPanel);
         }
 
         $('.datagrid-body').css({
             'overflow': 'hidden',
             'text-align': 'center'
         });
-        // $.parser.parse();//全局刷新
     }
 
-    function purchaseSeed(cropId) {
-        $.messager.confirm('确认', '你确定要购买该种子吗', function (r) {
+    function purchaseSeed(cropId, cropName) {
+        let message = '你确定要购买' + '<span style="color:gold;">' + cropName + '</span>' + '吗';
+        $.messager.confirm('确认', message, function (r) {
             if (r) {
                 request({
                     cropId: cropId,
                     seedNumber: 1
                 }, 'post', '<%=basePath%>/user/purchaseSeed', false, function (result) {
                     if (result.code == 10) {
-                        //刷新种子收纳袋页面
-                        parent.document.querySelector('#main input[name="bottomSpace"]').contentWindow.location.reload();
+                        //更新种子收纳袋页面
+                        parent.document.querySelector('#bottomSpace').src = '<%=basePath%>/page/seedBagPage';
+                        /*更新用户信息栏*/
+                        sessionStorage.setItem('userinfoMoney', result.data['money']);
+                        parent.document.querySelector('#topSpace').src = '<%=basePath%>/menu.jsp';
                         messageBox('消息', '种子购买成功');
                     } else {
                         messageBox('消息', '种子购买失败');

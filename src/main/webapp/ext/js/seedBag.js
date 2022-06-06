@@ -51,7 +51,7 @@
     }
 
     function insertImg(data, tpl, dom) {
-        console.log(data)
+        // console.log(data)
         var str = '';
         var width = 0;
         data.forEach(function (item, i) {
@@ -69,9 +69,9 @@
     }
 
     function change(isLeft) {
-        console.log(document.getElementsByClassName('all')[0].offsetWidth);
+        // console.log(document.getElementsByClassName('all')[0].offsetWidth);
         if ((Math.abs(width) + 640 >= document.getElementsByClassName('all')[0].offsetWidth && isLeft) || (width >= 0 && !isLeft)) {
-            messageBox('提示', '没有了');
+            messageBox('提示', '收纳袋中没有种子了');
             return;
         }
         width = isLeft ? width - 160 : width + 160;

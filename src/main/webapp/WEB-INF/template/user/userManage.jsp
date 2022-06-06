@@ -44,7 +44,7 @@
     </div>
     <div id="uploadPicButtons">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"
-           onclick="savePicForm($('#file').filebox('getValue'))">开始上传</a>
+           onclick="savePicForm()">开始上传</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
            onclick="$('#uploadPicDialog').dialog('close')">关闭窗口</a>
     </div>
@@ -206,7 +206,7 @@
                     align: 'center',
                     width: $(this).width() * 0.1,
                     formatter: function (value, row, index) {
-                        var str = $('<input type="button" class="blueColorButton" value="上传头像" onclick="uploadHeadPic(\'' + index + ',' + row.username + '\')"/>').prop("outerHTML");
+                        var str = $('<input type="button" class="blueColorButton" value="上传头像" onclick="uploadHeadPic(' + index + ",\'" + row.username + '\')"/>').prop("outerHTML");
                         str += $('<input type="button" class="pinkColorButton" value="保存数据" onclick="userManageGrid.edatagrid(\'saveRow\')"/>').prop("outerHTML");
                         return str;
                     }
@@ -226,7 +226,6 @@
             },
             onSuccess: function (index, row) {
                 messageBox('消息', '数据保存成功');
-                // userManageGrid.datagrid('reload');
             },
             onDestroy: function (index, row) {
                 messageBox('消息', '数据删除成功');
@@ -245,12 +244,7 @@
     }
 
     //保存图片
-    function savePicForm(filename) {
-        var headImgUrlEditor = userManageGrid.datagrid('getEditor', {
-            index: rowIndex,
-            field: 'headImgUrl'
-        });
-        $(headImgUrlEditor.target).textbox('setValue', '/ext/images/headImages/' + filename.substring(filename.lastIndexOf('\\') + 1));
+    function savePicForm() {
         //上传头像
         $('#uploadPic').form('submit', {
             url: '<%=basePath%>/file/upload',
@@ -258,6 +252,19 @@
                 var isValid = $(this).form('validate');
                 if (!isValid) {
                     return isValid;//返回false终止表单提交
+                }
+            },
+            success: function (result) {
+                var result = eval('(' + result + ')');
+                if (result.code == 10) {
+                    console.log('result.data: ', result.data);
+                    userManageGrid.datagrid('reload');
+                    <%--//如果用户信息头像相同则更换头像--%>
+                    <%--sessionStorage.setItem('userinfoHeadImg', result.data);--%>
+                    <%--parent.document.querySelector('#topSpace').src = '<%=basePath%>/menu.jsp';--%>
+                    messageBox('消息', '上传成功');
+                } else {
+                    messageBox('消息', '上传失败');
                 }
             }
         });

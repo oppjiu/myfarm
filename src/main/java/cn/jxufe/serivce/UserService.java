@@ -22,13 +22,15 @@ public interface UserService {
 
     User modify(User user);
 
+    User changImgUrl(String username, String serverFilePath);
+
     User register(User user);
 
     void delete(User user);
 
     User setCurUser(User user, HttpSession session);
 
-    SeedBag purchaseSeed(int cropId, int seedNumber, User user);
+    User purchaseSeed(int cropId, int seedNumber, User user);
 
     /**
      * 播种

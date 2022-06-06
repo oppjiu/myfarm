@@ -50,11 +50,11 @@ body {
 
 /*iconCls*/
 .icon-seedPurchase {
-    background: url('../images/advancePic/seedPurchaseIcon.png') no-repeat;
+    background: url(../images/advancePic/seedPurchaseIcon.png) no-repeat;
 }
 
 .icon-userLogin {
-    background: url('../images/advancePic/userLoginIcon.png') no-repeat;
+    background: url(../images/advancePic/userLoginIcon.png) no-repeat;
 }
 
 /*按钮*/

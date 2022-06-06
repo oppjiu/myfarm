@@ -29,6 +29,8 @@
             background-color: #ddd;
             height: 200px;
             float: left;
+            display: flex;
+            flex-direction: column;
         }
 
         .total {
@@ -74,10 +76,10 @@
         }
 
         img {
-            margin-top: 5px;
+
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 170px;
+            /*object-fit: cover;*/
             display: block;
         }
 
@@ -96,16 +98,14 @@
 </head>
 <body>
 <div id="root">
-    <%--    <div class="left" style="background:url(<%=basePath%>/ext/images/advancePic/other/leftarrow.png)"></div>--%>
-    <div class="right" style="background: url(<%=basePath%>/ext/images/other/rightarrow.png)"></div>
-    <div class="content">
+    <div class="right" style="background: url(<%=basePath%>/ext/images/other/rightArrow.png)"></div>
+    <div class="content" style="text-align: center">
         <div class="all"></div>
         <div class="empty">
             用户种子袋为空，请购买种子
         </div>
     </div>
-    <div class="left" style="background:url(<%=basePath%>/ext/images/other/leftarrow.png)"></div>
-    <%--    <div class="right" style="background: url(<%=basePath%>/ext/images/advancePic/other/rightarrow.png)"></div>--%>
+    <div class="left" style="background:url(<%=basePath%>/ext/images/other/leftArrow.png)"></div>
 </div>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>

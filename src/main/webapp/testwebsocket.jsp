@@ -41,7 +41,8 @@
 <a href="#" class="easyui-linkbutton" iconCls="icon-ok" style="width:100px;height:32px" onclick="doSend()">发送</a><br>
 测试内容：
 <input id="testSendHandler" class="easyui-textbox" data-options="prompt:'请输入测试内容'" style="width:300px;height:32px">
-<a href="#" class="easyui-linkbutton" iconCls="icon-ok" style="width:100px;height:32px" onclick="testSendHandler()">发送</a>
+<a href="#" class="easyui-linkbutton" iconCls="icon-ok" style="width:100px;height:32px"
+   onclick="testSendHandler()">发送</a>
 <div id="talks" class="easyui-panel" title="聊天记录" style="width:500px;height:600px;padding:10px;"></div>
 <script type="text/javascript">
     var websocket = null;

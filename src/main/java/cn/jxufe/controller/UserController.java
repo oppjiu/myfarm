@@ -1,13 +1,12 @@
 package cn.jxufe.controller;
 
 import cn.jxufe.bean.*;
-import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import cn.jxufe.serivce.UserService;
 import cn.jxufe.utils.EasyUIUtil;
 import cn.jxufe.utils.PrintUtil;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,12 +109,10 @@ public class UserController {
      * @param session session
      * @return
      */
-    @RequestMapping(value = "/setCurUser", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/setCurUser")
     @ResponseBody
     public ResponseResult<?> setCurUser(@RequestBody User user, HttpSession session) {
-        //TODO 是否需要增加shiro
         User userByFind = userService.setCurUser(user, session);
-        PrintUtil.println("user: " + user);
         //检测是否登录成功
         ResponseResult<?> result;
         if (userByFind != null) {
@@ -129,52 +126,74 @@ public class UserController {
     /**
      * 购买种子
      *
-     * @param seedId     种子id
-     * @param seedNumber 种子数量
+     * @param jsonObject 数据
      * @param session    购买用户
      * @return
      */
-    @RequestMapping(value = "/purchaseSeed", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/purchaseSeed")
     @ResponseBody
-    public ResponseResult<?> purchaseSeed(@RequestParam("seedId") int seedId, @RequestParam("seedNumber") int seedNumber, HttpSession session) {
-        PrintUtil.println("seedId: " + seedId + " seedNumber: " + seedNumber);
+    public ResponseResult<?> purchaseSeed(@RequestBody JSONObject jsonObject, HttpSession session) {
+        int cropId = (int) jsonObject.get("cropId");
+        int seedNumber = (int) jsonObject.get("seedNumber");
         User curUser = (User) session.getAttribute(SystemCode.USER_SESSION_NAME);
-        SeedBag seedBag = userService.purchaseSeed(seedId, seedNumber, curUser);
-        if (seedBag != null) {
-            return new ResponseResult<>(ResponseCode.SUCCESS, seedBag);
+        User user = userService.purchaseSeed(cropId, seedNumber, curUser);
+        if (user != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, user);
         } else {
             return new ResponseResult<>(ResponseCode.ERROR);
         }
     }
 
-    @RequestMapping(value = "/plantSeed", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/plantSeed")
     @ResponseBody
-    public ResponseResult<?> plantSeed(@RequestParam("landId") int landId, @RequestParam("cropId") int cropId, HttpSession session) {
-        //TODO 修改
-
-        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionPlantSeed(landId, cropId, session));
+    public ResponseResult<?> plantSeed(@RequestBody JSONObject jsonObject, HttpSession session) {
+        PrintUtil.println("plantSeed landId: "+jsonObject.get("landId"));
+        boolean feasible = userService.userActionPlantSeed((Integer) jsonObject.get("landId"), (Integer) jsonObject.get("cropId"), session);
+        if (feasible) {
+            return new ResponseResult<>(ResponseCode.SUCCESS);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 
-    @RequestMapping(value = "/harvest", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/harvest")
     @ResponseBody
-    public ResponseResult<?> harvest(@RequestParam("landId") int landId, HttpSession session) {
-        //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionHarvest(landId, session));
+    public ResponseResult<?> harvest(@RequestBody JSONObject jsonObject, HttpSession session) {
+        PrintUtil.println("harvest landId: "+jsonObject.get("landId"));
+        User user = userService.userActionHarvest((Integer) jsonObject.get("landId"), session);
+        if (user != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, user);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 
 
-    @RequestMapping(value = "/killWorm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/killWorm")
     @ResponseBody
-    public ResponseResult<?> killWorm(@RequestParam("landId") int landId, HttpSession session) {
+    public ResponseResult<?> killWorm(@RequestBody JSONObject jsonObject, HttpSession session) {
+        PrintUtil.println("killWorm landId: "+jsonObject.get("landId"));
         //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionKillWorm(landId, session));
+        User user = userService.userActionKillWorm((Integer) jsonObject.get("landId"), session);
+        if (user != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, user);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
+
     }
 
 
-    @RequestMapping(value = "/cleanGrass", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/cleanGrass")
     @ResponseBody
-    public ResponseResult<?> cleanGrass(@RequestParam("landId") int landId, HttpSession session) {
+    public ResponseResult<?> cleanGrass(@RequestBody JSONObject jsonObject, HttpSession session) {
         //TODO 修改
-        return new ResponseResult<>(ResponseCode.SUCCESS, userService.userActionCleanGrass(landId, session));
+        PrintUtil.println("cleanGrass landId: "+jsonObject.get("landId"));
+        User user = userService.userActionCleanGrass((Integer) jsonObject.get("landId"), session);
+        if (user != null) {
+            return new ResponseResult<>(ResponseCode.SUCCESS, user);
+        } else {
+            return new ResponseResult<>(ResponseCode.ERROR);
+        }
     }
 }
