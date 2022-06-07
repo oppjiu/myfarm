@@ -30,7 +30,7 @@ public class Land extends EntityID {
     private int nextCropGrowStage;    //下一生长阶段/*暂无作用*/
     private int growingSeason;    //第几季度
     private int growthTimeOfEachState;    //作物在每种状态下生长的时间
-    private Date stateEndTime = new Date();    //作物在每种状态已经生长的时间
+    private Date stateEndTime = null;    //作物在每种状态已经生长的时间
     //一对一外键
     private int cropId;    //种子ID
     private int landTypeCode;    //土地类型code

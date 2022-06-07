@@ -1,6 +1,7 @@
 ﻿var basePath = $('#basePath').attr('value');
 var wsBasePath = $('#wsBasePath').attr('value');
 var websocket = null;
+var farmGameLandId;
 
 /**
  * 土地类
@@ -25,6 +26,7 @@ class Land {
     landTypeCode;
     cropState;
     cropName;
+    harvestNum
 }
 
 /*音乐*/
@@ -54,10 +56,10 @@ var insectHeight = 100;
 $(function () {
     initWebSocket();//初始化视图
     /*种子收纳袋窗口*/
-    $('#seedBagWindow').window({
+    $('#seedBagDialog').dialog({
         title: '种子收纳袋',
-        width: '80%',
-        height: '80%',
+        width: '900',
+        height: 240,
         inline: true,
         modal: true,
         closed: 'true',
@@ -70,7 +72,7 @@ $(function () {
         top: positionY + 'px'
     });
     request({}, 'post', basePath + '/game/initiateFarmView', false, function (result) {
-        console.log('result.data: ', result.data);
+        console.log('初始化游戏数据: ', result.data)
         //初始化游戏
         if (result.code == 10) {
             let data = result.data,
@@ -104,7 +106,7 @@ $(function () {
         // 土地没有作物
         if (land.hasCrop == 0) {
             $('.clickBox').css({
-                cursor: 'url(ext/cursor/plantCrop.cur), wait',
+                cursor: 'progress',
             });
         } else {
             //作物成熟
@@ -156,20 +158,41 @@ $(function () {
         if (land.hasCrop == 0) {
             plantCrop(land.landId);
         } else {
-            if (land.isMature == 1) {
-                //作物成熟
-                harvest(land.landId);
-            } else if (land.isWithered == 1) {
-                //作物枯萎
-                cleanGrass(land.landId);
-            }
             //作物生虫
             if (land.hasInsect == 1) {
                 killWorm(land.landId);
+            } else {
+                if (land.isMature == 1) {
+                    //作物成熟
+                    harvest(land.landId);
+                } else if (land.isWithered == 1) {
+                    //作物枯萎
+                    cleanGrass(land.landId);
+                }
             }
         }
     });
-    initTipTool();//初始化提示框
+    /*动态绑定种子收纳袋点击事件*/
+    $(document).on('click', '.cropImg', function () {
+        request({
+            landId: parseInt(farmGameLandId),
+            cropId: parseInt(this.dataset.cropid)
+        }, 'post', basePath + '/user/plantSeed', true, function (result) {
+            if (result.code == 10) {
+                let data = result.data;
+                updateData(data['land'], data['cropGrowView']);
+                messageBox('提示', '种植成功');
+                soundPlantCropSuccess.play();
+                $('#seedBagDialog').dialog('close');//关闭窗口
+            } else {
+                soundNegative.play();//播放声音
+                messageBox('提示', '操作失败');
+            }
+        });
+    });
+
+    initTipTool();//初始化土地提示框
+    console.log('landMap: ', landMap)
 });
 
 function initWebSocket() {
@@ -188,13 +211,13 @@ function initWebSocket() {
         console.log('连接打开：', evt);
     };
     websocket.onmessage = function onMessage(evt) {
-        let data = evt.data;
-        //是游戏更新数据
+        let data = JSON.parse(evt.data);
+        //游戏更新数据
         if (data['code'] != null && data['code'] == 100) {
-            console.log('evt.data', evt.data);
             let land = data['land'];
             let cropGrowView = data['cropGrowView'];
-            updateData(land, cropGrowView);
+            let user = data['user'];
+            updateData(land, cropGrowView, user);
         }
     };
     websocket.onerror = function onError(evt) {
@@ -211,69 +234,54 @@ window.close = function () {
     websocket.onclose();
 }
 
-
-function updateData(landData, cropGrowData) {
+/**
+ * 更新视图并保存数据
+ * @param landData 土地数据
+ * @param cropGrowData 生长阶段数据
+ */
+function updateData(landData, cropGrowData, user) {
     let land = landMap.get(landData['landId']);
-    let i = land.get('i');
-    let j = land.get('j');
+    let i = land['i'];
+    let j = land['j'];
+
+    //更新视图
+    updateCropImg(i, j, landData, cropGrowData);
+    updateInsectImg(i, j, landData);
 
     land.landId = landData['landId'];
     land.stateEndTime = landData['stateEndTime'];
     land.hasInsect = landData['hasInsect'];
-    land.output = landData['output'];
-    land.isMature = landData['isMature'];
-    land.growingSeason = landData['growingSeason'];
-    land.nowCropGrowStage = landData['nowCropGrowStage'];
     land.hasCrop = landData['hasCrop'];
     land.isWithered = landData['isWithered'];
+    land.isMature = landData['isMature'];
+    land.output = landData['output'];
+    land.growingSeason = landData['growingSeason'];
+    land.nowCropGrowStage = landData['nowCropGrowStage'];
     land.nextCropGrowStage = landData['nextCropGrowStage'];
     land.growthTimeOfEachState = landData['growthTimeOfEachState'];
 
     land.cropId = landData['cropId'];
     land.landTypeCode = landData['landTypeCode'];
 
-    land.cropState = cropGrowData['cropState'];
-    land.cropName = cropGrowData['cropName'];
+    if (cropGrowData != null) {
+        land.cropState = cropGrowData['cropState'];
+        land.cropName = cropGrowData['cropName'];
+        land.harvestNum = cropGrowData['harvestNum'];
+    }
+
+    if (user != null) {
+        //更新用户信息显示数据
+        parent.frames['topSpace'].document.getElementById('userinfoExp').innerText = user['exp'];
+        parent.frames['topSpace'].document.getElementById('userinfoMoney').innerText = user['money'];
+        parent.frames['topSpace'].document.getElementById('userinfoPoint').innerText = user['point'];
+        sessionStorage.setItem('userinfoExp', user['exp']);
+        sessionStorage.setItem('userinfoMoney', user['money']);
+        sessionStorage.setItem('userinfoPoint', user['point']);
+    }
 
     landMap.set(land.landId, land);//存储数据
-
-    //更新视图
-    updateCropImg(i, j, landData, cropGrowData);
-    updateInsectImg(i, j, landData);
 }
 
-
-function openSeedBagWindow() {
-    let $seedBagWindow = $('#seedBagWindow');
-    $seedBagWindow.window('open');
-    $seedBagWindow.window('refresh', basePath + '/page/seedBagPage');
-}
-
-function playSound(id) {
-    switch (id) {
-        case 1:
-            soundWorm.play();
-            break;
-        case 2:
-            soundKillWorm.play();
-            break;
-        case 3:
-            soundCleanGrass.play();
-            break;
-        case 4:
-            soundHarvest.play();
-            break;
-        case 5:
-            soundNegative.play();
-            break;
-        case 6:
-            soundPlantCrop.play();
-            break;
-        case 7:
-            soundPlantCropSuccess.play();
-            break;
-    }
-}
 
 /**
  * 存储土地动态信息
@@ -311,26 +319,71 @@ function saveGameData(i, j, landData, cropGrowData) {
 }
 
 function plantCrop(landId) {
-    console.log('landId', landId);
-    let $seedBagWindow = $('#seedBagWindow');
-    $seedBagWindow.window('open');
-    $seedBagWindow.window('refresh', basePath + '/page/seedBagPage');
-    request({}, 'post', '');
+    farmGameLandId = landId;
+    soundPlantCrop.play();
+    let $seedBagWindow = $('#seedBagDialog');
+    $seedBagWindow.dialog('open');
+    $seedBagWindow.dialog('refresh', basePath + '/page/seedBagPage');
 }
 
-function killWorm(insectId) {
-    console.log('landId', insectId);
-    request({}, 'post', '');
+function killWorm(landId) {
+    console.log('killWorm.landId: ', landId);
+    request({landId: landId}, 'post', basePath + '/user/killWorm', true, function (result) {
+        if (result.code == 10) {
+            let data = result.data;
+            let user = data['user'];
+            let $msg = $('<div>' + '杀虫成功' + '</div>')
+                .append('<p>' + ' 获得经验：' + user['exp'] + '</p>')
+                .append('<p>' + ' 获得积分：' + user['point'] + '</p>')
+                .append('<p>' + ' 获得金钱：' + user['money'] + '</p>');
+            messageBox('提示', $msg);
+            soundKillWorm.play();
+            updateData(data['land'], data['cropGrowView']);
+        } else {
+            soundNegative.play();
+            messageBox('提示', '操作失败');
+        }
+    });
 }
 
 function harvest(landId) {
-    console.log('landId', landId);
-    request({}, 'post', '');
+    console.log('harvest.landId: ', landId);
+    request({landId: landId}, 'post', basePath + '/user/harvest', true, function (result) {
+        if (result.code == 10) {
+            let data = result.data;
+            let user = data['user'];
+            updateData(data['land'], data['cropGrowView']);
+            let $msg = $('<div>' + '收获成功' + '</div>')
+                .append('<p>' + ' 获得经验：' + user['exp'] + '</p>')
+                .append('<p>' + ' 获得积分：' + user['point'] + '</p>')
+                .append('<p>' + ' 获得金钱：' + user['money'] + '</p>');
+            messageBox('提示', $msg);
+            soundHarvest.play();
+        } else {
+            soundNegative.play();
+            messageBox('提示', '操作失败');
+        }
+    });
 }
 
 function cleanGrass(landId) {
-    console.log('landId', landId);
-    request({}, 'post', basePath + '/user/killWorm');
+    console.log('cleanGrass.landId: ', landId);
+    request({landId: landId}, 'post', basePath + '/user/cleanGrass', true, function (result) {
+        if (result.code == 10) {
+            let data = result.data;
+            let user = data['user'];
+            updateData(data['land'], data['cropGrowView']);
+            let $msg = $('<div>' + '除草成功' + '</div>')
+                .append('<p>' + ' 获得经验：' + user['exp'] + '</p>')
+                .append('<p>' + ' 获得积分：' + user['point'] + '</p>')
+                .append('<p>' + ' 获得金钱：' + user['money'] + '</p>');
+            messageBox('提示', $msg);
+            soundCleanGrass.play();
+        } else {
+            soundNegative.play();
+            messageBox('提示', '操作失败');
+        }
+    });
 }
 
 /**
@@ -344,13 +397,47 @@ function initTipTool() {
         onShow: function () {
             //根据land类动态刷新提示信息
             let land = landMap.get(parseInt(this.dataset.landid));
-            let content = $('<div style="color: black;font-weight: bold;"></div>')
-                .append('名称：' + land['cropName']).append('<br>')
-                .append('状态：' + land['cropState']).append('<br>')
-                .append('产量：' + land['output']).append('<br>')
-                .append('时间：' + getLocalTime(land['stateEndTime'])).append('<br>');
+            console.log('initTipTool land: ', land);
+            let cropName = land['cropName'];
+            let cropState = land['cropState'];
+            let output = land['output'];
+            let stateEndTime = land['stateEndTime'];
+            let $content = $('<div style="color: black;font-weight: bold;"></div>')
+            if (cropName != null && cropName != undefined) {
+                $content.append('名称：' + cropName);
+                $content.append('<br>');
+            } else {
+                $content.append('名称：未知');
+                $content.append('<br>');
+            }
+            if (cropState != null && cropState != undefined) {
+                $content.append('状态：' + cropState);
+                $content.append('<br>');
+            } else {
+                $content.append('名称：未知');
+                $content.append('<br>');
+            }
+            if (output != null && output != undefined) {
+                $content.append('产量：' + output);
+                $content.append('<br>');
+            } else {
+                $content.append('名称：未知');
+                $content.append('<br>');
+            }
+            if (stateEndTime != null && stateEndTime != undefined) {
+                if (!isNaN(stateEndTime)) {
+                    $content.append('时间：' + formatDate(stateEndTime));
+                    $content.append('<br>');
+                } else {
+                    $content.append('时间：' + formatDate(stateEndTime.time));
+                    $content.append('<br>');
+                }
+            } else {
+                $content.append('名称：未知');
+                $content.append('<br>');
+            }
             $(this).tooltip({
-                content: content
+                content: $content
             });
             $(this).tooltip('tip').css({
                 backgroundColor: 'white',
@@ -385,7 +472,6 @@ function initLandImg(i, j, land) {
         zIndex: 1
     });
     return $land;
-
 }
 
 function initCropImg(i, j, land, cropGrow) {
@@ -441,13 +527,12 @@ function initInsectImg(i, j, land) {
  */
 function updateCropImg(i, j, land, cropGrow) {
     //没有作物删除
+    let $crop = $('#crop_' + land.landId);
     if (land['hasCrop'] == 0) {
-        let $crop = $('#crop_' + land.landId);
-        if ($crop != null) {
+        if ($crop[0]) {
             $crop.remove();
         }
     } else {
-        let $crop = $('#crop_' + land.landId);
         let url;
         //更新作物图片
         if (land.nowCropGrowStage == 6 || land.nowCropGrowStage == 0) {
@@ -457,13 +542,7 @@ function updateCropImg(i, j, land, cropGrow) {
             //正常生长阶段
             url = basePath + '/ext/images/crops/' + land.cropId + '/' + land.nowCropGrowStage + '.png';
         }
-        //如果没有视图创建视图
-        if ($crop == null) {
-            $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + land.landId + '" src="' + url + '" alt="作物">');
-        } else {
-            $crop.src = url;
-        }
-
+        //调整样式
         let picOffsetX;
         let picOffsetY;
         let picWidth;
@@ -474,14 +553,26 @@ function updateCropImg(i, j, land, cropGrow) {
             picWidth = cropGrow['picWidth'];
             picHeight = cropGrow['picHeight'];
         }
-        $crop.css({
-            width: picWidth * 3 / 4 + 'px',
-            height: picHeight * 3 / 4 + 'px',
-            left: fixPositionX(i, j) + (picOffsetX - 10) * 3 / 4 + 'px', // (picOffsetX - 10) * 3 / 4修正
-            top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 3 / 4 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
-            zIndex: 10
-        });
-        $('#landBox').append($crop);
+        if (!$crop[0]) {
+            $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + land.landId + '" src="' + url + '" alt="作物">');
+            $crop.css({
+                width: picWidth * 3 / 4 + 'px',
+                height: picHeight * 3 / 4 + 'px',
+                left: fixPositionX(i, j) + (picOffsetX - 10) * 3 / 4 + 'px', // (picOffsetX - 10) * 3 / 4修正
+                top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 3 / 4 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
+                zIndex: 10
+            });
+            $('#landBox').append($crop);
+        } else {
+            $crop.css({
+                width: picWidth * 3 / 4 + 'px',
+                height: picHeight * 3 / 4 + 'px',
+                left: fixPositionX(i, j) + (picOffsetX - 10) * 3 / 4 + 'px', // (picOffsetX - 10) * 3 / 4修正
+                top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 3 / 4 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
+                zIndex: 10
+            });
+            $crop[0].src = url;
+        }
     }
 }
 
@@ -492,28 +583,25 @@ function updateCropImg(i, j, land, cropGrow) {
  * @param land
  */
 function updateInsectImg(i, j, land) {
-    //没有虫害删除
+    let $insect = $('#insect_' + land.landId);
+    //没有虫害删除有虫害添加
     if (land['hasInsect'] == 0) {
-        let $insect = $('#insect_' + land.landId);
-        if ($insect != null) {
+        if ($insect[0]) {
             $insect.remove();
         }
     } else {
-        let $insect = $('#insect_' + land.landId);
-        //判断是否有图片
-        if ($insect == null) {
+        if (!$insect[0]) {
             let url = basePath + '/ext/images/other/insect.png';
             $insect = $('<img class="insect" id="insect_' + land.landId + '" src="' + url + '" alt="害虫">');//创建图片
+            $insect.css({
+                width: insectWidth + 'px',
+                height: insectHeight + 'px',
+                left: fixPositionX(i, j) - 20 + 'px', //-10 修正
+                top: fixPositionY(i, j) - 30 + 'px', //-30 修正
+                zIndex: 20
+            });
+            $('#landBox').append($insect);
         }
-        let hasInsect;
-        $insect.css({
-            width: insectWidth + 'px',
-            height: insectHeight + 'px',
-            left: fixPositionX(i, j) - 20 + 'px', //-10 修正
-            top: fixPositionY(i, j) - 30 + 'px', //-30 修正
-            zIndex: 20
-        });
-        $('#landBox').append($insect);
     }
 }
 
@@ -526,11 +614,18 @@ function fixPositionY(i, j) {
 }
 
 /**
- * 时间戳转换日期
+ * 时间戳转换日期 yyyy-MM-dd HH:mm:ss(时间戳)
  * @param time
  * @returns {string}
  */
-function getLocalTime(time) {
-    var date = new Date(time + 8 * 3600 * 1000);
-    return date.toJSON().substr(0, 19).replace('T', ' ');
+function formatDate(time) {
+    let date = new Date(time);
+    let YY = date.getFullYear();
+    let MM = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+    let DD = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    let hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    let mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    let ss = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+    // 这里修改返回时间的格式
+    return YY + "-" + MM + "-" + DD + " " + hh + ":" + mm + ":" + ss;
 }

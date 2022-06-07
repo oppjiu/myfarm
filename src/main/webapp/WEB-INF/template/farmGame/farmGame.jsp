@@ -45,14 +45,15 @@
 
         .clickBox {
             position: absolute;
-            /*background-color: rgba(255, 127, 80, 0.5);*/
             clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+
         }
     </style>
 </head>
 <body>
 <div id="landBox"></div>
-<div id="seedBagWindow"></div>
+<div id="seedBagDialog"></div>
+
 <audio id="soundWorm" src="<%=basePath%>/ext/sounds/worm.mp3"></audio>
 <audio id="soundKillWorm" src="<%=basePath%>/ext/sounds/killWorm.mp3"></audio>
 <audio id="soundCleanGrass" src="<%=basePath%>/ext/sounds/cleanGrass.mp3"></audio>
@@ -61,19 +62,9 @@
 <audio id="soundPlantCrop" src="<%=basePath%>/ext/sounds/plantCrop.mp3"></audio>
 <audio id="soundPlantCropSuccess" src="<%=basePath%>/ext/sounds/plantCropSuccess.mp3"></audio>
 
-<input onclick="playSound(1)" type="button" value="soundWorm">
-<input onclick="playSound(2)" type="button" value="soundKillWorm">
-<input onclick="playSound(3)" type="button" value="soundCleanGrass">
-<input onclick="playSound(4)" type="button" value="soundHarvest">
-<input onclick="playSound(5)" type="button" value="soundNegative">
-<input onclick="playSound(6)" type="button" value="soundPlantCrop">
-<input onclick="playSound(7)" type="button" value="soundPlantCropSuccess">
-<input onclick="openSeedBagWindow()" type="button" value="openSeedBagWindow">
-
-
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript" src="<%=basePath%>/ext/js/farmGame.js"></script>
-
+<script type="text/javascript" src="<%=basePath%>/ext/js/seedBag.js"></script>
 </body>
 </html>

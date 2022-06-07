@@ -20,7 +20,7 @@ import java.util.ArrayList;
  **/
 public class SystemWebsocketHandler extends TextWebSocketHandler {
     private final static Logger log = LoggerFactory.getLogger(WebSocketHandler.class);
-    private static final ArrayList<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
+    public static final ArrayList<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {

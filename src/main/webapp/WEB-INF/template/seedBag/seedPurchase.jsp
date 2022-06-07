@@ -236,8 +236,8 @@
                 .append('名称：' + data[i]['cropName']).append('<br>')
                 .append('级别：' + data[i]['grade']).append('<br>')
                 .append('价格：' + data[i]['purchasePrice']).append('<br>')
-                .append('类别：' + data[i]['seedTypeCode']).append('<br>')
-                .append('土地：' + data[i]['landTypeCode']).append('<br>')
+                .append('类别：' + data[i]['seedType']).append('<br>')
+                .append('土地：' + data[i]['landType']).append('<br>')
                 .append('可收获季：' + data[i]['growSeason']).append('<br>')
                 .append('成熟时间：' + data[i]['growthTimeOfEachSeason']).append('<br>')
                 .append('单季收获：' + data[i]['harvestNum']).append('<br>')
@@ -282,7 +282,7 @@
                         parent.document.querySelector('#topSpace').src = '<%=basePath%>/menu.jsp';
                         messageBox('消息', '种子购买成功');
                     } else {
-                        messageBox('消息', '种子购买失败');
+                        messageBox('消息', '金钱不足');
                     }
                 });
             }

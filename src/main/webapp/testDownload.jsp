@@ -50,7 +50,6 @@
         /*动态绑定鼠标进入事件*/
         let $hoverButton = $('.hoverButton');
         $(document).on('mouseenter', '.hoverButton', function () {
-            console.log('this, ', this);
             let url = 'ext/cursor/plantCrop.cur'
             if (this.value == 1) {
                 url = 'ext/cursor/plantCrop.cur';

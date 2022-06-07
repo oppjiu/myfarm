@@ -257,7 +257,6 @@
             success: function (result) {
                 var result = eval('(' + result + ')');
                 if (result.code == 10) {
-                    console.log('result.data: ', result.data);
                     userManageGrid.datagrid('reload');
                     <%--//如果用户信息头像相同则更换头像--%>
                     <%--sessionStorage.setItem('userinfoHeadImg', result.data);--%>

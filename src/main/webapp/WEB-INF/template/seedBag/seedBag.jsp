@@ -22,100 +22,31 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.draggable.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
+    <basePath id="basePath" value="<%=basePath%>"></basePath>
     <style>
-        .item {
-            width: 150px;
-            margin-right: 10px;
-            background-color: #ddd;
-            height: 200px;
-            float: left;
-            display: flex;
-            flex-direction: column;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-
-        .total {
-            text-align: center;
-            margin-top: 5px;
-        }
-
-        .content {
-            width: 630px;
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .all {
-            height: 100%;
-            transition: all .5s;
-        }
-
-        .empty {
-            position: absolute;
-            font-size: 30px;
-            color: white;
-            width: 500px;
-            height: 100px;
-            left: 50%;
-            right: 50%;
-            top: 45%;
-            transform: translateX(-50%);
-        }
-
-
-        .total > span {
-            font-size: 12px;
-            display: inline-block;
-            width: 26px;
-            height: 26px;
-            background-color: red;
-            color: #fff;
-            line-height: 26px;
-            border-radius: 50%;
-            font-weight: bold;
-        }
-
-        img {
-            width: 100%;
-            height: 170px;
-            /*object-fit: cover;*/
-            display: block;
-        }
-
-        #root {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .right, .left {
-            width: 140px;
-            height: 140px;
-            line-height: 140px;
+        html{
+            border-top: white solid 5px;
         }
     </style>
 </head>
 <body>
-<div id="root">
-    <div class="right" style="background: url(<%=basePath%>/ext/images/other/rightArrow.png)"></div>
-    <div class="content" style="text-align: center">
-        <div class="all"></div>
-        <div class="empty">
-            用户种子袋为空，请购买种子
-        </div>
+<div id="seedBagBox">
+    <div id="scrollToLeft" style="display: flex;align-items: center;">
+        <img src="<%=basePath%>/ext/images/other/leftArrow.png" style="width: 50px;height: 50px;" alt="箭头">
     </div>
-    <div class="left" style="background:url(<%=basePath%>/ext/images/other/leftArrow.png)"></div>
+    <div id="seedBagContainer"></div>
+    <div id="scrollToRight" style="display: flex;align-items: center;">
+        <img src="<%=basePath%>/ext/images/other/rightArrow.png" style="width: 50px;height: 50px;" alt="箭头">
+    </div>
 </div>
+
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript" src="<%=basePath%>/ext/js/seedBag.js"></script>
-<script type="text/html" id="tpl">
-    <div class="item">
-        <div class="total">
-            <span>{{total}}</span>
-        </div>
-        <img src="<%=basePath%>/ext/images/crops/{{cropId}}/5.png">
-    </div>
-</script>
 </body>
 </html>

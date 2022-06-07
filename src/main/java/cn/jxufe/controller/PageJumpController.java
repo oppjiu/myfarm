@@ -45,4 +45,9 @@ public class PageJumpController {
     public String jump2FarmGamePage() {
         return "/farmGame/farmGame";
     }
+
+    @RequestMapping("/farmGameSeedBagPage")
+    public String jump2FarmGameSeedBagPage() {
+        return "/farmGame/farmGameSeedBag";
+    }
 }

@@ -388,7 +388,7 @@
             var path;
             //更改图片路径
             if (stageId == 6 || stageId == 0) {
-                path = '<%=basePath%>/ext/images/crops/basic/' + 6 + '.png';
+                path = '<%=basePath%>/ext/images/crops/basic/' + stageId + '.png';
             } else {
                 path = '<%=basePath%>/ext/images/crops/' + cropId + '/' + stageId + '.png';
             }

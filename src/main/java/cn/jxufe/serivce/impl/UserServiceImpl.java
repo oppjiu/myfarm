@@ -15,6 +15,7 @@ import cn.jxufe.repository.UserRepository;
 import cn.jxufe.repository.view.CropGrowViewRepository;
 import cn.jxufe.serivce.GameService;
 import cn.jxufe.serivce.UserService;
+import cn.jxufe.utils.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -162,21 +163,21 @@ public class UserServiceImpl implements UserService {
         Crop cropByFind = cropRepository.findByCropId(cropId);
         //玩家没有足够金钱
         if (userByFind.getMoney() - cropByFind.getPurchasePrice() < 0) {
+            PrintUtil.println("钱：" + (userByFind.getMoney() - cropByFind.getPurchasePrice()));
             return null;
         } else {
-            SeedBag saveSeed;
             SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, user.getUsername());
             if (seedBag != null) {
                 //数据库中有相关字段，种子数量增加
                 seedBag.setSeedNumber(seedBag.getSeedNumber() + seedNumber);
-                saveSeed = seedBagRepository.save(seedBag);
+                seedBagRepository.save(seedBag);
             } else {
                 //数据库中没有相关字段，创建关联
                 SeedBag newSeedBag = new SeedBag();
                 newSeedBag.setCropId(cropId);
                 newSeedBag.setUsername(user.getUsername());
                 newSeedBag.setSeedNumber(seedNumber);
-                saveSeed = seedBagRepository.save(newSeedBag);
+                seedBagRepository.save(newSeedBag);
             }
             //扣除玩家金币
             userByFind.setMoney(userByFind.getMoney() - cropByFind.getPurchasePrice());
@@ -193,7 +194,6 @@ public class UserServiceImpl implements UserService {
         SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, landByFind.getUsername());
         CropGrowView cropGrowViewByFind = cropGrowViewRepository.findByStageIdAndCropId(1, cropId);
         int seedNumber = seedBag.getSeedNumber();
-
         if (seedNumber <= 0) {
             //种子数量不足
             return null;
@@ -201,17 +201,22 @@ public class UserServiceImpl implements UserService {
             //土地类型和种子所需土地类型不一致
             return null;
         } else {
-            seedBag.setSeedNumber(seedNumber - 1);
-            seedBagRepository.save(seedBag);//保存种子收纳袋数据
+            if (seedNumber - 1 == 0) {
+                seedBagRepository.delete(seedBag);//删除数据
+            } else {
+                seedBag.setSeedNumber(seedNumber - 1);
+                seedBagRepository.save(seedBag);//保存种子收纳袋数据
+            }
+            landByFind.setCropId(cropId);
             landByFind.setHasCrop(1);
             landByFind.setHasInsect(0);
             landByFind.setIsWithered(0);
             landByFind.setIsMature(0);
             landByFind.setOutput(cropGrowViewByFind.getHarvestNum());//土地种子产出
-            landByFind.setNowCropGrowStage(1);
+            landByFind.setNowCropGrowStage(0);
             //TODO 可能超出范围
-            landByFind.setNextCropGrowStage(2);
-            landByFind.setGrowingSeason(1);
+            landByFind.setNextCropGrowStage(1);
+            landByFind.setGrowingSeason(cropGrowViewByFind.getGrowSeason());
             landByFind.setGrowthTimeOfEachState(0);
             landByFind.setStateEndTime(new Date(new Date().getTime() + cropGrowViewByFind.getGrowTime()));
             landRepository.save(landByFind);//保存土地数据
@@ -228,13 +233,18 @@ public class UserServiceImpl implements UserService {
         landRepository.save(landByFind);//保存土地数据
         //用户收益
         User userByFind = userRepository.findByUsername(landByFind.getUsername());
-        userByFind.setExp(SystemCode.KILL_WORM_GAIN_EXP);
-        userByFind.setPoint(SystemCode.KILL_WORM_GAIN_POINT);
-        userByFind.setMoney(SystemCode.KILL_WORM_GAIN_MONEY);
+        userByFind.setExp(userByFind.getExp() + SystemCode.KILL_WORM_GAIN_EXP);
+        userByFind.setPoint(userByFind.getPoint() + SystemCode.KILL_WORM_GAIN_POINT);
+        userByFind.setMoney(userByFind.getMoney() + SystemCode.KILL_WORM_GAIN_MONEY);
         userRepository.save(userByFind);//保存用户数据
+        //发送数据
+        User userSend = new User();
+        userSend.setExp(SystemCode.KILL_WORM_GAIN_EXP);
+        userSend.setPoint(SystemCode.KILL_WORM_GAIN_POINT);
+        userSend.setMoney(SystemCode.KILL_WORM_GAIN_MONEY);
         return new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, landByFind,
                 cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
-                        landByFind.getCropId()));
+                        landByFind.getCropId()), userSend);
     }
 
     @Override
@@ -253,18 +263,23 @@ public class UserServiceImpl implements UserService {
             } else {
                 //进入枯草期间
                 landByFind.setIsWithered(1);
-                landByFind.setGrowingSeason(growingSeason + 1);
+                landByFind.setNowCropGrowStage(SystemCode.CROP_GROW_STAGE_IS_MATURE + 1);//枯草期间
                 landRepository.save(landByFind);//保存数据
             }
             //用户收益
             User userByFind = userRepository.findByUsername(landByFind.getUsername());
-            userByFind.setExp(cropByFind.getHarvestExp());
-            userByFind.setPoint(cropByFind.getHarvestScore());
-            userByFind.setMoney(cropByFind.getHarvestNum() * cropByFind.getSalePrice());
+            userByFind.setExp(userByFind.getExp() + cropByFind.getHarvestExp());
+            userByFind.setPoint(userByFind.getPoint() + cropByFind.getHarvestScore());
+            userByFind.setMoney(userByFind.getMoney() + cropByFind.getHarvestNum() * cropByFind.getSalePrice());
             userRepository.save(userByFind);//保存用户数据
+            //发送数据
+            User userSend = new User();
+            userSend.setExp(cropByFind.getHarvestExp());
+            userSend.setPoint(cropByFind.getHarvestScore());
+            userSend.setMoney(cropByFind.getHarvestNum() * cropByFind.getSalePrice());
             return new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, landByFind,
                     cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
-                            landByFind.getCropId()));
+                            landByFind.getCropId()), userSend);
         } else {
             return null;
         }
@@ -273,17 +288,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public FarmResponse userActionCleanGrass(int landId, HttpSession session) {
         Land landByFind = landRepository.findByLandId(landId);
-        landByFind.setHasCrop(0);
-        landByFind.setIsWithered(0);
-        landRepository.save(landByFind);//保存数据
+        //清空数据
+        Land land = new Land();
+        land.setId(landByFind.getId());
+        land.setLandId(landByFind.getLandId());
+        land.setLandTypeCode(landByFind.getLandTypeCode());
+        land.setUsername(landByFind.getUsername());
+        PrintUtil.println("land: " + land);
+        landRepository.save(land);//保存数据
         //用户收益
         User userByFind = userRepository.findByUsername(landByFind.getUsername());
-        userByFind.setExp(SystemCode.CLEAN_GRASS_GAIN_EXP);
-        userByFind.setPoint(SystemCode.CLEAN_GRASS_GAIN_POINT);
-        userByFind.setMoney(SystemCode.CLEAN_GRASS_GAIN_MONEY);
+        userByFind.setExp(userByFind.getExp() + SystemCode.CLEAN_GRASS_GAIN_EXP);
+        userByFind.setPoint(userByFind.getPoint() + SystemCode.CLEAN_GRASS_GAIN_POINT);
+        userByFind.setMoney(userByFind.getMoney() + SystemCode.CLEAN_GRASS_GAIN_MONEY);
         userRepository.save(userByFind);//保存用户数据
-        return new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, landByFind,
+        //发送数据
+        User userSend = new User();
+        userSend.setExp(SystemCode.CLEAN_GRASS_GAIN_EXP);
+        userSend.setPoint(SystemCode.CLEAN_GRASS_GAIN_POINT);
+        userSend.setMoney(SystemCode.CLEAN_GRASS_GAIN_MONEY);
+        return new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, land,
                 cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
-                        landByFind.getCropId()));
+                        landByFind.getCropId()), userSend);
     }
 }
