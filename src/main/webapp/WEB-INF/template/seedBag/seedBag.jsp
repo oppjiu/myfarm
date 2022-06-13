@@ -12,7 +12,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>种子收纳袋</title>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
@@ -29,7 +29,8 @@
             padding: 0;
             box-sizing: border-box;
         }
-        html{
+
+        html {
             border-top: white solid 5px;
         }
     </style>

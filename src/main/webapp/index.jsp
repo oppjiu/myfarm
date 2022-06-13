@@ -23,7 +23,7 @@
     <frame id="bottomSpace" name="bottomSpace" src="tools.jsp" scrolling="no">
 </frameset>
 
-<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 

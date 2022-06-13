@@ -28,19 +28,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-//        User user = (User) request.getSession().getAttribute(SystemCode.USER_SESSION_NAME);
-//        if (user != null) {
-//            //用户已登录
-//            modelAndView.addObject(SystemCode.LOGIN_SESSION_NAME, true);
-//        } else {
-//            //用户未登录
-//            modelAndView.addObject(SystemCode.LOGIN_SESSION_NAME, false);
-//            modelAndView.setViewName("/user/userLogin");
-//        }
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) throws Exception {
-
     }
 }

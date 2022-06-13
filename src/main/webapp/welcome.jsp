@@ -13,8 +13,8 @@
     <title>欢迎首页</title>
     <style>
         body {
-            margin: 0px;
-            background-image: url(ext/images/basicPic/welcome.png);
+            margin: 0;
+            background-image: url(ext/images/advancePic/welcome.png);
             background-size: 100% 100%;
             background-repeat: no-repeat;
             background-color: transparent;

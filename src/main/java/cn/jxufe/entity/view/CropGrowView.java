@@ -1,9 +1,6 @@
 package cn.jxufe.entity.view;
 
 import cn.jxufe.bean.EntityID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,9 +10,6 @@ import javax.persistence.Table;
  * @author: lwz
  * @description:
  **/
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Entity
 @Table(name = "V_CropGrow")
 public class CropGrowView extends EntityID {
@@ -49,4 +43,234 @@ public class CropGrowView extends EntityID {
     private int cropStateCode;    //作物生长状态code
     private String cropState = "";  //作物生长状态
 
+    public int getStageId() {
+        return stageId;
+    }
+
+    public void setStageId(int stageId) {
+        this.stageId = stageId;
+    }
+
+    public String getStageName() {
+        return stageName;
+    }
+
+    public void setStageName(String stageName) {
+        this.stageName = stageName;
+    }
+
+    public int getGrowTime() {
+        return growTime;
+    }
+
+    public void setGrowTime(int growTime) {
+        this.growTime = growTime;
+    }
+
+    public double getInsectChance() {
+        return insectChance;
+    }
+
+    public void setInsectChance(double insectChance) {
+        this.insectChance = insectChance;
+    }
+
+    public int getPicWidth() {
+        return picWidth;
+    }
+
+    public void setPicWidth(int picWidth) {
+        this.picWidth = picWidth;
+    }
+
+    public int getPicHeight() {
+        return picHeight;
+    }
+
+    public void setPicHeight(int picHeight) {
+        this.picHeight = picHeight;
+    }
+
+    public int getPicOffsetX() {
+        return picOffsetX;
+    }
+
+    public void setPicOffsetX(int picOffsetX) {
+        this.picOffsetX = picOffsetX;
+    }
+
+    public int getPicOffsetY() {
+        return picOffsetY;
+    }
+
+    public void setPicOffsetY(int picOffsetY) {
+        this.picOffsetY = picOffsetY;
+    }
+
+    public int getCropId() {
+        return cropId;
+    }
+
+    public void setCropId(int cropId) {
+        this.cropId = cropId;
+    }
+
+    public String getCropName() {
+        return cropName;
+    }
+
+    public void setCropName(String cropName) {
+        this.cropName = cropName;
+    }
+
+    public int getGrowSeason() {
+        return growSeason;
+    }
+
+    public void setGrowSeason(int growSeason) {
+        this.growSeason = growSeason;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getGrowthTimeOfEachSeason() {
+        return growthTimeOfEachSeason;
+    }
+
+    public void setGrowthTimeOfEachSeason(int growthTimeOfEachSeason) {
+        this.growthTimeOfEachSeason = growthTimeOfEachSeason;
+    }
+
+    public int getHarvestScore() {
+        return harvestScore;
+    }
+
+    public void setHarvestScore(int harvestScore) {
+        this.harvestScore = harvestScore;
+    }
+
+    public int getHarvestExp() {
+        return harvestExp;
+    }
+
+    public void setHarvestExp(int harvestExp) {
+        this.harvestExp = harvestExp;
+    }
+
+    public int getHarvestNum() {
+        return harvestNum;
+    }
+
+    public void setHarvestNum(int harvestNum) {
+        this.harvestNum = harvestNum;
+    }
+
+    public int getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(int purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public int getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(int salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+
+    public int getLandTypeCode() {
+        return landTypeCode;
+    }
+
+    public void setLandTypeCode(int landTypeCode) {
+        this.landTypeCode = landTypeCode;
+    }
+
+    public String getLandType() {
+        return landType;
+    }
+
+    public void setLandType(String landType) {
+        this.landType = landType;
+    }
+
+    public int getSeedTypeCode() {
+        return seedTypeCode;
+    }
+
+    public void setSeedTypeCode(int seedTypeCode) {
+        this.seedTypeCode = seedTypeCode;
+    }
+
+    public String getSeedType() {
+        return seedType;
+    }
+
+    public void setSeedType(String seedType) {
+        this.seedType = seedType;
+    }
+
+    public int getCropStateCode() {
+        return cropStateCode;
+    }
+
+    public void setCropStateCode(int cropStateCode) {
+        this.cropStateCode = cropStateCode;
+    }
+
+    public String getCropState() {
+        return cropState;
+    }
+
+    public void setCropState(String cropState) {
+        this.cropState = cropState;
+    }
+
+    @Override
+    public String toString() {
+        return "CropGrowView{" +
+                "stageId=" + stageId +
+                ", stageName='" + stageName + '\'' +
+                ", growTime=" + growTime +
+                ", insectChance=" + insectChance +
+                ", picWidth=" + picWidth +
+                ", picHeight=" + picHeight +
+                ", picOffsetX=" + picOffsetX +
+                ", picOffsetY=" + picOffsetY +
+                ", cropId=" + cropId +
+                ", cropName='" + cropName + '\'' +
+                ", growSeason=" + growSeason +
+                ", grade=" + grade +
+                ", growthTimeOfEachSeason=" + growthTimeOfEachSeason +
+                ", harvestScore=" + harvestScore +
+                ", harvestExp=" + harvestExp +
+                ", harvestNum=" + harvestNum +
+                ", purchasePrice=" + purchasePrice +
+                ", salePrice=" + salePrice +
+                ", tips='" + tips + '\'' +
+                ", landTypeCode=" + landTypeCode +
+                ", landType='" + landType + '\'' +
+                ", seedTypeCode=" + seedTypeCode +
+                ", seedType='" + seedType + '\'' +
+                ", cropStateCode=" + cropStateCode +
+                ", cropState='" + cropState + '\'' +
+                '}';
+    }
 }

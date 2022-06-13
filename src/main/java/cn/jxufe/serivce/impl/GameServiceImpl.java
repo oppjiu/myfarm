@@ -97,33 +97,6 @@ public class GameServiceImpl implements GameService {
             //TODO 随机生成id or 根据自增设置id
             PrintUtil.println("initiateUserLands: " + user);
             createLand.setLandId(landId);
-            //TODO 测试数据
-//            if (i == 0) {
-//                createLand.setHasCrop(0);
-//            } else if (i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6) {
-//                createLand.setHasInsect(1);
-//                createLand.setIsMature(1);
-//                createLand.setNowCropGrowStage(5);
-//                createLand.setHasCrop(1);
-//                createLand.setHasInsect(1);
-//                createLand.setCropId(6);
-//                createLand.setIsWithered(0);
-//            } else if (i == 7 || i == 8 || i == 9 || i == 10 || i == 11) {
-//                createLand.setIsWithered(1);
-//                createLand.setHasCrop(1);
-//                createLand.setCropId(1);
-//                createLand.setHasInsect(0);
-//                createLand.setNowCropGrowStage(6);
-//                createLand.setNextCropGrowStage(0);
-//            } else {
-//                createLand.setIsWithered(1);
-//                createLand.setHasCrop(1);
-//                createLand.setCropId(1);
-//                createLand.setNowCropGrowStage(2);
-//                createLand.setNextCropGrowStage(3);
-//                createLand.setHasInsect(0);
-//            }
-
             //几种土地
             if (i % (SystemCode.INITIATE_USER_LANDS / 4) == 0 && i != 0) {
                 landTypeCode++;
@@ -176,6 +149,10 @@ public class GameServiceImpl implements GameService {
                 int nowCropGrowStage = landByFind.getNowCropGrowStage();//当前阶段
                 int cropId = landByFind.getCropId();//种子id
                 CropGrow nowCropGrowStageByFind = cropGrowRepository.findByStageIdAndCropId(nowCropGrowStage, cropId);//当前阶段信息
+                //是否有概率生虫
+                if (insectAlgorithm(landByFind, nowCropGrowStageByFind, nowTime)) {
+                    landByFind.setHasInsect(1);//生虫
+                }
                 //本阶段生长时间大于生长结束时间
                 if (nowTime.getTime() >= stateEndTime.getTime()) {
                     CropGrow nextCropGrowStageByFind = cropGrowRepository.findByStageIdAndCropId(nowCropGrowStage + 1, cropId);//下一生长阶段
@@ -198,14 +175,10 @@ public class GameServiceImpl implements GameService {
                         landByFind.setOutput(Math.max(landByFind.getOutput() - SystemCode.REDUCE_OUTPUT, 0));//减产
                     }
                 }
-                //是否有概率生虫
-                if (insectAlgorithm(landByFind, nowCropGrowStageByFind, nowTime)) {
-                    landByFind.setHasInsect(1);//生虫
-                }
                 landByFind.setGrowthTimeOfEachState(nowCropGrowStageByFind.getGrowTime() + SystemCode.PER_TIME);//增加生长时间
                 //保存数据
                 landRepository.save(landByFind);
-                //TODO 发送封装的消息，前端需要接受的参数landId
+                //websocket发送参数
                 FarmResponse farmResponse = new FarmResponse(SystemCode.FARM_RESPONSE_CODE_A, landByFind,
                         cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
                                 landByFind.getCropId()), userRepository.findByUsername(landByFind.getUsername()));

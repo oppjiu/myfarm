@@ -12,7 +12,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>用户登录</title>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
@@ -77,19 +77,16 @@
                 if (result.code == 10) {
                     var data = result.data;
                     messageBox('消息', '用户已经设定为' + data.nickname + '[' + data.username + ']');
-                    parent.frames['topSpace'].document.getElementById('userinfoHeadImg').src = '<%=basePath%>/' + data.headImgUrl;
-                    parent.frames['topSpace'].document.getElementById('userinfoExp').innerText = data.exp;
-                    parent.frames['topSpace'].document.getElementById('userinfoMoney').innerText = data.money;
-                    parent.frames['topSpace'].document.getElementById('userinfoPoint').innerText = data.point;
-                    parent.frames['topSpace'].document.getElementById('userinfoUsername').innerText = data.nickname;
-                    //设置session保存到本地
-                    sessionStorage.setItem('userinfoHeadImg', data.headImgUrl);
-                    sessionStorage.setItem('userinfoExp', data.exp);
-                    sessionStorage.setItem('userinfoMoney', data.money);
-                    sessionStorage.setItem('userinfoPoint', data.point);
-                    sessionStorage.setItem('userinfoUsername', data.nickname);
+                    updateUserBoxData({
+                        userinfoHeadImg: data.headImgUrl,
+                        userinfoExp: data.exp,
+                        userinfoMoney: data.money,
+                        userinfoPoint: data.point,
+                        userinfoUsername: data.nickname
+                    }, '<%=basePath%>');
+                    updateUserBoxView('<%=basePath%>')
                 } else {
-                    messageBox('错误', '操作失败');
+                    messageBox('错误', '登录失败');
                 }
             });
         } else {

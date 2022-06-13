@@ -1,4 +1,4 @@
-jQuery.extend({
+﻿jQuery.extend({
 
 
     createUploadIframe: function (id, uri) {

@@ -1,9 +1,6 @@
 package cn.jxufe.entity.view;
 
 import cn.jxufe.bean.EntityID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -15,9 +12,6 @@ import java.util.Date;
  * @author: lwz
  * @description:
  **/
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Entity
 @Table(name = "V_Land")
 public class LandView extends EntityID {
@@ -59,4 +53,262 @@ public class LandView extends EntityID {
     //土地需求
     private int landTypeCode;  //土地需求
     private String landType;    //土壤类型名称
+
+    public int getLandId() {
+        return landId;
+    }
+
+    public void setLandId(int landId) {
+        this.landId = landId;
+    }
+
+    public int getHasCrop() {
+        return hasCrop;
+    }
+
+    public void setHasCrop(int hasCrop) {
+        this.hasCrop = hasCrop;
+    }
+
+    public int getHasInsect() {
+        return hasInsect;
+    }
+
+    public void setHasInsect(int hasInsect) {
+        this.hasInsect = hasInsect;
+    }
+
+    public int getIsWithered() {
+        return isWithered;
+    }
+
+    public void setIsWithered(int isWithered) {
+        this.isWithered = isWithered;
+    }
+
+    public int getIsMature() {
+        return isMature;
+    }
+
+    public void setIsMature(int isMature) {
+        this.isMature = isMature;
+    }
+
+    public int getOutput() {
+        return output;
+    }
+
+    public void setOutput(int output) {
+        this.output = output;
+    }
+
+    public int getNowCropGrowStage() {
+        return nowCropGrowStage;
+    }
+
+    public void setNowCropGrowStage(int nowCropGrowStage) {
+        this.nowCropGrowStage = nowCropGrowStage;
+    }
+
+    public int getNextCropGrowStage() {
+        return nextCropGrowStage;
+    }
+
+    public void setNextCropGrowStage(int nextCropGrowStage) {
+        this.nextCropGrowStage = nextCropGrowStage;
+    }
+
+    public int getGrowingSeason() {
+        return growingSeason;
+    }
+
+    public void setGrowingSeason(int growingSeason) {
+        this.growingSeason = growingSeason;
+    }
+
+    public int getGrowthTimeOfEachState() {
+        return growthTimeOfEachState;
+    }
+
+    public void setGrowthTimeOfEachState(int growthTimeOfEachState) {
+        this.growthTimeOfEachState = growthTimeOfEachState;
+    }
+
+    public Date getStateEndTime() {
+        return stateEndTime;
+    }
+
+    public void setStateEndTime(Date stateEndTime) {
+        this.stateEndTime = stateEndTime;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public int getCropId() {
+        return cropId;
+    }
+
+    public void setCropId(int cropId) {
+        this.cropId = cropId;
+    }
+
+    public String getCropName() {
+        return cropName;
+    }
+
+    public void setCropName(String cropName) {
+        this.cropName = cropName;
+    }
+
+    public int getGrowSeason() {
+        return growSeason;
+    }
+
+    public void setGrowSeason(int growSeason) {
+        this.growSeason = growSeason;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getGrowthTimeOfEachSeason() {
+        return growthTimeOfEachSeason;
+    }
+
+    public void setGrowthTimeOfEachSeason(int growthTimeOfEachSeason) {
+        this.growthTimeOfEachSeason = growthTimeOfEachSeason;
+    }
+
+    public int getHarvestScore() {
+        return harvestScore;
+    }
+
+    public void setHarvestScore(int harvestScore) {
+        this.harvestScore = harvestScore;
+    }
+
+    public int getHarvestExp() {
+        return harvestExp;
+    }
+
+    public void setHarvestExp(int harvestExp) {
+        this.harvestExp = harvestExp;
+    }
+
+    public int getHarvestNum() {
+        return harvestNum;
+    }
+
+    public void setHarvestNum(int harvestNum) {
+        this.harvestNum = harvestNum;
+    }
+
+    public int getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(int purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public int getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(int salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+
+    public int getSeedTypeCode() {
+        return seedTypeCode;
+    }
+
+    public void setSeedTypeCode(int seedTypeCode) {
+        this.seedTypeCode = seedTypeCode;
+    }
+
+    public String getSeedType() {
+        return seedType;
+    }
+
+    public void setSeedType(String seedType) {
+        this.seedType = seedType;
+    }
+
+    public int getLandTypeCode() {
+        return landTypeCode;
+    }
+
+    public void setLandTypeCode(int landTypeCode) {
+        this.landTypeCode = landTypeCode;
+    }
+
+    public String getLandType() {
+        return landType;
+    }
+
+    public void setLandType(String landType) {
+        this.landType = landType;
+    }
+
+    @Override
+    public String toString() {
+        return "LandView{" +
+                "landId=" + landId +
+                ", hasCrop=" + hasCrop +
+                ", hasInsect=" + hasInsect +
+                ", isWithered=" + isWithered +
+                ", isMature=" + isMature +
+                ", output=" + output +
+                ", nowCropGrowStage=" + nowCropGrowStage +
+                ", nextCropGrowStage=" + nextCropGrowStage +
+                ", growingSeason=" + growingSeason +
+                ", growthTimeOfEachState=" + growthTimeOfEachState +
+                ", stateEndTime=" + stateEndTime +
+                ", username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", cropId=" + cropId +
+                ", cropName='" + cropName + '\'' +
+                ", growSeason=" + growSeason +
+                ", grade=" + grade +
+                ", growthTimeOfEachSeason=" + growthTimeOfEachSeason +
+                ", harvestScore=" + harvestScore +
+                ", harvestExp=" + harvestExp +
+                ", harvestNum=" + harvestNum +
+                ", purchasePrice=" + purchasePrice +
+                ", salePrice=" + salePrice +
+                ", tips='" + tips + '\'' +
+                ", seedTypeCode=" + seedTypeCode +
+                ", seedType='" + seedType + '\'' +
+                ", landTypeCode=" + landTypeCode +
+                ", landType='" + landType + '\'' +
+                '}';
+    }
 }

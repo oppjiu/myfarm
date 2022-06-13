@@ -63,7 +63,7 @@
             </tr>
             <tr>
                 <td>作物状态：</td>
-                <td><input name="cropStateCode"></td>
+                <td><input id="cropGrowCropStateCode" name="cropStateCode"></td>
                 <td></td>
                 <td><a href="javascript:void(0)" class="easyui-linkbutton c2" iconCls="icon-blank" style="width: 150px;"
                        onclick="loadPositionDialog()">编辑图片位置</a></td>
@@ -131,7 +131,7 @@
         });
 
         //作物状态下拉框
-        $('input[name="cropStateCode"]').combobox({
+        $('#cropGrowCropStateCode').combobox({
             required: true,
             panelHeight: 'auto',
             editable: false,
@@ -315,11 +315,11 @@
         var $cropGrowId = $('#cropGrowId');
         var $cropGrowCropId = $('#cropGrowCropId');
         $('#cropGrowFormDialog').dialog('open').dialog('setTitle', '新建生长阶段数据');//打开种子生长阶段编辑页面
-        $cropGrowId.textbox("setValue", 0);//设置id为0
-        $cropGrowCropId.textbox("setValue", cropGrowId);//设置cropId
         //$cropGrowId和$cropGrowCropId设置只读
         $cropGrowId.textbox('readonly', true);
         $cropGrowCropId.textbox('readonly', true);
+        $cropGrowId.textbox("setValue", 0);//设置id为0
+        $cropGrowCropId.textbox("setValue", cropGrowId);//设置cropId
     }
 
     //关闭表单编辑窗口窗口

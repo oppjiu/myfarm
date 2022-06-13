@@ -13,7 +13,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>我的农场</title>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <basePath id="basePath" value="<%=basePath%>"></basePath>
+    <basePath id="wsBasePath" value="<%=wsBasePath%>"></basePath>
+
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
@@ -23,10 +26,55 @@
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/plugins/jquery.draggable.js"></script>
     <script type="text/javascript" src="<%=basePath%>/ext/easyui/locale/easyui-lang-zh_CN.js"></script>
 
-    <basePath id="basePath" value="<%=basePath%>"></basePath>
-    <basePath id="wsBasePath" value="<%=wsBasePath%>"></basePath>
-
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /*自定义滚动条*/
+        .scrollbar-wrapper {
+            overflow-y: auto;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgb(239, 239, 239);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #bfbfbf;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #333;
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: #179a16;
+        }
+
+        /*底板*/
+        #farmBackgroundBox {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            background: url(<%=basePath%>/ext/images/advancePic/farm.png);
+            background-size: cover;
+        }
+
+        /*土地样式*/
         #landBox {
             position: absolute;
         }
@@ -46,13 +94,14 @@
         .clickBox {
             position: absolute;
             clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-
         }
     </style>
 </head>
 <body>
-<div id="landBox"></div>
-<div id="seedBagDialog"></div>
+<div id="farmBackgroundBox">
+    <div id="landBox"></div>
+    <div id="seedBagDialog"></div>
+</div>
 
 <audio id="soundWorm" src="<%=basePath%>/ext/sounds/worm.mp3"></audio>
 <audio id="soundKillWorm" src="<%=basePath%>/ext/sounds/killWorm.mp3"></audio>
@@ -61,8 +110,10 @@
 <audio id="soundNegative" src="<%=basePath%>/ext/sounds/negative.mp3"></audio>
 <audio id="soundPlantCrop" src="<%=basePath%>/ext/sounds/plantCrop.mp3"></audio>
 <audio id="soundPlantCropSuccess" src="<%=basePath%>/ext/sounds/plantCropSuccess.mp3"></audio>
+<audio id="soundHarvestEasterEgg" src="<%=basePath%>/ext/sounds/harvestEasterEgg.mp3"></audio>
+<audio id="soundPlantCropSuccessEasterEgg" src="<%=basePath%>/ext/sounds/plantCropSuccessEasterEgg.mp3"></audio>
+<audio id="soundCleanGrassEasterEgg" src="<%=basePath%>/ext/sounds/cleanGrassEasterEgg.mp3"></audio>
 
-<link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/css/farm.css">
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script type="text/javascript" src="<%=basePath%>/ext/js/farmGame.js"></script>
 <script type="text/javascript" src="<%=basePath%>/ext/js/seedBag.js"></script>

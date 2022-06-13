@@ -12,7 +12,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>种子购买</title>
 
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
@@ -267,24 +267,30 @@
     }
 
     function purchaseSeed(cropId, cropName) {
-        let message = '你确定要购买' + '<span style="color:gold;">' + cropName + '</span>' + '吗';
-        $.messager.confirm('确认', message, function (r) {
-            if (r) {
+        let message = '请输入您要购买的' + '<span style="color:gold;">' + cropName + '</span>' + '的数量';
+        $.messager.prompt('提示信息', message, function (number) {
+            //判断是否为正整数类型
+            if (/[1-9]\d*/.test(number)) {
                 request({
-                    cropId: cropId,
-                    seedNumber: 1
+                    cropId: parseInt(cropId),
+                    seedNumber: parseInt(number)
                 }, 'post', '<%=basePath%>/user/purchaseSeed', false, function (result) {
                     if (result.code == 10) {
-                        //更新种子收纳袋页面
+                        /*更新用户数据*/
+                        updateUserBoxData({
+                            userinfoMoney: result.data['money'],
+                        }, '<%=basePath%>')
+                        updateUserBoxView('<%=basePath%>');
+                        /*刷新页面*/
                         parent.document.querySelector('#bottomSpace').src = '<%=basePath%>/page/seedBagPage';
-                        /*更新用户信息栏*/
-                        sessionStorage.setItem('userinfoMoney', result.data['money']);
                         parent.document.querySelector('#topSpace').src = '<%=basePath%>/menu.jsp';
                         messageBox('消息', '种子购买成功');
                     } else {
                         messageBox('消息', '金钱不足');
                     }
                 });
+            } else {
+                messageBox('消息', '请输入有效数字');
             }
         });
     }

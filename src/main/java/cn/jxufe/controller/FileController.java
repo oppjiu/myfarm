@@ -3,8 +3,6 @@ package cn.jxufe.controller;
 import cn.jxufe.bean.ResponseCode;
 import cn.jxufe.bean.ResponseResult;
 import cn.jxufe.bean.SystemCode;
-import cn.jxufe.entity.User;
-import cn.jxufe.repository.UserRepository;
 import cn.jxufe.serivce.UserService;
 import cn.jxufe.utils.FileUpAndDownloadUtil;
 import cn.jxufe.utils.PrintUtil;

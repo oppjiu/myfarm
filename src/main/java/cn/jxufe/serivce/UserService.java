@@ -2,7 +2,6 @@ package cn.jxufe.serivce;
 
 import cn.jxufe.bean.EasyUIData;
 import cn.jxufe.bean.FarmResponse;
-import cn.jxufe.entity.SeedBag;
 import cn.jxufe.entity.User;
 import org.springframework.data.domain.Pageable;
 

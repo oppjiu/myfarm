@@ -1,15 +1,13 @@
 body {
-    font-family: "Microsoft YaHei";
-    margin: 10px;
-    background: url(../images/basicPic/background.png?t876);
+    font-family: "Microsoft YaHei", serif;
     background-size: 100% 100%;
-    background-repeat: no-repeat;
+    background: url(../images/advancePic/background.png) no-repeat;
 }
 
 .op-linkbutton {
     position: relative;
     display: inline-block;
-    top: 0px;
+    top: 0;
     padding: 0 3px;
     height: 24px;
     line-height: 24px;
@@ -46,15 +44,6 @@ body {
 
 ::-webkit-scrollbar-corner {
     background: #179a16;
-}
-
-/*iconCls*/
-.icon-seedPurchase {
-    background: url(../images/advancePic/seedPurchaseIcon.png) no-repeat;
-}
-
-.icon-userLogin {
-    background: url(../images/advancePic/userLoginIcon.png) no-repeat;
 }
 
 /*按钮*/
@@ -103,4 +92,13 @@ body {
 
 .pinkColorButton:hover {
     background-color: #e595e5;
+}
+
+/*iconCls*/
+.icon-seedPurchase {
+    background-size: 16px;
+}
+
+.icon-userLogin {
+    background-size: 16px;
 }

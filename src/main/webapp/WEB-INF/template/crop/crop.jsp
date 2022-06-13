@@ -24,7 +24,7 @@
 </head>
 <body>
 <table id="seedGrid"></table>
-<div id="cropGrowWindow" style="width:80%;height:80%;padding:10px;"></div>
+<div id="cropGrowWindow" style="padding:10px;"></div>
 <div id="seedFormDialogToolbar" style="padding:10px;">
     <a href="javascript:void(0);" class="easyui-linkbutton c2" iconCls="icon-add" plain="true"
        onclick="openSeedFormDialog()">添加</a>
@@ -55,7 +55,7 @@
                 <td>种子等级：</td>
                 <td><input name="grade" required="true" class="easyui-textbox" value=""></td>
                 <td>种子类型：</td>
-                <td><input name="seedTypeCode" value=""></td>
+                <td><input id="seedSeedTypeCode" name="seedTypeCode" value=""></td>
             </tr>
             <tr>
                 <td>可获经验：</td>
@@ -73,7 +73,7 @@
                 <td>每个收获的果实单价：</td>
                 <td><input name="salePrice" required="true" class="easyui-textbox" value=""></td>
                 <td>土地需求：</td>
-                <td><input name="landTypeCode" value=""></td>
+                <td><input id="seedLandTypeCode" name="landTypeCode" value=""></td>
             </tr>
             <tr>
                 <td>每季成熟可获得积分：</td>
@@ -116,7 +116,7 @@
         });
 
         //土地类型下拉框
-        $('input[name="landTypeCode"]').combobox({
+        $('#seedLandTypeCode').combobox({
             panelHeight: 'auto',
             editable: false,
             valueField: 'landTypeCode',
@@ -128,7 +128,7 @@
         });
 
         //种子类型下拉框
-        $('input[name="seedTypeCode"]').combobox({
+        $('#seedSeedTypeCode').combobox({
             panelHeight: 'auto',
             editable: false,
             valueField: 'seedTypeCode',
@@ -149,6 +149,8 @@
 
         //生长阶段管理窗口
         $('#cropGrowWindow').window({
+            width: '80%',
+            height: '80%',
             title: '生长阶段管理',
             iconCls: 'icon-edit',
             inline: true,

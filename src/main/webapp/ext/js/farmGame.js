@@ -37,23 +37,28 @@ var soundHarvest = $('#soundHarvest')[0];
 var soundNegative = $('#soundNegative')[0];
 var soundPlantCrop = $('#soundPlantCrop')[0];
 var soundPlantCropSuccess = $('#soundPlantCropSuccess')[0];
+var soundPlantCropSuccessEasterEgg = $('#plantCropSuccessEasterEgg')[0];
+var soundHarvestEasterEgg = $('#soundHarvestEasterEgg')[0];
+var soundCleanGrassEasterEgg = $('#soundCleanGrassEasterEgg')[0];
 
 var landMap = new Map();//土地数据
 /*为标准的3/4相对应的作物的宽高就需设置为相等的比例*/
 /*土地宽和土地高成比例1/2*/
-var landWidth = 150;//土地宽
-var landHeight = 75;//土地高
+var landWidth = 100;//土地宽
+var landHeight = 50;//土地高
 /*paddingX和paddingY成比例1/2*/
-var paddingX = 50;
-var paddingY = 25;
+var paddingX = 30;
+var paddingY = 15;
 /*土地的绝对位置*/
-var positionX = 580;
-var positionY = 80;
+var positionX = 780;
+var positionY = 200;
 /*害虫的大小*/
-var insectWidth = 100;
-var insectHeight = 100;
+var insectWidth = 60;
+var insectHeight = 60;
 
 $(function () {
+    parent.document.getElementById("main").rows = "60,*";//设置框架
+
     initWebSocket();//初始化视图
     /*种子收纳袋窗口*/
     $('#seedBagDialog').dialog({
@@ -72,7 +77,7 @@ $(function () {
         top: positionY + 'px'
     });
     request({}, 'post', basePath + '/game/initiateFarmView', false, function (result) {
-        console.log('初始化游戏数据: ', result.data)
+        console.log('初始化游戏数据: ', result.data);
         //初始化游戏
         if (result.code == 10) {
             let data = result.data,
@@ -105,41 +110,19 @@ $(function () {
         let land = landMap.get(parseInt(this.dataset.landid));
         // 土地没有作物
         if (land.hasCrop == 0) {
-            $('.clickBox').css({
-                cursor: 'progress',
-            });
+            $(this).css("cursor", "url(" + basePath + "/ext/cursor/plantCrop.cur) 16 16,default");
         } else {
             //作物成熟
             if (land.isMature == 1) {
-                // $('.clickBox').css({
-                //     cursor: 'url(ext/cursor/harvest.cur), wait',
-                // });
-                $('.clickBox').css({
-                    cursor: 'progress',
-                });
+                $(this).css("cursor", "url(" + basePath + "/ext/cursor/harvest.cur) 16 16,default");
             } else if (land.isWithered == 1) { //作物枯萎
-                // $('.clickBox').css({
-                //     cursor: 'url(ext/cursor/cleanGrass.cur), wait',
-                // });
-                $('.clickBox').css({
-                    cursor: 'cell',
-                });
+                $(this).css("cursor", "url(" + basePath + "/ext/cursor/cleanGrass.cur) 16 16,default");
             } else { //作物成长中
-                // $('.clickBox').css({
-                //     cursor: 'url(ext/cursor/waitGrow.cur), wait',
-                // });
-                $('.clickBox').css({
-                    cursor: 'copy',
-                });
+                $(this).css("cursor", "url(" + basePath + "/ext/cursor/waitGrow.cur) 16 16,default");
             }
             //作物生虫
             if (land.hasInsect == 1) {
-                // $('.clickBox').css({
-                //     cursor: 'url(ext/cursor/killWorm.cur), wait',
-                // });
-                $('.clickBox').css({
-                    cursor: 'move',
-                });
+                $(this).css("cursor", "url(" + basePath + "/ext/cursor/killWorm.cur) 16 16,default");
             }
         }
     });
@@ -180,19 +163,25 @@ $(function () {
         }, 'post', basePath + '/user/plantSeed', true, function (result) {
             if (result.code == 10) {
                 let data = result.data;
+                let cropGrow = data['cropGrowView'];
                 updateData(data['land'], data['cropGrowView']);
                 messageBox('提示', '种植成功');
-                soundPlantCropSuccess.play();
+                /*彩蛋*/
+                if (cropGrow['cropId'] == 110) {
+                    soundPlantCropSuccessEasterEgg.play();
+                } else {
+                    soundPlantCropSuccess.play();
+                }
                 $('#seedBagDialog').dialog('close');//关闭窗口
             } else {
                 soundNegative.play();//播放声音
-                messageBox('提示', '操作失败');
+                messageBox('提示', '土地类型不匹配');
             }
         });
     });
 
     initTipTool();//初始化土地提示框
-    console.log('landMap: ', landMap)
+    console.log('landMap: ', landMap);
 });
 
 function initWebSocket() {
@@ -271,14 +260,13 @@ function updateData(landData, cropGrowData, user) {
 
     if (user != null) {
         //更新用户信息显示数据
-        parent.frames['topSpace'].document.getElementById('userinfoExp').innerText = user['exp'];
-        parent.frames['topSpace'].document.getElementById('userinfoMoney').innerText = user['money'];
-        parent.frames['topSpace'].document.getElementById('userinfoPoint').innerText = user['point'];
-        sessionStorage.setItem('userinfoExp', user['exp']);
-        sessionStorage.setItem('userinfoMoney', user['money']);
-        sessionStorage.setItem('userinfoPoint', user['point']);
+        updateUserBoxData({
+            userinfoExp: user['exp'],
+            userinfoMoney: user['money'],
+            userinfoPoint: user['point'],
+        }, basePath)
+        updateUserBoxView(basePath);
     }
-
     landMap.set(land.landId, land);//存储数据
 }
 
@@ -341,7 +329,7 @@ function killWorm(landId) {
             updateData(data['land'], data['cropGrowView']);
         } else {
             soundNegative.play();
-            messageBox('提示', '操作失败');
+            messageBox('提示', '杀虫失败');
         }
     });
 }
@@ -352,16 +340,22 @@ function harvest(landId) {
         if (result.code == 10) {
             let data = result.data;
             let user = data['user'];
+            let cropGrow = data['cropGrowView'];
             updateData(data['land'], data['cropGrowView']);
             let $msg = $('<div>' + '收获成功' + '</div>')
                 .append('<p>' + ' 获得经验：' + user['exp'] + '</p>')
                 .append('<p>' + ' 获得积分：' + user['point'] + '</p>')
                 .append('<p>' + ' 获得金钱：' + user['money'] + '</p>');
             messageBox('提示', $msg);
-            soundHarvest.play();
+            /*彩蛋*/
+            if (cropGrow['cropId'] == 110) {
+                soundHarvestEasterEgg.play();
+            } else {
+                soundHarvest.play();
+            }
         } else {
             soundNegative.play();
-            messageBox('提示', '操作失败');
+            messageBox('提示', '收获失败');
         }
     });
 }
@@ -369,19 +363,27 @@ function harvest(landId) {
 function cleanGrass(landId) {
     console.log('cleanGrass.landId: ', landId);
     request({landId: landId}, 'post', basePath + '/user/cleanGrass', true, function (result) {
+        //重置前端数据
+        landId = new Land();
         if (result.code == 10) {
             let data = result.data;
             let user = data['user'];
+            let cropGrow = data['cropGrowView'];
             updateData(data['land'], data['cropGrowView']);
             let $msg = $('<div>' + '除草成功' + '</div>')
                 .append('<p>' + ' 获得经验：' + user['exp'] + '</p>')
                 .append('<p>' + ' 获得积分：' + user['point'] + '</p>')
                 .append('<p>' + ' 获得金钱：' + user['money'] + '</p>');
             messageBox('提示', $msg);
-            soundCleanGrass.play();
+            /*彩蛋*/
+            if (cropGrow['cropId'] == 110) {
+                soundCleanGrassEasterEgg.play();
+            } else {
+                soundCleanGrass.play();
+            }
         } else {
             soundNegative.play();
-            messageBox('提示', '操作失败');
+            messageBox('提示', '除草失败');
         }
     });
 }
@@ -397,7 +399,6 @@ function initTipTool() {
         onShow: function () {
             //根据land类动态刷新提示信息
             let land = landMap.get(parseInt(this.dataset.landid));
-            console.log('initTipTool land: ', land);
             let cropName = land['cropName'];
             let cropState = land['cropState'];
             let output = land['output'];
@@ -469,7 +470,7 @@ function initLandImg(i, j, land) {
         height: landHeight + 'px',
         left: fixPositionX(i, j) + 'px',
         top: fixPositionY(i, j) + 'px',
-        zIndex: 1
+        zIndex: 5
     });
     return $land;
 }
@@ -496,10 +497,10 @@ function initCropImg(i, j, land, cropGrow) {
     }
 
     $crop.css({
-        width: picWidth * 3 / 4 + 'px',
-        height: picHeight * 3 / 4 + 'px',
-        left: fixPositionX(i, j) + (picOffsetX - 10) * 3 / 4 + 'px', // (picOffsetX - 10) * 3 / 4修正
-        top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 3 / 4 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
+        width: picWidth * 1 / 2 + 'px',
+        height: picHeight * 1 / 2 + 'px',
+        left: fixPositionX(i, j) + (picOffsetX - 10) * 1 / 2 + 'px', // (picOffsetX - 10) * 3 / 4修正
+        top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 1 / 2 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
         zIndex: 10
     });
     return $crop;
@@ -511,8 +512,8 @@ function initInsectImg(i, j, land) {
     $insect.css({
         width: insectWidth + 'px',
         height: insectHeight + 'px',
-        left: fixPositionX(i, j) - 20 + 'px', //-10 修正
-        top: fixPositionY(i, j) - 30 + 'px', //-30 修正
+        left: fixPositionX(i, j) - 10 + 'px', //-10 修正
+        top: fixPositionY(i, j) - 10 + 'px', //-30 修正
         zIndex: 20
     });
     return $insect;
@@ -556,19 +557,19 @@ function updateCropImg(i, j, land, cropGrow) {
         if (!$crop[0]) {
             $crop = $('<img data-cropId="' + land.cropId + '" data-nowCropGrowStage="' + land.nowCropGrowStage + '" class="crop" id="crop_' + land.landId + '" src="' + url + '" alt="作物">');
             $crop.css({
-                width: picWidth * 3 / 4 + 'px',
-                height: picHeight * 3 / 4 + 'px',
-                left: fixPositionX(i, j) + (picOffsetX - 10) * 3 / 4 + 'px', // (picOffsetX - 10) * 3 / 4修正
-                top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 3 / 4 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
+                width: picWidth * 1 / 2 + 'px',
+                height: picHeight * 1 / 2 + 'px',
+                left: fixPositionX(i, j) + (picOffsetX - 10) * 1 / 2 + 'px', // (picOffsetX - 10) * 3 / 4修正
+                top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 1 / 2 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
                 zIndex: 10
             });
             $('#landBox').append($crop);
         } else {
             $crop.css({
-                width: picWidth * 3 / 4 + 'px',
-                height: picHeight * 3 / 4 + 'px',
-                left: fixPositionX(i, j) + (picOffsetX - 10) * 3 / 4 + 'px', // (picOffsetX - 10) * 3 / 4修正
-                top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 3 / 4 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
+                width: picWidth * 1 / 2 + 'px',
+                height: picHeight * 1 / 2 + 'px',
+                left: fixPositionX(i, j) + (picOffsetX - 10) * 1 / 2 + 'px', // (picOffsetX - 10) * 3 / 4修正
+                top: fixPositionY(i, j) + (picOffsetY - 200 + 15) * 1 / 2 + 'px', // (picOffsetY - 200 + 15) * 3 / 4修正
                 zIndex: 10
             });
             $crop[0].src = url;
@@ -596,10 +597,11 @@ function updateInsectImg(i, j, land) {
             $insect.css({
                 width: insectWidth + 'px',
                 height: insectHeight + 'px',
-                left: fixPositionX(i, j) - 20 + 'px', //-10 修正
-                top: fixPositionY(i, j) - 30 + 'px', //-30 修正
+                left: fixPositionX(i, j) - 10 + 'px', //-10 修正
+                top: fixPositionY(i, j) - 10 + 'px', //-30 修正
                 zIndex: 20
             });
+            soundWorm.play();//播放生虫音效
             $('#landBox').append($insect);
         }
     }

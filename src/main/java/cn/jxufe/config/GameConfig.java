@@ -19,6 +19,7 @@ public class GameConfig implements ApplicationContextAware {
 
     /**
      * 会执行两次！！！
+     *
      * @param applicationContext
      * @throws BeansException
      */

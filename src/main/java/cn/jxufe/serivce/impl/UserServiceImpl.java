@@ -162,8 +162,8 @@ public class UserServiceImpl implements UserService {
         User userByFind = userRepository.findByUsername(user.getUsername());
         Crop cropByFind = cropRepository.findByCropId(cropId);
         //玩家没有足够金钱
-        if (userByFind.getMoney() - cropByFind.getPurchasePrice() < 0) {
-            PrintUtil.println("钱：" + (userByFind.getMoney() - cropByFind.getPurchasePrice()));
+        if (userByFind.getMoney() - cropByFind.getPurchasePrice() * seedNumber < 0) {
+            PrintUtil.println("钱：" + (userByFind.getMoney() - cropByFind.getPurchasePrice() * seedNumber));
             return null;
         } else {
             SeedBag seedBag = seedBagRepository.findByCropIdAndUsername(cropId, user.getUsername());
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
                 seedBagRepository.save(newSeedBag);
             }
             //扣除玩家金币
-            userByFind.setMoney(userByFind.getMoney() - cropByFind.getPurchasePrice());
+            userByFind.setMoney(userByFind.getMoney() - cropByFind.getPurchasePrice() * seedNumber);
             userRepository.save(userByFind);
             return userByFind;
         }
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
             landByFind.setNextCropGrowStage(1);
             landByFind.setGrowingSeason(cropGrowViewByFind.getGrowSeason());
             landByFind.setGrowthTimeOfEachState(0);
-            landByFind.setStateEndTime(new Date(new Date().getTime() + cropGrowViewByFind.getGrowTime()));
+            landByFind.setStateEndTime(new Date(new Date().getTime() + cropGrowViewByFind.getGrowTime() * 1000L));
             landRepository.save(landByFind);//保存土地数据
             return new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, landByFind,
                     cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
@@ -269,14 +269,14 @@ public class UserServiceImpl implements UserService {
             //用户收益
             User userByFind = userRepository.findByUsername(landByFind.getUsername());
             userByFind.setExp(userByFind.getExp() + cropByFind.getHarvestExp());
-            userByFind.setPoint(userByFind.getPoint() + cropByFind.getHarvestScore());
-            userByFind.setMoney(userByFind.getMoney() + cropByFind.getHarvestNum() * cropByFind.getSalePrice());
+            userByFind.setPoint(userByFind.getPoint() + landByFind.getOutput());
+            userByFind.setMoney(userByFind.getMoney() + landByFind.getOutput() * cropByFind.getSalePrice());
             userRepository.save(userByFind);//保存用户数据
             //发送数据
             User userSend = new User();
             userSend.setExp(cropByFind.getHarvestExp());
             userSend.setPoint(cropByFind.getHarvestScore());
-            userSend.setMoney(cropByFind.getHarvestNum() * cropByFind.getSalePrice());
+            userSend.setMoney(landByFind.getOutput() * cropByFind.getSalePrice());
             return new FarmResponse(SystemCode.FARM_RESPONSE_CODE_B, landByFind,
                     cropGrowViewRepository.findByStageIdAndCropIdOrderByStageIdAsc(landByFind.getNowCropGrowStage(),
                             landByFind.getCropId()), userSend);

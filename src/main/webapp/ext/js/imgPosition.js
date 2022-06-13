@@ -1,4 +1,4 @@
-var draggableImg;
+﻿var draggableImg;
 var imgExtData = {
     offsetX: '',
     offsetY: '',

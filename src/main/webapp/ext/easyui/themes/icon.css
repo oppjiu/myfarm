@@ -94,3 +94,15 @@
 .icon-large-chart{
 	background:url('icons/large_chart.png') no-repeat center center;
 }
+
+/*自定义图标*/
+/*iconCls*/
+.icon-seedPurchase {
+	background: url('icons/seedPurchaseIcon.png') no-repeat center center;
+	background-size: 16px;
+}
+
+.icon-userLogin {
+	background: url('icons/userLoginIcon.png') no-repeat center center;
+	background-size: 16px;
+}

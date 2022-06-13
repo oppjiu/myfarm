@@ -11,7 +11,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>菜单</title>
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css?t564">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/green/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/ext/easyui/themes/color.css">
 
@@ -29,11 +29,12 @@
         }
 
         .bar {
-            background-image: url(ext/images/basicPic/topbar.png);
+            background-image: url(ext/images/advancePic/topbar.png);
             background-size: 25% 60px;
             background-repeat: repeat-x;
             width: 100%;
             height: 60px;
+            border-bottom: 3px solid green;
 
             display: flex;
             justify-content: space-between;
@@ -102,18 +103,18 @@
         }
     </style>
 </head>
-<body class="bar">
+<body>
 <div class="bar">
     <div class="leftBar">
         <img id="userinfoHeadImg" src="ext/images/headImages/0.jpg" alt="图片">
         <div class="leftBarContent">
             <div id="userinfoUsername"
-                 style="text-shadow: 0 0 5px #5eff79, 0 0 5px #ff5a5a;font-weight: bold;font-size: 20px;color: gold;">
+                 style="text-shadow: 0 0 10px #5eff79, 0 0 10px #ff5a5a;font-weight: bold;font-size: 20px;color: lawngreen;">
             </div>
             <div class="leftBarBottom">
-                <span>经验：</span><span style="margin-right: 20px;" id="userinfoExp"></span>
-                <span>金币：</span><span style="margin-right: 20px;" id="userinfoMoney"></span>
-                <span>积分：</span><span style="margin-right: 20px;" id="userinfoPoint"></span>
+                <span>经验：</span><span style="font-family: KaiTi;margin-right: 20px;" id="userinfoExp"></span>
+                <span>金币：</span><span style="font-family: KaiTi;margin-right: 20px;" id="userinfoMoney"></span>
+                <span>积分：</span><span style="font-family: KaiTi;margin-right: 20px;" id="userinfoPoint"></span>
             </div>
         </div>
     </div>
@@ -140,37 +141,7 @@
 <script type="text/javascript" src="<%=basePath%>/ext/js/helper.js"></script>
 <script>
     $(function () {
-        //初始化用户栏信息
-        let userinfoHeadImg = sessionStorage.getItem('userinfoHeadImg');
-        let userinfoUsername = sessionStorage.getItem('userinfoUsername');
-        let userinfoExp = sessionStorage.getItem('userinfoExp');
-        let userinfoMoney = sessionStorage.getItem('userinfoMoney');
-        let userinfoPoint = sessionStorage.getItem('userinfoPoint');
-        if (userinfoHeadImg != null) {
-            document.getElementById('userinfoHeadImg').src = '<%=basePath%>/' + userinfoHeadImg;
-        } else {
-            document.getElementById('userinfoHeadImg').src = '<%=basePath%>/ext/images/headImages/0.jpg';
-        }
-        if (userinfoPoint != null) {
-            document.getElementById('userinfoUsername').innerText = userinfoUsername;
-        } else {
-            document.getElementById('userinfoUsername').innerText = '未知用户';
-        }
-        if (userinfoUsername != null) {
-            document.getElementById('userinfoExp').innerText = userinfoExp;
-        } else {
-            document.getElementById('userinfoExp').innerText = '0';
-        }
-        if (userinfoExp != null) {
-            document.getElementById('userinfoMoney').innerText = userinfoMoney;
-        } else {
-            document.getElementById('userinfoMoney').innerText = '0';
-        }
-        if (userinfoMoney != null) {
-            document.getElementById('userinfoPoint').innerText = userinfoPoint;
-        } else {
-            document.getElementById('userinfoPoint').innerText = '0';
-        }
+        updateUserBoxView('<%=basePath%>');
     });
 
     function restoreRows() {

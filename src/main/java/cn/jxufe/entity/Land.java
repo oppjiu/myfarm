@@ -1,9 +1,6 @@
 package cn.jxufe.entity;
 
 import cn.jxufe.bean.EntityID;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,9 +11,7 @@ import java.util.Date;
  * @author: lwz
  * @description:
  **/
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+
 @Entity
 @Table(name = "T_Land")
 public class Land extends EntityID {
@@ -37,4 +32,136 @@ public class Land extends EntityID {
     //多对一外键
     private String username;    //用户ID
 
+
+    public int getLandId() {
+        return landId;
+    }
+
+    public void setLandId(int landId) {
+        this.landId = landId;
+    }
+
+    public int getHasCrop() {
+        return hasCrop;
+    }
+
+    public void setHasCrop(int hasCrop) {
+        this.hasCrop = hasCrop;
+    }
+
+    public int getHasInsect() {
+        return hasInsect;
+    }
+
+    public void setHasInsect(int hasInsect) {
+        this.hasInsect = hasInsect;
+    }
+
+    public int getIsWithered() {
+        return isWithered;
+    }
+
+    public void setIsWithered(int isWithered) {
+        this.isWithered = isWithered;
+    }
+
+    public int getIsMature() {
+        return isMature;
+    }
+
+    public void setIsMature(int isMature) {
+        this.isMature = isMature;
+    }
+
+    public int getOutput() {
+        return output;
+    }
+
+    public void setOutput(int output) {
+        this.output = output;
+    }
+
+    public int getNowCropGrowStage() {
+        return nowCropGrowStage;
+    }
+
+    public void setNowCropGrowStage(int nowCropGrowStage) {
+        this.nowCropGrowStage = nowCropGrowStage;
+    }
+
+    public int getNextCropGrowStage() {
+        return nextCropGrowStage;
+    }
+
+    public void setNextCropGrowStage(int nextCropGrowStage) {
+        this.nextCropGrowStage = nextCropGrowStage;
+    }
+
+    public int getGrowingSeason() {
+        return growingSeason;
+    }
+
+    public void setGrowingSeason(int growingSeason) {
+        this.growingSeason = growingSeason;
+    }
+
+    public int getGrowthTimeOfEachState() {
+        return growthTimeOfEachState;
+    }
+
+    public void setGrowthTimeOfEachState(int growthTimeOfEachState) {
+        this.growthTimeOfEachState = growthTimeOfEachState;
+    }
+
+    public Date getStateEndTime() {
+        return stateEndTime;
+    }
+
+    public void setStateEndTime(Date stateEndTime) {
+        this.stateEndTime = stateEndTime;
+    }
+
+    public int getCropId() {
+        return cropId;
+    }
+
+    public void setCropId(int cropId) {
+        this.cropId = cropId;
+    }
+
+    public int getLandTypeCode() {
+        return landTypeCode;
+    }
+
+    public void setLandTypeCode(int landTypeCode) {
+        this.landTypeCode = landTypeCode;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "Land{" +
+                "landId=" + landId +
+                ", hasCrop=" + hasCrop +
+                ", hasInsect=" + hasInsect +
+                ", isWithered=" + isWithered +
+                ", isMature=" + isMature +
+                ", output=" + output +
+                ", nowCropGrowStage=" + nowCropGrowStage +
+                ", nextCropGrowStage=" + nextCropGrowStage +
+                ", growingSeason=" + growingSeason +
+                ", growthTimeOfEachState=" + growthTimeOfEachState +
+                ", stateEndTime=" + stateEndTime +
+                ", cropId=" + cropId +
+                ", landTypeCode=" + landTypeCode +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

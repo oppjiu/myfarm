@@ -3,6 +3,11 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Downloads/JavaDoc" />
+    <option name="OTHER_OPTIONS" value="-encoding UTF-8 -charset UTF-8" />
+    <option name="LOCALE" value="zh_CN" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
